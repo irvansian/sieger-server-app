@@ -1,16 +1,18 @@
+package sieger.model;
+
 import java.util.UUID;
 
 public class Account {
 	//Id of account
-	String id;
+	private String id;
 	//email adress
-	String email;
+	private String email;
 	//user passwort
-	String password;
+	private String password;
 	//username
-	String username;
+	private String username;
 	//Id of user
-	String userId;
+	private String userId;
 	
 	//constructor
 	public Account(String email, String password, String username) {

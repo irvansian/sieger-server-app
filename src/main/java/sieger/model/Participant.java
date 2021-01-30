@@ -1,14 +1,16 @@
-import java.util.ArrayList;
+package sieger.model;
+
+import java.util.List;
 
 public abstract class Participant {
 	//tournament list of participant
-	ArrayList<String> tournamentList;
+	private List<String> tournamentList;
 	//get participant name.
 	abstract String getParticipantName();
 	//join a tournament
-	abstract boolean joinTournament();
+	abstract boolean joinTournament(Tournament tournament);
 	//quit tournament
-	abstract boolean quitTournament();
+	abstract boolean quitTournament(Tournament tournament);
 	//add tournament
 	public void addTournament(String tournamentId) {
 		tournamentList.add(tournamentId);
@@ -18,7 +20,7 @@ public abstract class Participant {
 		tournamentList.remove(tournamentId);
 	}
 	//get tournamentids
-	public ArrayList<String> getTournamentList(){
+	public List<String> getTournamentList(){
 		return this.tournamentList;
 	}
 }
