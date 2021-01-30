@@ -1,61 +1,62 @@
-package sieger.model;
+import java.util.UUID;
 
-import java.util.Collection;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-public class Account implements UserDetails {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4811672328749817394L;
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getUsername() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return false;
+public class Account {
+	//Id of account
+	String id;
+	//email adress
+	String email;
+	//user passwort
+	String password;
+	//username
+	String username;
+	//Id of user
+	String userId;
+	
+	//constructor
+	public Account(String email, String password, String username) {
+		this.email = email;
+		this.password = password;
+		this.username = username;
+		this.id = randomId();
 	}
 	
-	public String getEmail() {
-		return null;
+	//get random Id
+	private String randomId() {
+		return UUID.randomUUID().toString();
 	}
-
+	
+	//Set userid
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	
+	//Set password
+	public void setPassword(String newPassword) {
+		this.password = newPassword;
+	}
+	
+	//Get Password
+	public String getPassword() {
+		return password;
+	}
+	
+	//Get id
+	public String getId() {
+		return this.id;
+	}
+	
+	//Get email
+	public String getEmail() {
+		return this.email;
+	}
+	
+	//Get username
+	public String getUsername() {
+		return this.username;
+	}
+	
+	//Get userId
+	public String getUserId() {
+		return this.userId;
+	}
 }
