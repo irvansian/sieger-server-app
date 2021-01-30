@@ -1,6 +1,24 @@
-package sieger.model;
+import java.util.ArrayList;
 
-public interface Participant {
-	void joinTournament(Tournament tournament);
-	String getParcipantName();
+public abstract class Participant {
+	//tournament list of participant
+	ArrayList<String> tournamentList;
+	//get participant name.
+	abstract String getParticipantName();
+	//join a tournament
+	abstract boolean joinTournament();
+	//quit tournament
+	abstract boolean quitTournament();
+	//add tournament
+	public void addTournament(String tournamentId) {
+		tournamentList.add(tournamentId);
+	}
+	//remove tournament
+	public void removeTournament(String tournamentId) {
+		tournamentList.remove(tournamentId);
+	}
+	//get tournamentids
+	public ArrayList<String> getTournamentList(){
+		return this.tournamentList;
+	}
 }
