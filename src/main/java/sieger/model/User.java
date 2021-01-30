@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class User implements Participant {
+public class User extends Participant {
 	private UUID id;
 	private String username;
 	private String firstName;
@@ -70,6 +70,24 @@ public class User implements Participant {
 	@Override
 	public String getParcipantName() {
 		return getUsername();
+	}
+
+	@Override
+	String getParticipantName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	boolean joinTournament() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	boolean quitTournament() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	

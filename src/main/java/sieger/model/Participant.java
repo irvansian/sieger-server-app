@@ -1,3 +1,5 @@
+package sieger.model;
+
 import java.util.ArrayList;
 
 public abstract class Participant {
@@ -20,5 +22,9 @@ public abstract class Participant {
 	//get tournamentids
 	public ArrayList<String> getTournamentList(){
 		return this.tournamentList;
+	}
+	public void joinTournament(Tournament tournament) {
+		// TODO Auto-generated method stub
+		
 	}
 }

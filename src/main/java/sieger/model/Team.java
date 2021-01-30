@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Team implements Participant {
+public class Team extends Participant {
 	private UUID id;
 	private String name;
 	private List<User> members;
@@ -65,5 +65,26 @@ public class Team implements Participant {
 	@Override
 	public String getParcipantName() {
 		return getName();
+	}
+
+
+	@Override
+	String getParticipantName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	boolean joinTournament() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	boolean quitTournament() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
