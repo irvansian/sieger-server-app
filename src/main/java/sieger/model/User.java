@@ -56,6 +56,7 @@ public class User extends Participant{
 		tournament.removeParticipant(userId);
 		return true;
 	}
+	
 	//show next Tournament(not finished)
 	public List<String> showNextTournaments(){
 		return getTournamentList();
