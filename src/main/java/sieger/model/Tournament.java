@@ -84,7 +84,12 @@ public abstract class Tournament implements Searchable {
 	}
 	//implement getInformation
 	public String getInformation() {
-		return "todo";
+		return  "Tournament:" + tournamentDetail.getTournamentName() 
+		+ "\r\n" + "ParticipantForm:" + tournamentDetail.getParticipantForm() 
+		+ "\r\n" + "Location:" + tournamentDetail.getLocation()
+		+ "\r\n" + "Game:" + tournamentDetail.getTypeOfGame()
+		+ "\r\n" + "Time: from" + tournamentDetail.getStartTime() + "to" + tournamentDetail.getEndTime()
+		+ "\r\n" + "Register: before" + tournamentDetail.getRegistrationDeadline().toString();
 	}
 	//get tournamentId
 	public String getTournamentId() {
