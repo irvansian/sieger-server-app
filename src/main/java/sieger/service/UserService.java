@@ -17,13 +17,13 @@ import sieger.repository.UserRepository;
 @Service
 public class UserService {
 	
-	private final UserRepository userRepository;
+	private UserRepository userRepository;
 	
-	private final TournamentService tournamentService;
+	private TournamentService tournamentService;
 	
-	private final TeamService teamService;
+	private TeamService teamService;
 	
-	private final InvitationService invitationService;
+	private InvitationService invitationService;
 
 	public UserService(UserRepository userRepository, TournamentService tournamentService, TeamService teamService,
 			InvitationService invitationService) {
