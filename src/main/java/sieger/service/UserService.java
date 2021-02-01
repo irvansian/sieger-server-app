@@ -34,11 +34,11 @@ public class UserService {
 	}
 	
 	public Optional<User> getUserByUsername(String username) {
-		return null;
+		return userRepository.retrieveUserByUsername(username);
 	}
 	
 	public Optional<User> getUserById(String userId) {
-		return null;
+		return userRepository.retrieveUserById(userId);
 	}
 	
 	public List<Tournament> getUserTournaments(String userId) {
