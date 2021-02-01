@@ -70,7 +70,12 @@ public class UserService {
 	}
 	
 	public boolean updateUserDetail(String userId, String username, String surname, String forename) {
-		return false;
+		Optional<User> user = getUserById(userId);
+		if (user.isEmpty()) return false;
+		user.get().setUsername(username);
+		user.get().setForename(forename);
+		user.get().setSurname(surname);
+		return true;
 	}
 	
 	public boolean updateUserById(String userId, User user) {
