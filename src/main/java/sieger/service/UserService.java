@@ -58,7 +58,7 @@ public class UserService {
 	}
 	
 	public boolean deleteUser(String userId) {
-		return false;
+		return userRepository.deleteUser(userId);
 	}
 	
 	public boolean joinTeam(String userId, String teamName, String teamPassword) {
