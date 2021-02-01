@@ -159,4 +159,20 @@ public class User extends Participant{
 	public List<String> getInvitationList(){
 		return this.invitationList;
 	}
+	
+	public void setSurname(String surname) {
+		this.surname = surname;
+	}
+	
+	public void setUsername(String username) {
+		this.userName = username;
+	}
+	
+	public void setForename(String forename) {
+		this.forename = forename;
+	}
+	
+	
+	
+	
 }
