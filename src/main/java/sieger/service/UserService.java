@@ -54,7 +54,7 @@ public class UserService {
 	}
 	
 	public boolean createNewUser(User user) {
-		return false;
+		return userRepository.createUser(user);
 	}
 	
 	public boolean deleteUser(String userId) {
