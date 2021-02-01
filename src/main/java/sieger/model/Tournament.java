@@ -29,8 +29,6 @@ public abstract class Tournament implements Searchable {
 	}
 	//abstract methode
 	abstract public void createGames();
-	//create notification
-	abstract public void createNotification();
 	//check if participant list has place
 	public boolean checkSize(){
 		for(String item: participantList){
