@@ -3,6 +3,7 @@ package sieger.repository.database;
 import java.util.Optional;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import com.google.firebase.auth.UserRecord.CreateRequest;
 
@@ -13,7 +14,7 @@ public class AccountDatabase implements AccountRepository {
 
 	@Override
 	public Optional<Account> retrieveAccountByEmail(String email) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
@@ -33,8 +34,17 @@ public class AccountDatabase implements AccountRepository {
 	public boolean createAccount(Account account) {
 		FirebaseAuth auth = FirebaseAuth.getInstance();
 		UserRecord.CreateRequest userRecord = new CreateRequest();
+		userRecord.setEmail(account.getEmail());
+		userRecord.setDisplayName(account.getUsername());
+		userRecord.setPassword(account.getPassword());
+		userRecord.setUid(account.getId());
+		try {
+			auth.createUser(userRecord);
+		} catch (FirebaseAuthException e) {
+			e.printStackTrace();
+		}
 		
-		return false;
+		return true;
 	}
 
 	@Override
