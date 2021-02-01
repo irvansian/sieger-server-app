@@ -77,8 +77,9 @@ public class UserDatabase implements UserRepository {
 
 	@Override
 	public boolean deleteUser(String userId) {
-		// TODO Auto-generated method stub
-		return false;
+		Firestore db = FirestoreClient.getFirestore();
+		db.collection(path).document(userId).delete();
+		return true;
 	}
 
 }
