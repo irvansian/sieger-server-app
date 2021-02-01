@@ -4,7 +4,9 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.google.cloud.firestore.Firestore;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.cloud.FirestoreClient;
 
 import sieger.model.User;
 import sieger.repository.UserRepository;
@@ -16,9 +18,9 @@ public class UserDatabase implements UserRepository {
 
 	@Override
 	public boolean createUser(User user) {
-		FirebaseAuth auth = FirebaseAuth.getInstance();
-		
-		return false;
+		Firestore db = FirestoreClient.getFirestore();
+		db.collection(path).add(user);
+		return true;
 	}
 
 	@Override
