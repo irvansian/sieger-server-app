@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QuerySnapshot;
 import com.google.firebase.cloud.FirestoreClient;
 
 import sieger.model.User;
@@ -48,8 +49,23 @@ public class UserDatabase implements UserRepository {
 
 	@Override
 	public Optional<User> retrieveUserByUsername(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		User user = null;
+		Firestore db = FirestoreClient.getFirestore();
+		ApiFuture<QuerySnapshot> future = db.collection(path)
+				.whereEqualTo("username", username).get();
+		try {
+			for (DocumentSnapshot ds : future.get().getDocuments()) {
+				user = ds.toObject(User.class);
+				break;
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return Optional.ofNullable(user);
 	}
 
 	@Override
