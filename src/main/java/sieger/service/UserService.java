@@ -79,7 +79,10 @@ public class UserService {
 	}
 	
 	public boolean updateUserById(String userId, User user) {
-		return false;
+		Optional<User> retrievedUser = getUserById(userId);
+		if (retrievedUser.isEmpty()) return false;
+		userRepository.updateUserById(userId, user);
+		return true;
 	}
 	
 	
