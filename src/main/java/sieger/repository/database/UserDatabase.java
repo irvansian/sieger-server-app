@@ -70,8 +70,9 @@ public class UserDatabase implements UserRepository {
 
 	@Override
 	public boolean updateUserById(String userId, User user) {
-		// TODO Auto-generated method stub
-		return false;
+		Firestore db = FirestoreClient.getFirestore();
+		db.collection(path).document(userId).set(user);
+		return true;
 	}
 
 	@Override
