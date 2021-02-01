@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import sieger.repository.AccountRepository;
 
 @Service
-public class AccountService implements UserDetailsService {
+public class AccountService {
 	
 	@Autowired
 	private AccountRepository accountRepository;
@@ -25,15 +25,6 @@ public class AccountService implements UserDetailsService {
 		this.accountRepository = accountRepository;
 		this.userService = userService;
 	}
-
-
-
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return new User("foo", "password", new ArrayList<>());
-	}
-	
-	//ini mulai sama kaya di entwurf
 	
 	public String registerUser(String email, String password, String username, String surname, String forename) {
 		return null;
