@@ -38,10 +38,6 @@ public class Game {
 		}
 		return null;
 	}
-	//send notification
-	public void sendNotification() {
-		//todo
-	}
 	//get time
 	public Date getTime() {
 		return this.time;

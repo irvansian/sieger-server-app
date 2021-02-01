@@ -1,6 +1,7 @@
 package sieger.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -58,8 +59,30 @@ public class User extends Participant{
 	}
 	
 	//show next Tournament(not finished)
-	public List<String> showNextTournaments(){
-		return getTournamentList();
+	public List<String> showNextTournaments(List<Tournament> tournaments){
+		Date current = new Date();
+		List<Tournament> tempTournaments = new ArrayList<>();
+		for(Tournament tournament: tournaments) {
+			if(tournament.getTournamentDetail().getEndTime().after(current)) {
+				tempTournaments.add(tournament);
+			}
+		}
+		Tournament tempTournament;
+		//bubble sort
+		for (int i = tempTournaments.size()- 1; i > 0; --i) {
+            for (int j = 0; j < i; ++j) {
+            	if(tempTournaments.get(j+1).getTournamentDetail().getEndTime().before(tempTournaments.get(j).getTournamentDetail().getEndTime())){           		
+            		tempTournament = tempTournaments.get(j);
+            		tempTournaments.set(j, tempTournaments.get(j+1));
+            		tempTournaments.set(j+1, tempTournament);
+            	}
+            }
+        }
+		List<String> result = new ArrayList<>();
+		result.add(tempTournaments.get(0).getTournamentId());
+		result.add(tempTournaments.get(1).getTournamentId());
+		result.add(tempTournaments.get(2).getTournamentId());
+		return result;
 	}
 	//join team
 	public boolean joinTeam(Team team, String password) {

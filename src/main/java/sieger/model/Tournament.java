@@ -13,11 +13,14 @@ public abstract class Tournament implements Searchable {
 	private List<String> gameList;
 	//list of participants
 	private String[] participantList;
+	//temp notification
+	private List<Notification> notificationList;
 	//constructor
 	public Tournament(int participantSize, TournamentDetail tournamentDetail) {
 		this.tournamentid = randomId();
 		this.tournamentDetail = tournamentDetail;
 		this.gameList = new ArrayList<>();
+		this.notificationList = new ArrayList<>();
 		this.participantList = new String[participantSize];
 	}
 	//get random Id
@@ -26,7 +29,8 @@ public abstract class Tournament implements Searchable {
 	}
 	//abstract methode
 	abstract public void createGames();
-	
+	//create notification
+	abstract public void createNotification();
 	//check if participant list has place
 	public boolean checkSize(){
 		for(String item: participantList){
@@ -107,6 +111,10 @@ public abstract class Tournament implements Searchable {
 	public String[] getParticipantList() {
 		return this.participantList;
 	}
+	//get notificationList
+	public List<Notification> notificationList(){
+		return this.notificationList;
+	}
 	//add game
 	public void addGame(String gameId){
 		gameList.add(gameId);
@@ -132,5 +140,13 @@ public abstract class Tournament implements Searchable {
 				break;
 			}
 		}
+	}
+	//add notification
+	public void addNotification(Notification notification) {
+		notificationList.add(notification);
+	}
+	//remove notification
+	public void removeNotification(Notification notification) {
+		notificationList.remove(notification);
 	}
 }
