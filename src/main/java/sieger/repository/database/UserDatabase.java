@@ -11,6 +11,8 @@ import sieger.repository.UserRepository;
 
 @Repository("firebase")
 public class UserDatabase implements UserRepository {
+	
+	private String path = "users";
 
 	@Override
 	public boolean createUser(User user) {
