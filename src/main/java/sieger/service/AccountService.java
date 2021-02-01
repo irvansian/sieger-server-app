@@ -3,12 +3,10 @@ package sieger.service;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import sieger.model.Account;
+import sieger.model.User;
 import sieger.repository.AccountRepository;
 
 @Service
@@ -27,7 +25,13 @@ public class AccountService {
 	}
 	
 	public String registerUser(String email, String password, String username, String surname, String forename) {
-		return null;
+		if (userService.getUserByUsername(username).isEmpty()) return null;
+		Account account = new Account(email, password, username);
+		accountRepository.createAccount(account);
+		User user = new User(username, surname, forename);
+		userService.createNewUser(user);
+		return userService.getUserByUsername(username).get().getUserId();
+		
 	}
 	
 	public String confirmLogin(String identifier, String password, String type) {
