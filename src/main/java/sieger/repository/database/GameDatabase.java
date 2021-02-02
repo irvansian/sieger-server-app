@@ -43,7 +43,9 @@ public class GameDatabase implements GameRepository {
 
 	@Override
 	public boolean deleteGame(String tournamentId, String gameId) {
-		// TODO Auto-generated method stub
+		Firestore db = FirestoreClient.getFirestore();
+		db.collection("tournaments").document(tournamentId)
+			.collection(path).document(gameId).delete();
 		return false;
 	}
 	
