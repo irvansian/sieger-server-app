@@ -35,8 +35,10 @@ public class GameDatabase implements GameRepository {
 
 	@Override
 	public boolean updateGame(String tournamentId, String gameId, Game game) {
-		// TODO Auto-generated method stub
-		return false;
+		Firestore db = FirestoreClient.getFirestore();
+		db.collection("tournaments").document(tournamentId)
+			.collection(path).document(gameId).set(game);
+		return true;
 	}
 
 	@Override
