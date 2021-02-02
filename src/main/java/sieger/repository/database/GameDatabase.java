@@ -42,7 +42,7 @@ public class GameDatabase implements GameRepository {
 	}
 
 	@Override
-	public boolean deleteGmae(String tournamentId, String gameId) {
+	public boolean deleteGame(String tournamentId, String gameId) {
 		// TODO Auto-generated method stub
 		return false;
 	}

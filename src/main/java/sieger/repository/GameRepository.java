@@ -10,5 +10,5 @@ public interface GameRepository {
 	List<Game> retrieveMultipleGamesById(String[] ids);
 	boolean createGame(String tournamentId, Game game);
 	boolean updateGame(String tournamentId, String gameId, Game game);
-	boolean deleteGmae(String tournamentId, String gameId);
+	boolean deleteGame(String tournamentId, String gameId);
 }
