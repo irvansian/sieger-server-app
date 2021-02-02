@@ -81,7 +81,7 @@ public abstract class Tournament implements Searchable {
 		}
 	}
 	//implement gettitle()
-	public String getTirle() {
+	public String getTitle() {
 		return "Tournament:" + this.tournamentDetail.getTournamentName();
 	}
 	//implement getInformation
