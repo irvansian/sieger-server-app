@@ -58,8 +58,9 @@ public class TournamentDatabase implements TournamentRepository {
 
 	@Override
 	public boolean deleteTournament(String tournamentId) {
-		// TODO Auto-generated method stub
-		return false;
+		Firestore db = FirestoreClient.getFirestore();
+		db.collection(path).document(tournamentId).delete();
+		return true;
 	}
 	
 	
