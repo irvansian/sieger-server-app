@@ -51,8 +51,9 @@ public class TournamentDatabase implements TournamentRepository {
 
 	@Override
 	public boolean updateTournament(String tournamentId, Tournament tournament) {
-		// TODO Auto-generated method stub
-		return false;
+		Firestore db = FirestoreClient.getFirestore();
+		db.collection(path).document(tournamentId).set(tournament);
+		return true;
 	}
 
 	@Override
