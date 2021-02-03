@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import com.google.firebase.auth.UserRecord.CreateRequest;
+import com.google.firebase.auth.UserRecord.UpdateRequest;
 
 import sieger.model.Account;
 import sieger.repository.AccountRepository;
@@ -49,7 +50,16 @@ public class AccountDatabase implements AccountRepository {
 
 	@Override
 	public boolean updateAccountById(String id, Account account) {
-		// TODO Auto-generated method stub
+		FirebaseAuth auth = FirebaseAuth.getInstance();
+		UserRecord.UpdateRequest userRecord = new UpdateRequest(account.getId());
+		userRecord.setEmail(account.getEmail());
+		userRecord.setDisplayName(account.getUsername());
+		userRecord.setPassword(account.getPassword());
+		try {
+			auth.updateUser(userRecord);
+		} catch (FirebaseAuthException e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 
