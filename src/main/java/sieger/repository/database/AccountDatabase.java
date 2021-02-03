@@ -51,7 +51,7 @@ public class AccountDatabase implements AccountRepository {
 	@Override
 	public boolean updateAccountById(String id, Account account) {
 		FirebaseAuth auth = FirebaseAuth.getInstance();
-		UserRecord.UpdateRequest userRecord = new UpdateRequest(account.getId());
+		UserRecord.UpdateRequest userRecord = new UpdateRequest(id);
 		userRecord.setEmail(account.getEmail());
 		userRecord.setDisplayName(account.getUsername());
 		userRecord.setPassword(account.getPassword());
@@ -60,7 +60,7 @@ public class AccountDatabase implements AccountRepository {
 		} catch (FirebaseAuthException e) {
 			e.printStackTrace();
 		}
-		return false;
+		return true;
 	}
 
 	@Override
