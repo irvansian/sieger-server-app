@@ -11,7 +11,7 @@ import com.google.firebase.auth.UserRecord.UpdateRequest;
 import sieger.model.Account;
 import sieger.repository.AccountRepository;
 
-public class AccountDatabase implements AccountRepository {
+public class AccountDatabase implements AccountRepository{
 
 	@Override
 	public Optional<Account> retrieveAccountByEmail(String email) {
@@ -68,5 +68,6 @@ public class AccountDatabase implements AccountRepository {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
 
 }
