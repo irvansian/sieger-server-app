@@ -1,6 +1,7 @@
 package sieger.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,8 @@ import sieger.model.Tournament;
 import sieger.model.User;
 import sieger.service.UserService;
 
-@RestController("users")
+@RestController
+@RequestMapping("users")
 public class UserController {
 	
 	private final UserService userService;
@@ -30,8 +32,13 @@ public class UserController {
 		this.userService = userService;
 	}
 	
-	public ResponseEntity<User> getUserByUsername(String username) {
-		return null;
+	@GetMapping("/{username}")
+	public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
+		Optional<User> user = userService.getUserByUsername(username);
+		if (user.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(user.get());
 	}
 	
 	public ResponseEntity<User> getUserById(String userId) {
