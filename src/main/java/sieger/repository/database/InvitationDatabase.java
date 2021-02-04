@@ -46,8 +46,9 @@ public class InvitationDatabase implements InvitationRepository {
 
 	@Override
 	public boolean deleteInvitation(String invitationId) {
-		// TODO Auto-generated method stub
-		return false;
+		Firestore db = FirestoreClient.getFirestore();
+		db.collection(path).document(invitationId).delete();
+		return true;
 	}
 
 }
