@@ -83,8 +83,9 @@ public class TeamDatabase implements TeamRepository {
 
 	@Override
 	public boolean deleteTeam(String teamId) {
-		// TODO Auto-generated method stub
-		return false;
+		Firestore db = FirestoreClient.getFirestore();
+		db.collection(path).document(teamId).delete();
+		return true;
 	}
 
 }
