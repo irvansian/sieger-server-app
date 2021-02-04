@@ -1,20 +1,47 @@
 package sieger.repository.database;
 
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
+import com.google.firebase.cloud.FirestoreClient;
+
 import sieger.model.Invitation;
+import sieger.model.Team;
 import sieger.repository.InvitationRepository;
 
 public class InvitationDatabase implements InvitationRepository {
+	
+	private String path = "invitations";
 
 	@Override
 	public boolean createInvitation(Invitation invitation) {
-		// TODO Auto-generated method stub
-		return false;
+		Firestore db = FirestoreClient.getFirestore();
+		db.collection(path).document(invitation.getInvitationId()).set(invitation);
+		return true;
 	}
 
 	@Override
-	public boolean retrieveInvitationById(String invitationId) {
-		// TODO Auto-generated method stub
-		return false;
+	public Optional<Invitation> retrieveInvitationById(String invitationId) {
+		Invitation invitation = null;
+		Firestore db = FirestoreClient.getFirestore();
+		ApiFuture<DocumentSnapshot> future = db.collection(path)
+				.document(invitationId).get();
+		
+		try {
+			if (future.get().exists()) {
+				invitation = future.get().toObject(Invitation.class);
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return Optional.ofNullable(invitation);
 	}
 
 	@Override
