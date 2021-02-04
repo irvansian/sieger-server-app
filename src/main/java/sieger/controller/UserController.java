@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,23 +30,24 @@ public class UserController {
 		this.userService = userService;
 	}
 	
-	public User getUserByUsername(String username) {
+	public ResponseEntity<User> getUserByUsername(String username) {
+		
 		return null;
 	}
 	
-	public User getUserById(String userId) {
+	public ResponseEntity<User> getUserById(String userId) {
 		return null;
 	}
 	
-	public List<Tournament> getUserTournaments(String userId) {
+	public ResponseEntity<List<Tournament>> getUserTournaments(String userId) {
 		return null;
 	}
 	
-	public List<Team> getUserTeams(String userId) {
+	public ResponseEntity<List<Team>> getUserTeams(String userId) {
 		return null;
 	}
 	
-	public List<Invitation> getUserInvitations(String userId) {
+	public ResponseEntity<List<Invitation>> getUserInvitations(String userId) {
 		return null;
 	}
 	
