@@ -69,14 +69,16 @@ public class TeamDatabase implements TeamRepository {
 
 	@Override
 	public boolean createTeam(Team team) {
-		// TODO Auto-generated method stub
-		return false;
+		Firestore db = FirestoreClient.getFirestore();
+		db.collection(path).document(team.getTeamId()).set(team);
+		return true;
 	}
 
 	@Override
 	public boolean updateTeam(String teamId, Team team) {
-		// TODO Auto-generated method stub
-		return false;
+		Firestore db = FirestoreClient.getFirestore();
+		db.collection(path).document(teamId).set(team);
+		return true;
 	}
 
 	@Override
