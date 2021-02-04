@@ -20,7 +20,7 @@ import sieger.model.Tournament;
 import sieger.model.User;
 import sieger.service.UserService;
 
-
+@RestController("users")
 public class UserController {
 	
 	private final UserService userService;
@@ -31,7 +31,6 @@ public class UserController {
 	}
 	
 	public ResponseEntity<User> getUserByUsername(String username) {
-		
 		return null;
 	}
 	
