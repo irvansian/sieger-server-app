@@ -1,5 +1,6 @@
 package sieger.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,35 +23,57 @@ public class TeamService {
 	}
 	
 	public Optional<Team> getTeamByName(String teamName) {
-		return null;
+		return teamRepository.retrieveTeamByName(teamName);
 	}
 	
 	public Optional<Team> getTeamById(String teamId) {
-		return null;
+		return teamRepository.retrieveTeamById(teamId);
 	}
 	
 	public boolean createNewTeam(Team team) {
-		return false;
+		return teamRepository.createTeam(team);
 	}
 	
 	public boolean deleteTeam(String teamId) {
-		return false;
+		return teamRepository.deleteTeam(teamId);
 	}
 	
 	public List<User> getTeamMembers(String teamId) {
-		return null;
+		List<User> teamMember = new ArrayList<>();
+		Optional<Team> team = teamRepository.retrieveTeamById(teamId);
+		if(!team.isEmpty()) {
+			for(String memberId: team.get().getMemberList()) {
+				teamMember.add(userService.getUserById(memberId).get());
+			}
+		}
+		return teamMember;
 	}
 	
 	public List<Tournament> getTeamTournaments(String teamId) {
-		return null;
+		List<Tournament> teamTournament = new ArrayList<>();
+		Optional<Team> team = teamRepository.retrieveTeamById(teamId);
+		if(!team.isEmpty()) {
+			for(String tournamentId: team.get().getTournamentList()) {
+				teamTournament.add(tournamentService.getTournamentById(tournamentId).get());
+			}
+		}
+		return teamTournament;
 	}
 	
 	public boolean kickTeamMembers(String userId, String teamId) {
-		return false;
+		Optional<Team> team = teamRepository.retrieveTeamById(teamId);
+		User user = userService.getUserById(userId).get();
+		if(!team.isEmpty()) {
+			team.get().kickMember(user);
+		}
+		return userService.updateUserById(userId, user) && updateTeamById(teamId, team.get());
 	}
 	
 	public boolean updateTeamById(String teamId, Team team) {
-		return false;
+		Optional<Team> retrievedTeam = getTeamById(teamId);
+		if (retrievedTeam.isEmpty()) return false;
+		teamRepository.updateTeam(teamId, team);
+		return true;
 	}
 	
 }
