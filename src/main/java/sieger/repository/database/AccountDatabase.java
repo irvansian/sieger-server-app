@@ -15,8 +15,13 @@ public class AccountDatabase implements AccountRepository{
 
 	@Override
 	public Optional<Account> retrieveAccountByEmail(String email) {
-		
-		return null;
+		FirebaseAuth auth = FirebaseAuth.getInstance();
+		try {
+			UserRecord userRecord = auth.getUserByEmail(email);
+		} catch (FirebaseAuthException e) {
+			e.printStackTrace();
+		}
+		return userRecord.;
 	}
 
 	@Override

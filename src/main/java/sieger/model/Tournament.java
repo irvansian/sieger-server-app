@@ -40,11 +40,11 @@ public abstract class Tournament implements Searchable {
 	}
 	//Check if allow user to join
 	public boolean allowUserToJoin(){
-		if (tournamentDetail.getParticipantForm() == ParticipantForm.SINGLE){
+		if(tournamentDetail.getParticipantForm() == ParticipantForm.SINGLE) {
 			if (checkSize()){
 				return true;
 			}
-		}
+	    }
 		return false;
 	}
 	//check if allow team to join

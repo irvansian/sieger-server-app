@@ -68,7 +68,7 @@ public class Team extends Participant{
 	}
 	//kick member
 	public void kickMember(User user) {
-		
+		user.quitTeam(this);
 	}
 	//add member
 	public void addMember(String userId) {

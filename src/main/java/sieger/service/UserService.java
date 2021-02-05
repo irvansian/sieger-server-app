@@ -1,5 +1,6 @@
 package sieger.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -42,15 +43,36 @@ public class UserService {
 	}
 	
 	public List<Tournament> getUserTournaments(String userId) {
-		return null;
+		List<Tournament> userTournaments = new ArrayList<>();
+		Optional<User> user = userRepository.retrieveUserById(userId);
+		if(!user.isEmpty()) {
+			for(String tournamentid: user.get().getTournamentList()) {
+				userTournaments.add(tournamentService.getTournamentById(tournamentid).get());
+			}
+		}
+		return userTournaments;
 	}
 	
 	public List<Team> getUserTeams(String userId) {
-		return null;
+		List<Team> userTeams = new ArrayList<>();
+		Optional<User> user = userRepository.retrieveUserById(userId);
+		if(!user.isEmpty()) {
+			for(String teamId: user.get().getTeamList()) {
+				userTeams.add(teamService.getTeamById(teamId).get());
+			}
+		}
+		return userTeams;
 	}
 	
 	public List<Invitation> getUserInvitations(String userId) {
-		return null;
+		List<Invitation> userInvitations = new ArrayList<>();
+		Optional<User> user = userRepository.retrieveUserById(userId);
+		if(!user.isEmpty()) {
+			for(String invitationId: user.get().getInvitationList()) {
+				userInvitations.add(invitationService.getInvitation(invitationId).get());
+			}
+		}
+		return userInvitations;
 	}
 	
 	public boolean createNewUser(User user) {
