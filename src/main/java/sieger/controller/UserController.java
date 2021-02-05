@@ -60,8 +60,11 @@ public class UserController {
 		return ResponseEntity.ok(teams);
 	}
 	
-	public ResponseEntity<List<Invitation>> getUserInvitations(String userId) {
-		return null;
+	@GetMapping("/{username}/invitations")
+	public ResponseEntity<List<Invitation>> getUserInvitations(
+			@PathVariable("username") String username) {
+		List<Invitation> invitations = userService.getUserInvitations(username);
+		return ResponseEntity.ok(invitations);
 	}
 	
 	public void joinTeam(String username, String teamName, String password) {
