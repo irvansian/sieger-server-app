@@ -52,8 +52,11 @@ public class UserController {
 		return ResponseEntity.ok(tournaments);
 	}
 	
-	public ResponseEntity<List<Team>> getUserTeams(String userId) {
-		return null;
+	@GetMapping("/{username}/teams")
+	public ResponseEntity<List<Team>> getUserTeams(
+			@PathVariable("username") String username) {
+		List<Team> teams = userService.getUserTeams(username);
+		return ResponseEntity.ok(teams);
 	}
 	
 	public ResponseEntity<List<Invitation>> getUserInvitations(String userId) {
