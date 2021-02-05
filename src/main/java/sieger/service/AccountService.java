@@ -1,24 +1,14 @@
 package sieger.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import sieger.model.Account;
 import sieger.model.User;
 import sieger.repository.AccountRepository;
-import sieger.security.SecurityConfiguration;
 
 @Service
-public class AccountService implements UserDetailsService {
+public class AccountService {
 	
 	@Autowired
 	private AccountRepository accountRepository;
@@ -43,40 +33,31 @@ public class AccountService implements UserDetailsService {
 	}
 	
 	public String confirmLogin(String identifier, String password, String type) {
-		return null;
+		Account account = null;
+		if(type.equals("email")) {
+			account = accountRepository.retrieveAccountByEmail(identifier).get();
+		}
+		if(type.equals("username")) {
+			account = accountRepository.retrieveAccountByUsername(identifier).get();
+		}
+		if(account.getPassword().equals(password) && account != null) {
+			return account.getUserId();
+		} else {
+			return null;
+		}
 	}
 	
 	public boolean changePassword(String email, String oldPassword, String newPassword) {
-		return false;
+		Account account = accountRepository.retrieveAccountByEmail(email).get();
+		if(account.getPassword().equals(oldPassword)) {
+			account.setPassword(newPassword);
+		}
+		accountRepository.updateAccountById(account.getId(), account);
+		return true;
 	}
 	
 	public boolean deleteAccount(String email, String password) {
 		return false;
 	}
-
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<Account> account = accountRepository.retrieveAccountByUsername(username);
-		
-		Collection<GrantedAuthority> grantedAuths=getAuthorities();
-		boolean enables = true;  
-	    boolean accountNonExpired = true;  
-	    boolean credentialsNonExpired = true;  
-	    boolean accountNonLocked = true;
-		 
-	    User userdetail = new User(account.get().getUsername(), account.get().getPassword(),
-	    		, enables, grantedAuths);  
-	   
-	    
-	    return userdetail;
-	}
 	
-	private Collection<GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Optional<Account> getAccountByName(String name){
-		return accountRepository.retrieveAccountByUsername(name);
-	}
 }
