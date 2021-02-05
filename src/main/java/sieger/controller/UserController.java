@@ -46,8 +46,9 @@ public class UserController {
 	}
 	
 	@GetMapping("/{username}/tournaments")
-	public ResponseEntity<List<Tournament>> getUserTournaments(String userId) {
-		List<Tournament> tournaments = userService.getUserTournaments(userId);
+	public ResponseEntity<List<Tournament>> getUserTournaments(
+			@PathVariable("username") String username) {
+		List<Tournament> tournaments = userService.getUserTournaments(username);
 		return ResponseEntity.ok(tournaments);
 	}
 	
