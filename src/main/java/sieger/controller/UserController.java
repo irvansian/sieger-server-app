@@ -1,9 +1,11 @@
 package sieger.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +21,8 @@ import sieger.model.Tournament;
 import sieger.model.User;
 import sieger.service.UserService;
 
-
+@RestController
+@RequestMapping("users")
 public class UserController {
 	
 	private final UserService userService;
@@ -29,23 +32,28 @@ public class UserController {
 		this.userService = userService;
 	}
 	
-	public User getUserByUsername(String username) {
+	@GetMapping("/{username}")
+	public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
+		Optional<User> user = userService.getUserByUsername(username);
+		if (user.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(user.get());
+	}
+	
+	public ResponseEntity<User> getUserById(String userId) {
 		return null;
 	}
 	
-	public User getUserById(String userId) {
+	public ResponseEntity<List<Tournament>> getUserTournaments(String userId) {
 		return null;
 	}
 	
-	public List<Tournament> getUserTournaments(String userId) {
+	public ResponseEntity<List<Team>> getUserTeams(String userId) {
 		return null;
 	}
 	
-	public List<Team> getUserTeams(String userId) {
-		return null;
-	}
-	
-	public List<Invitation> getUserInvitations(String userId) {
+	public ResponseEntity<List<Invitation>> getUserInvitations(String userId) {
 		return null;
 	}
 	
