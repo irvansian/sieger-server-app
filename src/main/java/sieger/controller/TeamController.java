@@ -1,8 +1,12 @@
 package sieger.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,8 +25,15 @@ public class TeamController {
 		this.teamService = teamService;
 	}
 	
-	public Team getTeamByName(String teamName) {
-		return null;
+	@GetMapping("/{teamName}")
+	public ResponseEntity<Team> getTeamByName(
+			@PathVariable("teamName") String teamName) {
+		Optional<Team> team = 
+				teamService.getTeamByName(teamName);
+		if (team.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(team.get());
 	}
 	
 	public Team getTeamById(String teamId) {
