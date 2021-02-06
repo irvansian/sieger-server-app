@@ -110,7 +110,10 @@ public class TeamController {
 		return ResponseEntity.ok(null);
 	}
 	
-	public void quitTeam(String username, String teamId) {
-		
+	@PostMapping("/{teamName}")
+	public ResponseEntity<String> quitTeam(String currentUserId, 
+			@PathVariable("teamName") String teamName) {
+		userService.quitTeam(currentUserId, teamName);
+		return ResponseEntity.ok(null);
 	}
 }
