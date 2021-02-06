@@ -84,9 +84,9 @@ public class TeamController {
 		return ResponseEntity.ok(tournaments);
 	}
 	
-	@PutMapping("/{teamName}/members")
+	@PutMapping("/{teamName}/members/{id}")
 	public ResponseEntity<String> kickTeamMember(String adminId, 
-			@RequestParam(name = "id") String userToKickId, 
+			@PathVariable("id") String userToKickId, 
 			@PathVariable("teamName") String teamName) {
 		if (teamService.kickTeamMembers(userToKickId, teamName)) {
 			return ResponseEntity.ok(null);
