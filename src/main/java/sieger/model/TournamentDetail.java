@@ -7,8 +7,7 @@ public class TournamentDetail {
     private ParticipantForm participantForm;
     //id of admin
     private String adminId;
-    //name of tournament
-    private String tournamentName;
+
     //type of tournament
     private TournamentTypes tournamentTypes; 
     //type of game
@@ -22,9 +21,9 @@ public class TournamentDetail {
     //end time
     private Date endTime;
     //constructor
-    public TournamentDetail(String organisatorId, String name, TournamentTypes tournamentTypes, String typeOfGame, String location, Date registrationDeadline, Date startTime, Date endTime, ParticipantForm form){
+    public TournamentDetail(String organisatorId, TournamentTypes tournamentTypes, String typeOfGame, String location, Date registrationDeadline, Date startTime, Date endTime, ParticipantForm form){
         this.adminId = organisatorId;
-        this.tournamentName = name;
+        
         this.tournamentTypes = tournamentTypes;
         this.typeOfGame = typeOfGame;
         this.location = location;
@@ -41,10 +40,7 @@ public class TournamentDetail {
     public String getAdminId(){
         return this.adminId;
     }
-    //get name of tournament
-    public String getTournamentName(){
-        return this.tournamentName;
-    }
+   
     //get tournament type
     public TournamentTypes getTournamentTypes(){
         return this.tournamentTypes;
