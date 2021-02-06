@@ -76,8 +76,11 @@ public class TeamController {
 		return ResponseEntity.ok(members);
 	}
 	
-	public List<Tournament> getTeamTournaments(String teamId) {
-		return null;
+	@GetMapping("/{teamName}/tournaments")
+	public ResponseEntity<List<Tournament>> getTeamTournaments(
+			@PathVariable("teamName") String teamName) {
+		List<Tournament> tournaments = teamService.getTeamTournaments(teamName);
+		return ResponseEntity.ok(tournaments);
 	}
 	
 	public void kickTeamMember(String adminId, String userToKickId, String teamId) {
