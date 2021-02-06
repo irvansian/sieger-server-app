@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import sieger.model.Invitation;
@@ -43,8 +44,14 @@ public class UserController {
 		return ResponseEntity.ok(user.get());
 	}
 	
-	public ResponseEntity<User> getUserById(String userId) {
-		return null;
+	@GetMapping
+	public ResponseEntity<User> getUserById(
+			@RequestParam(name = "id") String userId) {
+		Optional<User> user = userService.getUserById(userId);
+		if (user.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(user.get());
 	}
 	
 	@GetMapping("/{username}/tournaments")
