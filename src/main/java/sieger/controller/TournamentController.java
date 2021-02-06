@@ -122,16 +122,37 @@ public class TournamentController {
 		return ResponseEntity.ok(game.get());
 	}
 	
-	public void updateGameById(String tournamentId, String gameId, Game game) {
-		
+	@PutMapping("/{tournamentName}/games/{id}")
+	public ResponseEntity<String> updateGameById(
+			@PathVariable("tournamentName") String tournamentName, 
+			@PathVariable("id") String gameId, 
+			Game game) {
+		if (gameService.updateGameById(tournamentName, gameId, game))
+			return ResponseEntity.ok(null);
+		return new ResponseEntity<String>(null, null, 
+				HttpStatus.SC_INTERNAL_SERVER_ERROR);
 	}
 	
-	public void createNewGame(String tournamentId, Game game) {
-		
+	@PostMapping("/{tournamentName}/games")
+	public ResponseEntity<String> createNewGame(
+			@PathVariable("tournamentName") String tournamentName, Game game) {
+		if (gameService.createNewGame(tournamentName, game)) {
+			return new ResponseEntity<String>(null, null, HttpStatus.SC_CREATED);
+		}
+		return new ResponseEntity<String>(null, null, 
+				HttpStatus.SC_INTERNAL_SERVER_ERROR);
 	}
 	
-	public void deleteGame(String gameId) {
+	@DeleteMapping("/{tournamentName}/games/{id}")
+	public ResponseEntity<String> deleteGame(
+			@PathVariable("tournamentName") String tournamentName, 
+			@PathVariable("id") String gameId) {
+		if (gameService.deleteGame(tournamentName, gameId)) {
+			return ResponseEntity.ok(null);
+		}
 		
+		return new ResponseEntity<String>(null, null, 
+				HttpStatus.SC_INTERNAL_SERVER_ERROR);
 	}
 	
 	
