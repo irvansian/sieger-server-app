@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -83,7 +84,15 @@ public class TeamController {
 		return ResponseEntity.ok(tournaments);
 	}
 	
-	public void kickTeamMember(String adminId, String userToKickId, String teamId) {
+	@PutMapping("/{teamName}/members")
+	public ResponseEntity<String> kickTeamMember(String adminId, 
+			@RequestParam(name = "id") String userToKickId, 
+			@PathVariable("teamName") String teamName) {
+		if (teamService.kickTeamMembers(userToKickId, teamName)) {
+			return ResponseEntity.ok(null);
+		}
+		return new ResponseEntity<String>(null, null, 
+				HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		
 	}
 }
