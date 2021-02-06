@@ -1,6 +1,7 @@
 package sieger.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import sieger.model.Invitation;
@@ -33,7 +35,8 @@ public class UserController {
 	}
 	
 	@GetMapping("/{username}")
-	public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
+	public ResponseEntity<User> getUserByUsername(
+			@PathVariable("username") String username) {
 		Optional<User> user = userService.getUserByUsername(username);
 		if (user.isEmpty()) {
 			return ResponseEntity.notFound().build();
@@ -41,20 +44,35 @@ public class UserController {
 		return ResponseEntity.ok(user.get());
 	}
 	
-	public ResponseEntity<User> getUserById(String userId) {
-		return null;
+	@GetMapping
+	public ResponseEntity<User> getUserById(
+			@RequestParam(name = "id") String userId) {
+		Optional<User> user = userService.getUserById(userId);
+		if (user.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(user.get());
 	}
 	
-	public ResponseEntity<List<Tournament>> getUserTournaments(String userId) {
-		return null;
+	@GetMapping("/{username}/tournaments")
+	public ResponseEntity<List<Tournament>> getUserTournaments(
+			@PathVariable("username") String username) {
+		List<Tournament> tournaments = userService.getUserTournaments(username);
+		return ResponseEntity.ok(tournaments);
 	}
 	
-	public ResponseEntity<List<Team>> getUserTeams(String userId) {
-		return null;
+	@GetMapping("/{username}/teams")
+	public ResponseEntity<List<Team>> getUserTeams(
+			@PathVariable("username") String username) {
+		List<Team> teams = userService.getUserTeams(username);
+		return ResponseEntity.ok(teams);
 	}
 	
-	public ResponseEntity<List<Invitation>> getUserInvitations(String userId) {
-		return null;
+	@GetMapping("/{username}/invitations")
+	public ResponseEntity<List<Invitation>> getUserInvitations(
+			@PathVariable("username") String username) {
+		List<Invitation> invitations = userService.getUserInvitations(username);
+		return ResponseEntity.ok(invitations);
 	}
 	
 	public void joinTeam(String username, String teamName, String password) {
@@ -65,8 +83,14 @@ public class UserController {
 		
 	}
 	
-	public void updateUserDetail(String userId, String forename, String surname) {
-		
+	@PutMapping("/{username}")
+	public ResponseEntity<String> updateUserDetail(@PathVariable("username") String oldUsername, 
+			@RequestBody Map<String, String> userDetail) {
+		String newUsername = userDetail.get("username");
+		String forename = userDetail.get("forename");
+		String surname = userDetail.get("surname");
+		userService.updateUserDetail(oldUsername, newUsername, surname, forename);
+		return ResponseEntity.ok(null);
 	}
 	
 	

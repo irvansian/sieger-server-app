@@ -33,7 +33,7 @@ public class GameService {
 		return false;
 	}
 	
-	public boolean deleteGame(String gameId) {
+	public boolean deleteGame(String tournamentName, String gameId) {
 		return false;
 	}
 	
