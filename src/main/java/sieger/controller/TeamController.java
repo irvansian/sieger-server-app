@@ -102,18 +102,16 @@ public class TeamController {
 	
 	
 	@PostMapping("/{teamName}")
-	public ResponseEntity<String> joinTeam(String currentUserId, 
+	public ResponseEntity<String> handleMembership(String currentUserId, 
 			@PathVariable("teamName") String teamName, 
-			@RequestBody Map<String, String> joinRequestPayload) {
-		String password = joinRequestPayload.get("password");
-		userService.joinTeam(currentUserId, teamName, password);
-		return ResponseEntity.ok(null);
-	}
-	
-	@PostMapping("/{teamName}")
-	public ResponseEntity<String> quitTeam(String currentUserId, 
-			@PathVariable("teamName") String teamName) {
-		userService.quitTeam(currentUserId, teamName);
+			@RequestBody Map<String, String> payload) {
+		if (payload.get("activity").equals("join")) {
+			String password = payload.get("password");
+			userService.joinTeam(currentUserId, teamName, password);
+		} else if (payload.get("activity").equals("quit")) {
+			userService.quitTeam(currentUserId, teamName);
+		}
+		
 		return ResponseEntity.ok(null);
 	}
 }
