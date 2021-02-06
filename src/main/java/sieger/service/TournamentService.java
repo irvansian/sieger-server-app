@@ -24,8 +24,8 @@ public class TournamentService {
 		return null;
 	}
 	
-	public Optional<Tournament> getTournamentById(String tournametnId) {
-		return null;
+	public Optional<Tournament> getTournamentById(String tournamentId) {
+		return tournamentRepository.retrieveTournamentById(tournamentId);
 	}
 	
 	
