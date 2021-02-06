@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import sieger.model.Game;
 import sieger.model.Participant;
 import sieger.model.Tournament;
 import sieger.model.TournamentDetail;
@@ -98,6 +99,26 @@ public class TournamentController {
 		}
 		return new ResponseEntity<String>(null, null, 
 				HttpStatus.SC_INTERNAL_SERVER_ERROR);
+	}
+	
+	public List<Game> getTournamentGames(String tournamentId) {
+		return null;
+	}
+	
+	public Game getGameById(String tournamentId, String gameId) {
+		return null;
+	}
+	
+	public void updateGameById(String tournamentId, String gameId, Game game) {
+		
+	}
+	
+	public void createNewGame(String tournamentId, Game game) {
+		
+	}
+	
+	public void deleteGame(String gameId) {
+		
 	}
 	
 	
