@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -73,8 +75,17 @@ public class TournamentController {
 				HttpStatus.SC_UNPROCESSABLE_ENTITY);
 	}
 	
-	public void updateTournamentDetailById(String tournamentId, TournamentDetail tournamentDetail) {
+	@PutMapping("/{tournamentName}")
+	public ResponseEntity<String> updateTournamentDetailById(
+			@PathVariable("tournamentName") String tournamentName, 
+			@RequestBody TournamentDetail tournamentDetail) {
+		if (tournamentService.updateTournamentDetailById(tournamentName, 
+				tournamentDetail)) {
+			return ResponseEntity.ok(null);
+		}
 		
+		return new ResponseEntity<String>(null, null, 
+				HttpStatus.SC_UNPROCESSABLE_ENTITY);
 	}
 	
 	public void deleteTournament(String tournamentId) {
