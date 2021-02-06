@@ -1,6 +1,7 @@
 package sieger.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -75,8 +76,14 @@ public class UserController {
 		
 	}
 	
-	public void updateUserDetail(String userId, String forename, String surname) {
-		
+	@PutMapping("/{username}")
+	public ResponseEntity<String> updateUserDetail(@PathVariable("username") String oldUsername, 
+			@RequestBody Map<String, String> userDetail) {
+		String newUsername = userDetail.get("username");
+		String forename = userDetail.get("forename");
+		String surname = userDetail.get("surname");
+		userService.updateUserDetail(oldUsername, newUsername, surname, forename);
+		return ResponseEntity.ok(null);
 	}
 	
 	
