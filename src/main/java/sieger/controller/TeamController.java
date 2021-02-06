@@ -1,6 +1,7 @@
 package sieger.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,14 +21,16 @@ import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.model.User;
 import sieger.service.TeamService;
+import sieger.service.UserService;
 
 @RestController
 @RequestMapping("teams")
 public class TeamController {
 	private TeamService teamService;
+	private UserService userService;
 	
 	@Autowired
-	public TeamController(TeamService teamService) {
+	public TeamController(TeamService teamService, UserService userService) {
 		this.teamService = teamService;
 	}
 	
@@ -96,8 +100,14 @@ public class TeamController {
 		
 	}
 	
-	public void joinTeam(String username, String teamName, String password) {
-		
+	
+	@PostMapping("/{teamName}")
+	public ResponseEntity<String> joinTeam(String currentUserId, 
+			@PathVariable("teamName") String teamName, 
+			@RequestBody Map<String, String> joinRequestPayload) {
+		String password = joinRequestPayload.get("password");
+		userService.joinTeam(currentUserId, teamName, password);
+		return ResponseEntity.ok(null);
 	}
 	
 	public void quitTeam(String username, String teamId) {
