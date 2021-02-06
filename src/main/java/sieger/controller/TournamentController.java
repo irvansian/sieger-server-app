@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import sieger.model.Participant;
@@ -31,8 +32,14 @@ public class TournamentController {
 		return null;
 	}
 	
-	public Tournament getTournamentById(String tournamentId) {
-		return null;
+	@GetMapping
+	public ResponseEntity<Tournament> getTournamentById(
+			@RequestParam(name = "id") String tournamentId) {
+		Optional<Tournament> tournament = tournamentService.getTournamentById(tournamentId);
+		if (tournament.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(tournament.get());
 	}
 	
 	@GetMapping("/{tournamentName}")
