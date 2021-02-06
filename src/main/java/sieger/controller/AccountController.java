@@ -1,11 +1,13 @@
 package sieger.controller;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +31,7 @@ public class AccountController {
 	
 	@GetMapping("/")
 	public String returnHello() {
+		
 		return "Hello";
 	}
 	
@@ -45,27 +48,50 @@ public class AccountController {
 		final UserDetails userDetails = accountService.loadUserByUsername(authenticationRequest.getUsername());
 		final String jwt = jwtUtil.generateToken(userDetails);
 		
-		
 		return ResponseEntity.ok(jwt);
 		
 	}
 	
 	//these are the real methods
-	
-	public String registerUser(String email, String password, String username, String surname, String forname) {
-		return null;
+	@PostMapping
+	public ResponseEntity<String> registerUser(String email, String password, String username, String surname, String forname) {
+		String result = accountService.registerUser(email, password, username, surname, forname);
+		if(result != null) {
+			return ResponseEntity.ok(result);
+		}
+		return new ResponseEntity<String>(null, null, 
+				HttpStatus.SC_NOT_FOUND);
 	}
 	
-	public String confirmLogin(String identifier, String password, String type) {
-		return null;
+	public ResponseEntity<String> confirmLogin(String identifier, String password, String type) {
+		String result = accountService.confirmLogin(identifier, password, type);
+		if(result != null) {
+			return ResponseEntity.ok(result);
+		}
+		return new ResponseEntity<String>(null, null, 
+				HttpStatus.SC_NOT_FOUND);
 	}
 	
-	public void changePassowrd(String email, String oldPassword, String newPassword) {
-		
+	public ResponseEntity<String> changePassowrd(String email, String oldPassword, String newPassword) {
+		boolean result = accountService.changePassword(email, oldPassword, newPassword);
+		if(result) {
+			return new ResponseEntity<String>(null, null, 
+					HttpStatus.SC_OK);
+		}else {
+		    return new ResponseEntity<String>(null, null, 
+				HttpStatus.SC_NOT_FOUND);
+		}
 	}
 	
-	public void deleteAccount(String email, String password) {
-		
+	public ResponseEntity<String> deleteAccount(String email, String password) {
+		boolean result = accountService.deleteAccount(email, password);
+		if(result) {
+			return new ResponseEntity<String>(null, null, 
+					HttpStatus.SC_OK);
+		}else {
+		    return new ResponseEntity<String>(null, null, 
+				HttpStatus.SC_NOT_FOUND);
+		}
 	}
 	
 	
