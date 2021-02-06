@@ -84,7 +84,7 @@ public class TeamController {
 		return ResponseEntity.ok(tournaments);
 	}
 	
-	@PutMapping("/{teamName}/members/{id}")
+	@PutMapping("/{teamName}/members/{id}/kick")
 	public ResponseEntity<String> kickTeamMember(String adminId, 
 			@PathVariable("id") String userToKickId, 
 			@PathVariable("teamName") String teamName) {
