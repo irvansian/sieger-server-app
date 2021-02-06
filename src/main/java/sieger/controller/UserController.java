@@ -21,6 +21,7 @@ import sieger.model.Invitation;
 import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.model.User;
+import sieger.service.InvitationService;
 import sieger.service.UserService;
 
 @RestController
@@ -28,9 +29,10 @@ import sieger.service.UserService;
 public class UserController {
 	
 	private final UserService userService;
+	private InvitationService invitationService;
 	
 	@Autowired
-	public UserController(UserService userService) {
+	public UserController(UserService userService, InvitationService invitationService) {
 		this.userService = userService;
 	}
 	
@@ -93,12 +95,18 @@ public class UserController {
 		return ResponseEntity.ok(null);
 	}
 	
-	public void acceptInvitation(String userId, String invitationId) {
-		
-	}
-	
-	public void declineInvitation(String userId, String invitationId) {
-		
+	@PostMapping("/{username}/invitations/{id}")
+	public ResponseEntity<String> handleInvitationAcceptation(
+			String currentUserId, 
+			@PathVariable("id") String invitationId,
+			@RequestBody Map<String, Boolean> acceptation) {
+		boolean acceptationVal = acceptation.get("accept").booleanValue();
+		if (acceptationVal == true) {
+			invitationService.acceptInvitation(currentUserId, invitationId);
+		} else if (acceptationVal == false) {
+			invitationService.declineInvitation(currentUserId, invitationId);
+		}
+		return ResponseEntity.ok(null);
 	}
 	
 	

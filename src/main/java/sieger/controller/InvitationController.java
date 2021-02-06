@@ -30,12 +30,4 @@ public class InvitationController {
 				HttpStatus.SC_UNPROCESSABLE_ENTITY);
 	}
 	
-	public void acceptInvitation(String userId, String invitationId) {
-		
-	}
-	
-	public void declineInvitation(String userId, String invitationId) {
-		
-	}
-	
 }
