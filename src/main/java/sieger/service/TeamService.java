@@ -90,8 +90,18 @@ public class TeamService {
 		}
 	}
 	
-	public boolean quitTeam(String userId, String teamId) {
-		return false;
+	public void quitTeam(String userId, String teamName) {
+		Optional<Team> team = getTeamByName(teamName);
+		Optional<User> user = userService.getUserById(userId);
+		if (team.isEmpty() || user.isEmpty()) {
+			//throw exception
+		}
+		
+		boolean success = user.get().quitTeam(team.get());
+		
+		if (!success) {
+			//throw an exception
+		}
 	}
 	
 }
