@@ -95,4 +95,12 @@ public class TeamController {
 				HttpStatus.SC_INTERNAL_SERVER_ERROR);
 		
 	}
+	
+	public void joinTeam(String username, String teamName, String password) {
+		
+	}
+	
+	public void quitTeam(String username, String teamId) {
+		
+	}
 }

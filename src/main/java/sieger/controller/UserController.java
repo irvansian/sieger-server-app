@@ -77,14 +77,6 @@ public class UserController {
 		return ResponseEntity.ok(invitations);
 	}
 	
-	public void joinTeam(String username, String teamName, String password) {
-		
-	}
-	
-	public void quitTeam(String username, String teamId) {
-		
-	}
-	
 	@PutMapping("/{username}")
 	public ResponseEntity<String> updateUserDetail(@PathVariable("username") String oldUsername, 
 			@RequestBody Map<String, String> userDetail) {
