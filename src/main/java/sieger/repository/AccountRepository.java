@@ -10,5 +10,5 @@ public interface AccountRepository {
 	Optional<Account> retrieveAccountById(String accountId);
 	boolean createAccount(Account account);
 	boolean updateAccountById(String id, Account account);
-	boolean deleteAccount(String email, String password);	
+	boolean deleteAccount(String accountId);	
 }

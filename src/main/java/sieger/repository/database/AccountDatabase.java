@@ -69,9 +69,14 @@ public class AccountDatabase implements AccountRepository{
 	}
 
 	@Override
-	public boolean deleteAccount(String email, String password) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean deleteAccount(String accountId) {
+		FirebaseAuth auth = FirebaseAuth.getInstance();
+		try {
+			auth.deleteUser(accountId);
+		} catch (FirebaseAuthException e) {
+			e.printStackTrace();
+		}
+		return true;
 	}
 
 
