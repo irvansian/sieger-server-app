@@ -3,10 +3,12 @@ package sieger.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,8 +49,14 @@ public class TeamController {
 		return ResponseEntity.ok(team.get());
 	}
 	
-	public void createNewTeam(Team team) {
+	@PostMapping
+	public ResponseEntity<String> createNewTeam(Team team) {
+		if (teamService.createNewTeam(team)) {
+			return ResponseEntity.ok(null);
+		}
 		
+		return new ResponseEntity<String>(null, null, 
+				HttpStatus.SC_UNPROCESSABLE_ENTITY);
 	}
 	
 	public void deleteTeam(String teamId) {
