@@ -69,8 +69,11 @@ public class TeamController {
 				HttpStatus.SC_INTERNAL_SERVER_ERROR);
 	}
 	
-	public List<User> getTeamMembers(String teamId) {
-		return null;
+	@GetMapping("/{teamName}/members")
+	public ResponseEntity<List<User>> getTeamMembers(
+			@PathVariable("teamName") String teamName) {
+		List<User> members = teamService.getTeamMembers(teamName);
+		return ResponseEntity.ok(members);
 	}
 	
 	public List<Tournament> getTeamTournaments(String teamId) {
