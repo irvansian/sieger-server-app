@@ -76,4 +76,12 @@ public class TeamService {
 		return true;
 	}
 	
+	public boolean joinTeam(String userId, String teamName, String teamPassword) {
+		return false;
+	}
+	
+	public boolean quitTeam(String userId, String teamId) {
+		return false;
+	}
+	
 }

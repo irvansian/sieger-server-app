@@ -83,14 +83,6 @@ public class UserService {
 		return userRepository.deleteUser(userId);
 	}
 	
-	public boolean joinTeam(String userId, String teamName, String teamPassword) {
-		return false;
-	}
-	
-	public boolean quitTeam(String userId, String teamId) {
-		return false;
-	}
-	
 	public boolean updateUserDetail(String userId, String username, String surname, String forename) {
 		Optional<User> user = getUserById(userId);
 		if (user.isEmpty()) return false;

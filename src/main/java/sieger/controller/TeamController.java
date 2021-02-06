@@ -26,7 +26,6 @@ import sieger.service.UserService;
 @RequestMapping("teams")
 public class TeamController {
 	private TeamService teamService;
-	private UserService userService;
 	
 	@Autowired
 	public TeamController(TeamService teamService, UserService userService) {
@@ -105,9 +104,9 @@ public class TeamController {
 			@RequestBody Map<String, String> payload) {
 		if (payload.get("activity").equals("join")) {
 			String password = payload.get("password");
-			userService.joinTeam(currentUserId, teamName, password);
+			teamService.joinTeam(currentUserId, teamName, password);
 		} else if (payload.get("activity").equals("quit")) {
-			userService.quitTeam(currentUserId, teamName);
+			teamService.quitTeam(currentUserId, teamName);
 		}
 		
 		return ResponseEntity.ok(null);
