@@ -1,5 +1,6 @@
 package sieger.controller;
 
+import sieger.service.GameService;
 import sieger.service.TournamentService;
 
 
@@ -28,6 +29,7 @@ import sieger.model.TournamentDetail;
 @RequestMapping("tournaments")
 public class TournamentController {
 	private TournamentService tournamentService;
+	private GameService gameService;
 
 	@Autowired
 	public TournamentController(TournamentService tournamentService) {
@@ -91,7 +93,7 @@ public class TournamentController {
 				HttpStatus.SC_UNPROCESSABLE_ENTITY);
 	}
 	
-	@DeleteMapping("/tournamentName")
+	@DeleteMapping("/{tournamentName}")
 	public ResponseEntity<String> deleteTournament(
 			@PathVariable("tournamentName") String tournamentName) {
 		if (tournamentService.deleteTournament(tournamentName)) {
@@ -101,8 +103,11 @@ public class TournamentController {
 				HttpStatus.SC_INTERNAL_SERVER_ERROR);
 	}
 	
-	public List<Game> getTournamentGames(String tournamentId) {
-		return null;
+	@GetMapping("/{tournamentName}/games")
+	public ResponseEntity<List<Game>> getTournamentGames(
+			@PathVariable("tournamentName") String tournamentName) {
+		List<Game> games = gameService.getAllGame(tournamentName);
+		return ResponseEntity.ok(games);
 	}
 	
 	public Game getGameById(String tournamentId, String gameId) {
