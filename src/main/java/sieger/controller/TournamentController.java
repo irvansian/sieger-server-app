@@ -2,6 +2,7 @@ package sieger.controller;
 
 import sieger.service.TournamentService;
 
+
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import sieger.model.Participant;
 import sieger.model.Tournament;
 import sieger.model.TournamentDetail;
-import sieger.model.User;
 
 @RestController
 @RequestMapping("tournaments")
@@ -40,7 +40,8 @@ public class TournamentController {
 	@GetMapping
 	public ResponseEntity<Tournament> getTournamentById(
 			@RequestParam(name = "id") String tournamentId) {
-		Optional<Tournament> tournament = tournamentService.getTournamentById(tournamentId);
+		Optional<Tournament> tournament = tournamentService
+				.getTournamentById(tournamentId);
 		if (tournament.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}

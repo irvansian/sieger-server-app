@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import sieger.model.Team;
@@ -36,8 +37,14 @@ public class TeamController {
 		return ResponseEntity.ok(team.get());
 	}
 	
-	public Team getTeamById(String teamId) {
-		return null;
+	@GetMapping
+	public ResponseEntity<Team> getTeamById(
+			@RequestParam(name = "id") String teamId) {
+		Optional<Team> team = teamService.getTeamById(teamId);
+		if (team.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(team.get());
 	}
 	
 	public void createNewTeam(Team team) {
