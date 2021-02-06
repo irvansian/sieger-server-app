@@ -53,8 +53,12 @@ public class TournamentController {
 		return ResponseEntity.ok(tournament.get());
 	}
 	
-	public List<Participant> getTournamentParticipants(String tournamentId) {
-		return null;
+	@GetMapping("/{tournamentName}/participants")
+	public ResponseEntity<List<Participant>> getTournamentParticipants(
+			@PathVariable("tournamentName") String tournamentName) {
+		List<Participant> participants = tournamentService
+				.getTournamentParticipants(tournamentName);
+		return ResponseEntity.ok(participants);
 	}
 	
 	public void createNewTournament(Tournament tournament) {
