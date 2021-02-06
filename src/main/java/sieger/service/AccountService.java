@@ -1,5 +1,7 @@
 package sieger.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,18 +35,24 @@ public class AccountService {
 	}
 	
 	public String confirmLogin(String identifier, String password, String type) {
-		Account account = null;
+		
 		if(type.equals("email")) {
-			account = accountRepository.retrieveAccountByEmail(identifier).get();
+			Optional<Account> account = accountRepository.retrieveAccountByEmail(identifier);
+			if(!account.isEmpty()) {
+				if(account.get().getPassword().equals(password)) {
+					return account.get().getUserId();
+				}
+			}
 		}
 		if(type.equals("username")) {
-			account = accountRepository.retrieveAccountByUsername(identifier).get();
+			Optional<Account> account = accountRepository.retrieveAccountByUsername(identifier);
+			if(!account.isEmpty()) {
+				if(account.get().getPassword().equals(password)) {
+					return account.get().getUserId();
+				}
+			}
 		}
-		if(account.getPassword().equals(password) && account != null) {
-			return account.getUserId();
-		} else {
-			return null;
-		}
+		return null;
 	}
 	
 	public boolean changePassword(String email, String oldPassword, String newPassword) {
@@ -57,6 +65,14 @@ public class AccountService {
 	}
 	
 	public boolean deleteAccount(String email, String password) {
+		Optional<Account> account = accountRepository.retrieveAccountByEmail(email);
+		if (!account.isEmpty()) {
+			if(account.get().getPassword().equals(password)) {
+				accountRepository.deleteAccount(account.get().getId());
+				userService.deleteUser(account.get().getUserId());
+				return true;
+			}
+		}
 		return false;
 	}
 	
