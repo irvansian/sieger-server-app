@@ -1,10 +1,12 @@
 package sieger.controller;
 
 import sieger.service.GameService;
+import sieger.service.ParticipantService;
 import sieger.service.TournamentService;
 
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.http.HttpStatus;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -30,10 +33,11 @@ import sieger.model.TournamentDetail;
 public class TournamentController {
 	private TournamentService tournamentService;
 	private GameService gameService;
+	private ParticipantService participantService;
 
 	@Autowired
 	public TournamentController(TournamentService tournamentService, 
-			GameService gameService) {
+			GameService gameService, ParticipantService participantService) {
 		this.tournamentService = tournamentService;
 	}
 	
@@ -102,6 +106,20 @@ public class TournamentController {
 		}
 		return new ResponseEntity<String>(null, null, 
 				HttpStatus.SC_INTERNAL_SERVER_ERROR);
+	}
+	
+	@PostMapping("/{tournamentName}")
+	public ResponseEntity<String> handleParticipation(
+			@PathVariable("tournamentName") String tournamentName,
+			@RequestBody Map<String, Boolean> participation,
+			String currentUserId) {
+		boolean participationVal = participation.get("participation").booleanValue();
+		if (participationVal == true) {
+			participantService.joinTournament(currentUserId, tournamentName);
+		} else if (participationVal == false) {
+			participantService.quitTournament(currentUserId, tournamentName);
+		}
+		return ResponseEntity.ok(null);
 	}
 	
 	@GetMapping("/{tournamentName}/games")
