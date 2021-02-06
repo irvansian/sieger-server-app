@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,8 +60,13 @@ public class TeamController {
 				HttpStatus.SC_UNPROCESSABLE_ENTITY);
 	}
 	
-	public void deleteTeam(String teamId) {
-		
+	@DeleteMapping("/{teamName}")
+	public ResponseEntity<String> deleteTeam(@PathVariable("teamName") String teamName) {
+		if (teamService.deleteTeam(teamName)) {
+			return ResponseEntity.ok(null);
+		}
+		return new ResponseEntity<String>(null, null, 
+				HttpStatus.SC_INTERNAL_SERVER_ERROR);
 	}
 	
 	public List<User> getTeamMembers(String teamId) {
