@@ -93,5 +93,13 @@ public class UserController {
 		return ResponseEntity.ok(null);
 	}
 	
+	public void acceptInvitation(String userId, String invitationId) {
+		
+	}
+	
+	public void declineInvitation(String userId, String invitationId) {
+		
+	}
+	
 	
 }
