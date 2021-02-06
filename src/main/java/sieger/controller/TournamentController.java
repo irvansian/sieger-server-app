@@ -32,7 +32,8 @@ public class TournamentController {
 	private GameService gameService;
 
 	@Autowired
-	public TournamentController(TournamentService tournamentService) {
+	public TournamentController(TournamentService tournamentService, 
+			GameService gameService) {
 		this.tournamentService = tournamentService;
 	}
 	
@@ -110,8 +111,15 @@ public class TournamentController {
 		return ResponseEntity.ok(games);
 	}
 	
-	public Game getGameById(String tournamentId, String gameId) {
-		return null;
+	@GetMapping("/{tournamentName}/games/{id}")
+	public ResponseEntity<Game> getGameById(
+			@PathVariable("tournamentName") String tournamentName, 
+			@PathVariable("id") String gameId) {
+		Optional<Game> game = gameService.getGameById(tournamentName, gameId);
+		if (game.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(game.get());
 	}
 	
 	public void updateGameById(String tournamentId, String gameId, Game game) {
