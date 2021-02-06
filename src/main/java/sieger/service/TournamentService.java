@@ -30,7 +30,7 @@ public class TournamentService {
 	
 	
 	public Optional<Tournament> getTournamentByName(String tournamentName) {
-		return null;
+		return tournamentRepository.retrieveTournamentByName(tournamentName);
 	}
 	
 	public List<Participant> getTournamentParticipants(String tournamentId) {
