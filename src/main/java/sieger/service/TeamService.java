@@ -76,8 +76,18 @@ public class TeamService {
 		return true;
 	}
 	
-	public boolean joinTeam(String userId, String teamName, String teamPassword) {
-		return false;
+	public void joinTeam(String userId, String teamName, String teamPassword) {
+		Optional<Team> team = getTeamByName(teamName);
+		Optional<User> user = userService.getUserById(userId);
+		if (team.isEmpty() || user.isEmpty()) {
+			//throw exception
+		}
+		
+		boolean success = user.get().joinTeam(team.get(), teamPassword);
+		
+		if (!success) {
+			//throw an exception
+		}
 	}
 	
 	public boolean quitTeam(String userId, String teamId) {
