@@ -7,6 +7,7 @@ import sieger.model.Tournament;
 
 public interface TournamentRepository {
 	Optional<Tournament> retrieveTournamentById(String tournamentId);
+	Optional<Tournament> retrieveTournamentByName(String tournamentName);
 	List<Tournament> retrieveMultipleTournamentsByKeyword(String keyword);
 	boolean createTournament(Tournament tournament);
 	boolean updateTournament(String tournamentId, Tournament tournament);
