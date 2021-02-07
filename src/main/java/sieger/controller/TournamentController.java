@@ -128,16 +128,19 @@ public class TournamentController {
 	
 	@GetMapping("/{tournamentName}/games")
 	public ResponseEntity<List<Game>> getTournamentGames(
-			@PathVariable("tournamentName") String tournamentName) {
-		List<Game> games = gameService.getAllGame(tournamentName);
+			@PathVariable("tournamentName") String tournamentName,
+			String currentUserId) {
+		List<Game> games = gameService.getAllGame(currentUserId, tournamentName);
 		return ResponseEntity.ok(games);
 	}
 	
 	@GetMapping("/{tournamentName}/games/{id}")
 	public ResponseEntity<Game> getGameById(
 			@PathVariable("tournamentName") String tournamentName, 
-			@PathVariable("id") String gameId) {
-		Optional<Game> game = gameService.getGameById(tournamentName, gameId);
+			@PathVariable("id") String gameId,
+			String currentUserId) {
+		Optional<Game> game = gameService.getGameById(currentUserId, 
+				tournamentName, gameId);
 		if (game.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
