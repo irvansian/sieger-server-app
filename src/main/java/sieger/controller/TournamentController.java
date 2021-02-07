@@ -46,9 +46,10 @@ public class TournamentController {
 	
 	@GetMapping
 	public ResponseEntity<Tournament> getTournamentById(
-			@RequestParam(name = "id") String tournamentId) {
+			@RequestParam(name = "id") String tournamentId,
+			String currentUserId) {
 		Optional<Tournament> tournament = tournamentService
-				.getTournamentById(tournamentId);
+				.getTournamentById(currentUserId, tournamentId);
 		if (tournament.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
@@ -57,9 +58,10 @@ public class TournamentController {
 	
 	@GetMapping("/{tournamentName}")
 	public ResponseEntity<Tournament> getTournamentByName(
-			@PathVariable("tournamentName") String tournamentName) {
+			@PathVariable("tournamentName") String tournamentName,
+			String currentUserId) {
 		Optional<Tournament> tournament = 
-				tournamentService.getTournamentByName(tournamentName);
+				tournamentService.getTournamentByName(currentUserId, tournamentName);
 		if (tournament.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
@@ -68,9 +70,10 @@ public class TournamentController {
 	
 	@GetMapping("/{tournamentName}/participants")
 	public ResponseEntity<List<Participant>> getTournamentParticipants(
-			@PathVariable("tournamentName") String tournamentName) {
+			@PathVariable("tournamentName") String tournamentName,
+			String currentUserId) {
 		List<Participant> participants = tournamentService
-				.getTournamentParticipants(tournamentName);
+				.getTournamentParticipants(currentUserId, tournamentName);
 		return ResponseEntity.ok(participants);
 	}
 	
@@ -87,9 +90,10 @@ public class TournamentController {
 	@PutMapping("/{tournamentName}")
 	public ResponseEntity<String> updateTournamentDetailById(
 			@PathVariable("tournamentName") String tournamentName, 
-			@RequestBody TournamentDetail tournamentDetail) {
-		if (tournamentService.updateTournamentDetailById(tournamentName, 
-				tournamentDetail)) {
+			@RequestBody TournamentDetail tournamentDetail,
+			String currentUserId) {
+		if (tournamentService.updateTournamentDetailById(currentUserId, 
+				tournamentName, tournamentDetail)) {
 			return ResponseEntity.ok(null);
 		}
 		
@@ -99,8 +103,9 @@ public class TournamentController {
 	
 	@DeleteMapping("/{tournamentName}")
 	public ResponseEntity<String> deleteTournament(
-			@PathVariable("tournamentName") String tournamentName) {
-		if (tournamentService.deleteTournament(tournamentName)) {
+			@PathVariable("tournamentName") String tournamentName,
+			String currentUserId) {
+		if (tournamentService.deleteTournament(currentUserId, tournamentName)) {
 			return ResponseEntity.ok(null);
 		}
 		return new ResponseEntity<String>(null, null, 

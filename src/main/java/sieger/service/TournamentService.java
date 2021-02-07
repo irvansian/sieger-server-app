@@ -56,14 +56,10 @@ public class TournamentService {
 		return tournamentOpt;
 	}
 	
-	public List<Participant> getTournamentParticipants(String tournamentName) {
-		Optional<Tournament> tournament = tournamentRepository
-				.retrieveTournamentByName(tournamentName);
-		if (tournament.isEmpty()) {
-			//throw exception
-		}
-		String tournamentId = tournament.get().getTournamentId();
-		ParticipantForm pf = tournament.get().getTournamentDetail()
+	public List<Participant> getTournamentParticipants(String currentUserId, String tournamentName) {
+		Tournament tournament = getTournamentByName(currentUserId, tournamentName).get();
+		String tournamentId = tournament.getTournamentId();
+		ParticipantForm pf = tournament.getTournamentDetail()
 				.getParticipantForm();
 		return tournamentRepository.retrieveTournamentParticipants(tournamentId, pf);
 	}
