@@ -34,9 +34,10 @@ public class TeamController {
 	
 	@GetMapping("/{teamName}")
 	public ResponseEntity<Team> getTeamByName(
-			@PathVariable("teamName") String teamName) {
+			@PathVariable("teamName") String teamName,
+			String currentUserId) {
 		Optional<Team> team = 
-				teamService.getTeamByName(teamName);
+				teamService.getTeamByName(currentUserId,teamName);
 		if (team.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}

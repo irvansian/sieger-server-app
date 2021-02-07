@@ -15,7 +15,7 @@ public class ParticipantService {
 	}
 	
 	public boolean joinTournament(String participantId, String tournamentId) {
-		Tournament tournament = tournamentService.getTournamentById(tournamentId).get();
+		Tournament tournament = tournamentService.getTournamentById(participantId,tournamentId).get();
 		Participant participant;
 		if(tournament.allowUserToJoin()) {
 			participant = userService.getUserById(participantId).get();
@@ -29,7 +29,7 @@ public class ParticipantService {
 	}
 	
 	public boolean quitTournament(String participantId, String tournamentId) {
-		Tournament tournament = tournamentService.getTournamentById(tournamentId).get();
+		Tournament tournament = tournamentService.getTournamentById(participantId,tournamentId).get();
 		Participant participant;
 		if(tournament.allowUserToJoin()) {
 			participant = userService.getUserById(participantId).get();

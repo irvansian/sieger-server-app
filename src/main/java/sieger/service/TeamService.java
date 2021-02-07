@@ -63,7 +63,7 @@ public class TeamService {
 		Optional<Team> team = teamRepository.retrieveTeamById(teamId);
 		if(!team.isEmpty()) {
 			for(String tournamentId: team.get().getTournamentList()) {
-				teamTournament.add(tournamentService.getTournamentById(tournamentId).get());
+				teamTournament.add(tournamentService.getTournamentById(teamId, tournamentId).get());
 			}
 		}
 		return teamTournament;
@@ -86,7 +86,7 @@ public class TeamService {
 	}
 	
 	public void joinTeam(String userId, String teamName, String teamPassword) {
-		Optional<Team> team = getTeamByName(teamName);
+		Optional<Team> team = getTeamByName(userId, teamName);
 		Optional<User> user = userService.getUserById(userId);
 		if (team.isEmpty() || user.isEmpty()) {
 			//throw exception
@@ -102,7 +102,7 @@ public class TeamService {
 	}
 	
 	public void quitTeam(String userId, String teamName) {
-		Optional<Team> team = getTeamByName(teamName);
+		Optional<Team> team = getTeamByName(userId,teamName);
 		Optional<User> user = userService.getUserById(userId);
 		if (team.isEmpty() || user.isEmpty()) {
 			//throw exception

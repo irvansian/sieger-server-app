@@ -3,10 +3,6 @@ package sieger.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import sieger.model.Invitation;
@@ -47,7 +43,7 @@ public class UserService {
 		Optional<User> user = userRepository.retrieveUserById(userId);
 		if(!user.isEmpty()) {
 			for(String tournamentid: user.get().getTournamentList()) {
-				userTournaments.add(tournamentService.getTournamentById(tournamentid).get());
+				userTournaments.add(tournamentService.getTournamentById(userId,tournamentid).get());
 			}
 		}
 		return userTournaments;
