@@ -15,13 +15,16 @@ public abstract class Tournament implements Searchable {
 	private String[] participantList;
 	//temp notification
 	private List<Notification> notificationList;
+    //name of tournament
+    private String tournamentName;
 	//constructor
-	public Tournament(int participantSize, TournamentDetail tournamentDetail) {
+	public Tournament(int participantSize, String name, TournamentDetail tournamentDetail) {
 		this.tournamentid = randomId();
 		this.tournamentDetail = tournamentDetail;
 		this.gameList = new ArrayList<>();
 		this.notificationList = new ArrayList<>();
 		this.participantList = new String[participantSize];
+		this.tournamentName = name;
 	}
 	//get random Id
 	private String randomId() {
@@ -82,11 +85,11 @@ public abstract class Tournament implements Searchable {
 	}
 	//implement gettitle()
 	public String getTitle() {
-		return "Tournament:" + this.tournamentDetail.getTournamentName();
+		return "Tournament:" + getTournamentName();
 	}
 	//implement getInformation
 	public String getInformation() {
-		return  "Tournament:" + tournamentDetail.getTournamentName() 
+		return  "Tournament:" + getTournamentName() 
 		+ "\r\n" + "ParticipantForm:" + tournamentDetail.getParticipantForm() 
 		+ "\r\n" + "Location:" + tournamentDetail.getLocation()
 		+ "\r\n" + "Game:" + tournamentDetail.getTypeOfGame()
@@ -97,6 +100,10 @@ public abstract class Tournament implements Searchable {
 	public String getTournamentId() {
 		return this.tournamentid;
 	}
+	//get name of tournament
+    public String getTournamentName(){
+        return this.tournamentName;
+    }
 	//get detail
 	public TournamentDetail getTournamentDetail() {
 		return this.tournamentDetail;
