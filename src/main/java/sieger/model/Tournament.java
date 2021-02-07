@@ -12,7 +12,7 @@ public abstract class Tournament implements Searchable {
 	//list of Games.
 	private List<String> gameList;
 	//list of participants
-	private String[] participantList;
+	private List<String> participantList;
 	//temp notification
 	private List<Notification> notificationList;
     //name of tournament
@@ -23,7 +23,7 @@ public abstract class Tournament implements Searchable {
 		this.tournamentDetail = tournamentDetail;
 		this.gameList = new ArrayList<>();
 		this.notificationList = new ArrayList<>();
-		this.participantList = new String[participantSize];
+		this.participantList = new ArrayList<String>();
 		this.tournamentName = name;
 	}
 	//get random Id
@@ -113,7 +113,7 @@ public abstract class Tournament implements Searchable {
 		return this.gameList;
 	}
 	//get participant list
-	public String[] getParticipantList() {
+	public List<String> getParticipantList() {
 		return this.participantList;
 	}
 	//get notificationList
