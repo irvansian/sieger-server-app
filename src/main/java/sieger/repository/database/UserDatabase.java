@@ -1,5 +1,6 @@
 package sieger.repository.database;
 
+
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -81,5 +82,7 @@ public class UserDatabase implements UserRepository {
 		db.collection(path).document(userId).delete();
 		return true;
 	}
+
+	
 
 }

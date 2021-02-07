@@ -49,7 +49,13 @@ public class TournamentService {
 	}
 	
 	public boolean createNewTournament(Tournament tournament) {
-		return false;
+		Optional<Tournament> tournamentOpt = 
+				getTournamentByName(tournament.getTournamentName());
+		if (tournamentOpt.isPresent()) {
+			//throw an exception
+		}
+		tournamentRepository.createTournament(tournament);
+		return true;
 	}
 	
 	public boolean updateTournamentDetailById(String tournamentId, TournamentDetail tournamentDetail) {
