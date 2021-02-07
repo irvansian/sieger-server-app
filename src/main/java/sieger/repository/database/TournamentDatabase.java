@@ -1,6 +1,8 @@
 package sieger.repository.database;
 
+import java.util.ArrayList;
 import java.util.List;
+
 
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -8,10 +10,15 @@ import java.util.concurrent.ExecutionException;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.firebase.cloud.FirestoreClient;
 
+import sieger.model.Participant;
+import sieger.model.ParticipantForm;
 import sieger.model.Tournament;
+import sieger.model.User;
+import sieger.model.Team;
 import sieger.repository.TournamentRepository;
 
 public class TournamentDatabase implements TournamentRepository {
@@ -84,6 +91,37 @@ public class TournamentDatabase implements TournamentRepository {
 			e.printStackTrace();
 		}
 		return Optional.ofNullable(tournament);
+	}
+	
+	@Override
+	public List<Participant> retrieveTournamentParticipants(String tournamentId, ParticipantForm pf) {
+		Firestore db = FirestoreClient.getFirestore();
+		String childPath = null;
+		if (pf.equals(ParticipantForm.SINGLE)) {
+			childPath = "users";
+		} else {
+			childPath = "teams";
+		}
+		
+		Query query = db.collection(childPath)
+				.whereArrayContains("tournamentList", tournamentId);
+		List<Participant> participants = new ArrayList<Participant>();
+		try {
+			for (DocumentSnapshot ds : query.get().get().getDocuments()) {
+				if (pf.equals(ParticipantForm.SINGLE)) {
+					participants.add(ds.toObject(User.class));
+				} else {
+					participants.add(ds.toObject(Team.class));
+				}
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return participants;
 	}
 	
 	
