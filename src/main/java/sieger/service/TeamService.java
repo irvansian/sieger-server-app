@@ -22,8 +22,18 @@ public class TeamService {
 		this.tournamentService = tournamentService;
 	}
 	
-	public Optional<Team> getTeamByName(String teamName) {
-		return teamRepository.retrieveTeamByName(teamName);
+	public Optional<Team> getTeamByName(String currentUserId, 
+			String teamName) {
+		Optional<Team> teamOpt = teamRepository
+				.retrieveTeamByName(teamName);
+		if (teamOpt.isEmpty()) {
+			//throw resource not found exception
+		}
+		Optional<User> user = userService.getUserById(currentUserId);
+		if (!teamOpt.get().getMemberList().contains(currentUserId)) {
+			//throw forbidden exception
+		}
+		return tournamentOpt;
 	}
 	
 	public Optional<Team> getTeamById(String teamId) {
@@ -88,6 +98,8 @@ public class TeamService {
 		if (!success) {
 			//throw an exception
 		}
+		userService.updateUserById(userId, user.get());
+		teamRepository.updateTeam(team.get().getTeamId(), team.get());
 	}
 	
 	public void quitTeam(String userId, String teamName) {
@@ -102,6 +114,8 @@ public class TeamService {
 		if (!success) {
 			//throw an exception
 		}
+		userService.updateUserById(userId, user.get());
+		teamRepository.updateTeam(team.get().getTeamId(), team.get());
 	}
 	
 }
