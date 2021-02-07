@@ -78,7 +78,9 @@ public class TournamentService {
 		return true;
 	}
 	
-	public boolean updateTournamentDetailById(String tournamentId, TournamentDetail tournamentDetail) {
+	public boolean updateTournamentDetailById(String currentUserId, 
+			String tournamentName, TournamentDetail tournamentDetail) {
+		
 		return false;
 	}
 	
@@ -86,7 +88,13 @@ public class TournamentService {
 		return false;
 	}
 	
-	public boolean deleteTournament(String tournmaentId) {
+	public boolean deleteTournament(String currentUserId, String tournamentName) {
+		Tournament tournament = getTournamentByName(currentUserId, tournamentName)
+				.get();
+		if (!tournament.isAdmin(currentUserId)) {
+			//throw forbidden exception
+		}
+		tournamentRepository.deleteTournament(tournament.getTournamentId());
 		return false;
 	}	
 	
