@@ -1,9 +1,11 @@
 package sieger.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import sieger.model.Game;
+import sieger.model.Tournament;
 import sieger.repository.GameRepository;
 
 public class GameService {
@@ -17,24 +19,58 @@ public class GameService {
 		this.tournamentService = tournamentService;
 	}
 	
-	public List<Game> getAllGame(String tournamentName) {
-		return null;
+	public List<Game> getAllGame(String currentUserId, String tournamentName) {
+		Tournament tournament = tournamentService
+				.getTournamentByName(currentUserId, tournamentName).get();
+		String[] ids = (String[]) tournament.getGameList().toArray();
+		List<Game> gameList = gameRepository.retrieveMultipleGamesById(ids);
+		return gameList;
+		
 	}
 	
-	public Optional<Game> getGameById(String tournamentName, String gameId) {
-		return null;
+	public Optional<Game> getGameById(String currentUserId, 
+			String tournamentName, String gameId) {
+		Tournament tournament = tournamentService
+				.getTournamentByName(currentUserId, tournamentName).get();
+		Optional<Game> gameOpt = gameRepository
+				.retrieveGameById(tournament.getTournamentId(), gameId);
+		if (gameOpt.isEmpty()) {
+			//throw resource not found exception
+		}
+		return gameOpt;
 	}
 	
-	public boolean updateGameById(String tournamentName, String gameId, Game game) {
-		return false;
+	public boolean updateGameById(String currentUserId, 
+			String tournamentName, String gameId, Game game) {
+		Tournament tournament = tournamentService
+				.getTournamentByName(currentUserId, tournamentName).get();
+		if (!tournament.isAdmin(currentUserId)) {
+			//throw forbidden exception
+		}
+		gameRepository.updateGame(tournament.getTournamentId(), gameId, game);
+		return true;
 	}
 	
-	public boolean createNewGame(String tournamentName, Game game) {
-		return false;
+	public boolean createNewGame(String currentUserId, 
+			String tournamentName, Game game) {
+		Tournament tournament = tournamentService
+				.getTournamentByName(currentUserId, tournamentName).get();
+		if (!tournament.isAdmin(currentUserId)) {
+			//throw forbidden exception
+		}
+		gameRepository.createGame(tournament.getTournamentId(), game);
+		return true;
 	}
 	
-	public boolean deleteGame(String tournamentName, String gameId) {
-		return false;
+	public boolean deleteGame(String currentUserId, 
+			String tournamentName, String gameId) {
+		Tournament tournament = tournamentService
+				.getTournamentByName(currentUserId, tournamentName).get();
+		if (!tournament.isAdmin(currentUserId)) {
+			//throw forbidden exception
+		}
+		gameRepository.deleteGame(tournament.getTournamentId(), gameId);
+		return true;
 	}
 	
 }
