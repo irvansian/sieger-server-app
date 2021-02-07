@@ -97,11 +97,6 @@ public class UserService {
 		if (retrievedUser.isEmpty()) return false;
 		userRepository.updateUserById(userId, user);
 		return true;
-	}
-	
-	
-	
-	
-	
+	}	
 
 }

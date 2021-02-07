@@ -33,15 +33,32 @@ public class InvitationService {
 		return true;
 	}
 	
-	public boolean acceptInvitation(String userId, String invitationId) {
-		return false;
+	public boolean acceptInvitation(String currentUserId, String invitationId) {
+		Invitation invitation = getInvitation(invitationId).get();
+		User user = userService.getUserById(currentUserId).get();
+		
+		if (!invitation.getRecipientUsername().equals(user.getUserName())) {
+			// throw forbidden
+		}
+		user.removeInvitation(invitationId);
+		user.addTournament(invitation.getTournamentId());
+		invitationRepository.deleteInvitation(invitationId);
+		userService.updateUserById(currentUserId, user);
+		return true;
 	}
 	
-	public boolean declineInvitation(String userId, String invitationId) {
-		return false;
+	public boolean declineInvitation(String currentUserId, String invitationId) {
+		Invitation invitation = getInvitation(invitationId).get();
+		User user = userService.getUserById(currentUserId).get();
+		
+		if (!invitation.getRecipientUsername().equals(user.getUserName())) {
+			// throw forbidden
+		}
+		user.removeInvitation(invitationId);
+		invitationRepository.deleteInvitation(invitationId);
+		userService.updateUserById(currentUserId, user);
+		return true;
 	}
-	
-	
 	
 	
 }
