@@ -17,6 +17,8 @@ public abstract class Tournament implements Searchable {
 	private List<Notification> notificationList;
     //name of tournament
     private String tournamentName;
+    //mac number
+    private int maxParticipantNumber;
 	//constructor
 	public Tournament(int participantSize, String name, TournamentDetail tournamentDetail) {
 		this.tournamentid = randomId();
@@ -25,6 +27,7 @@ public abstract class Tournament implements Searchable {
 		this.notificationList = new ArrayList<>();
 		this.participantList = new ArrayList<String>();
 		this.tournamentName = name;
+		this.maxParticipantNumber = participantSize;
 	}
 	//get random Id
 	private String randomId() {
@@ -32,14 +35,36 @@ public abstract class Tournament implements Searchable {
 	}
 	//abstract methode
 	abstract public void createGames();
-	//check if participant list has place
-	public boolean checkSize(){
-		for(String item: participantList){
-			if(item == null){
+	//check if user participate the tournament
+	public boolean isParticipate(User user) {
+		if(tournamentDetail.getParticipantForm() == ParticipantForm.SINGLE) {
+			return participateAsSingle(user);
+		} else if(tournamentDetail.getParticipantForm() == ParticipantForm.TEAM) {
+			return participateAsTeam(user);
+		}
+		return false;
+	}
+	//if user participate as single.
+	public boolean participateAsSingle(User user) {
+		String userId = user.getUserId();
+		return participantList.contains(userId);
+	}
+	//if user participate as team
+	public boolean participateAsTeam(User user) {
+		for(String teamId: user.getTeamList()) {
+			if(participantList.contains(teamId)) {
 				return true;
 			}
 		}
 		return false;
+	}
+	//check if participant list has place
+	public boolean checkSize(){
+		if(participantList.size() < this.maxParticipantNumber) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	//Check if allow user to join
 	public boolean allowUserToJoin(){
@@ -62,9 +87,9 @@ public abstract class Tournament implements Searchable {
 	//check if ready to be held
 	public boolean readyToBeHeld() {
 		if(!checkSize()) {
-			return false;
-		}else {
 			return true;
+		}else {
+			return false;
 		}
 	}
 	//check if is open
@@ -95,6 +120,10 @@ public abstract class Tournament implements Searchable {
 		+ "\r\n" + "Game:" + tournamentDetail.getTypeOfGame()
 		+ "\r\n" + "Time: from" + tournamentDetail.getStartTime() + "to" + tournamentDetail.getEndTime()
 		+ "\r\n" + "Register: before" + tournamentDetail.getRegistrationDeadline().toString();
+	}
+	//get maxparticipantnumber
+	public int getMaxParticipantNumber() {
+		return this.maxParticipantNumber;
 	}
 	//get tournamentId
 	public String getTournamentId() {
@@ -130,21 +159,11 @@ public abstract class Tournament implements Searchable {
 	}
 	//add participant
 	public void addParticipant(String participantId){
-		for(String item: participantList){
-			if(item == null){
-				item = participantId;
-				break;
-			}
-		}
+		participantList.add(participantId);
 	}
 	//remove participant
 	public void removeParticipant(String participantId){
-		for(String item: participantList){
-			if(item == participantId){
-				item = null;
-				break;
-			}
-		}
+		participantList.remove(participantId);
 	}
 	//add notification
 	public void addNotification(Notification notification) {
