@@ -42,12 +42,23 @@ public class TournamentService {
 	}
 	
 	
-	public Optional<Tournament> getTournamentByName(String tournamentName) {
-		return tournamentRepository.retrieveTournamentByName(tournamentName);
+	public Optional<Tournament> getTournamentByName(String currentUserId, 
+			String tournamentName) {
+		Optional<Tournament> tournamentOpt = tournamentRepository
+				.retrieveTournamentByName(tournamentName);
+		if (tournamentOpt.isEmpty()) {
+			//throw resource not found exception
+		}
+		Optional<User> user = userService.getUserById(currentUserId);
+		if (!tournamentOpt.get().isParticipant(user.get())) {
+			//throw forbidden exception
+		}
+		return tournamentOpt;
 	}
 	
 	public List<Participant> getTournamentParticipants(String tournamentName) {
-		Optional<Tournament> tournament = getTournamentByName(tournamentName);
+		Optional<Tournament> tournament = tournamentRepository
+				.retrieveTournamentByName(tournamentName);
 		if (tournament.isEmpty()) {
 			//throw exception
 		}
@@ -59,7 +70,7 @@ public class TournamentService {
 	
 	public boolean createNewTournament(Tournament tournament) {
 		Optional<Tournament> tournamentOpt = 
-				getTournamentByName(tournament.getTournamentName());
+				tournamentRepository.retrieveTournamentByName(tournament.getTournamentName());
 		if (tournamentOpt.isPresent()) {
 			//throw an exception
 		}
