@@ -29,7 +29,16 @@ public class TournamentService {
 	
 	public Optional<Tournament> getTournamentById(String currentUserId, 
 			String tournamentId) {
-		return null;
+		Optional<Tournament> tournamentOpt = tournamentRepository
+				.retrieveTournamentById(tournamentId);
+		if (tournamentOpt.isEmpty()) {
+			//throw resource not found exception
+		}
+		Optional<User> user = userService.getUserById(currentUserId);
+		if (!tournamentOpt.get().isParticipant(user.get())) {
+			//throw forbidden exception
+		}
+		return tournamentOpt;
 	}
 	
 	
