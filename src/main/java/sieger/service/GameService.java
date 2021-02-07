@@ -17,19 +17,19 @@ public class GameService {
 		this.tournamentService = tournamentService;
 	}
 	
-	public List<Game> getAllGame(String tournamentId) {
+	public List<Game> getAllGame(String tournamentName) {
 		return null;
 	}
 	
-	public Optional<Game> getGameById(String tournamentId, String gameId) {
+	public Optional<Game> getGameById(String tournamentName, String gameId) {
 		return null;
 	}
 	
-	public boolean updateGameById(String tournamentId, String gameId, Game game) {
+	public boolean updateGameById(String tournamentName, String gameId, Game game) {
 		return false;
 	}
 	
-	public boolean createNewGame(String tournamentId, Game game) {
+	public boolean createNewGame(String tournamentName, Game game) {
 		return false;
 	}
 	
