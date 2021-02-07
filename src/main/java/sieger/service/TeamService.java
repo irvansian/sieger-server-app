@@ -29,11 +29,10 @@ public class TeamService {
 		if (teamOpt.isEmpty()) {
 			//throw resource not found exception
 		}
-		Optional<User> user = userService.getUserById(currentUserId);
 		if (!teamOpt.get().getMemberList().contains(currentUserId)) {
 			//throw forbidden exception
 		}
-		return tournamentOpt;
+		return teamOpt;
 	}
 	
 	public Optional<Team> getTeamById(String teamId) {
