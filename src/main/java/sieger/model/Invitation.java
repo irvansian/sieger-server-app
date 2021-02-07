@@ -6,15 +6,15 @@ public class Invitation {
 	//id of invitation
 	private String invitationId;
 	//sender name
-	private String senderName;
+	private String senderUsername;
 	//recipient user name
 	private String recipientUsername;
 	//tournament id
 	private String tournamentId;
 	//constructor
-	public Invitation(String senderName, String recipientUsername, String tournamentId) {
+	public Invitation(String senderUsername, String recipientUsername, String tournamentId) {
 		this.recipientUsername = recipientUsername;
-		this.senderName = senderName;
+		this.senderUsername = senderUsername;
 		this.tournamentId = tournamentId;
 		this.invitationId = randomId();
 	}
@@ -27,8 +27,8 @@ public class Invitation {
 		return this.invitationId;
 	}
 	//get sender name
-	public String getSenderName() {
-		return this.senderName;
+	public String getSenderUsername() {
+		return this.senderUsername;
 	}
 	//get recipient username
 	public String getRecipientUsername() {
