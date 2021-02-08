@@ -4,6 +4,7 @@ import java.util.List;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import sieger.exception.BadRequestException;
@@ -22,6 +23,7 @@ public class TournamentService {
 	private TournamentRepository tournamentRepository;
 	private UserService userService;
 	
+	@Autowired
 	public TournamentService(TournamentRepository tournamentRepository, UserService userService) {
 		this.tournamentRepository = tournamentRepository;
 		this.userService = userService;

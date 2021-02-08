@@ -1,5 +1,6 @@
 package sieger.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import sieger.model.Participant;
@@ -11,6 +12,7 @@ public class ParticipantService {
 	private TeamService teamService;
 	private TournamentService tournamentService;
 	
+	@Autowired
 	public ParticipantService(UserService userService, TeamService teamService, TournamentService tournamentService) {
 		this.userService = userService;
 		this.teamService = teamService;
