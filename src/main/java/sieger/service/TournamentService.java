@@ -4,6 +4,8 @@ import java.util.List;
 
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import sieger.exception.BadRequestException;
 import sieger.exception.ForbiddenException;
 import sieger.exception.ResourceNotFoundException;
@@ -15,6 +17,7 @@ import sieger.model.User;
 import sieger.payload.ApiResponse;
 import sieger.repository.TournamentRepository;
 
+@Service
 public class TournamentService {
 	private TournamentRepository tournamentRepository;
 	private UserService userService;

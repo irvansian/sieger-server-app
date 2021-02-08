@@ -1,8 +1,11 @@
 package sieger.service;
 
+import org.springframework.stereotype.Service;
+
 import sieger.model.Participant;
 import sieger.model.Tournament;
 
+@Service
 public class ParticipantService {
 	private UserService userService;
 	private TeamService teamService;

@@ -3,6 +3,8 @@ package sieger.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import sieger.exception.ForbiddenException;
 import sieger.exception.ResourceNotFoundException;
 import sieger.model.Game;
@@ -10,6 +12,7 @@ import sieger.model.Tournament;
 import sieger.payload.ApiResponse;
 import sieger.repository.GameRepository;
 
+@Service
 public class GameService {
 	private GameRepository gameRepository;
 	

@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.model.User;
 import sieger.repository.TeamRepository;
 
+@Service
 public class TeamService {
 	private TeamRepository teamRepository;
 	

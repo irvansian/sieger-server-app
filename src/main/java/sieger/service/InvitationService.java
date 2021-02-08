@@ -2,6 +2,8 @@ package sieger.service;
 
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import sieger.exception.ForbiddenException;
 import sieger.exception.ResourceNotFoundException;
 import sieger.model.Invitation;
@@ -9,6 +11,7 @@ import sieger.model.User;
 import sieger.payload.ApiResponse;
 import sieger.repository.InvitationRepository;
 
+@Service
 public class InvitationService {
 	private InvitationRepository invitationRepository;
 	private UserService userService;
