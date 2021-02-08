@@ -25,7 +25,7 @@ import com.google.firebase.auth.FirebaseToken;
 @Order(1)
 @Component
 @WebFilter(filterName = "MyFilter", urlPatterns = {"/**"}) 
-public class myFilter implements Filter {
+public class MyFilter implements Filter {
 
 
 
