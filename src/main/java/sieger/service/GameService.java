@@ -3,8 +3,11 @@ package sieger.service;
 import java.util.List;
 import java.util.Optional;
 
+import sieger.exception.ForbiddenException;
+import sieger.exception.ResourceNotFoundException;
 import sieger.model.Game;
 import sieger.model.Tournament;
+import sieger.payload.ApiResponse;
 import sieger.repository.GameRepository;
 
 public class GameService {
@@ -34,7 +37,7 @@ public class GameService {
 		Optional<Game> gameOpt = gameRepository
 				.retrieveGameById(tournament.getTournamentId(), gameId);
 		if (gameOpt.isEmpty()) {
-			//throw resource not found exception
+			throw new ResourceNotFoundException("Game", "id", gameId);
 		}
 		return gameOpt;
 	}
@@ -44,7 +47,9 @@ public class GameService {
 		Tournament tournament = tournamentService
 				.getTournamentByName(currentUserId, tournamentName).get();
 		if (!tournament.isAdmin(currentUserId)) {
-			//throw forbidden exception
+			ApiResponse response = new ApiResponse(false, "You don't have "
+					+ "permission to update this game.");
+			throw new ForbiddenException(response);
 		}
 		gameRepository.updateGame(tournament.getTournamentId(), gameId, game);
 		return true;
@@ -55,7 +60,9 @@ public class GameService {
 		Tournament tournament = tournamentService
 				.getTournamentByName(currentUserId, tournamentName).get();
 		if (!tournament.isAdmin(currentUserId)) {
-			//throw forbidden exception
+			ApiResponse response = new ApiResponse(false, "You don't have "
+					+ "permission to create a game in <" + tournamentName + "> tournament.");
+			throw new ForbiddenException(response);
 		}
 		gameRepository.createGame(tournament.getTournamentId(), game);
 		return true;
@@ -66,7 +73,9 @@ public class GameService {
 		Tournament tournament = tournamentService
 				.getTournamentByName(currentUserId, tournamentName).get();
 		if (!tournament.isAdmin(currentUserId)) {
-			//throw forbidden exception
+			ApiResponse response = new ApiResponse(false, "You don't have "
+					+ "permission to delete a game in <" + tournamentName + "> tournament.");
+			throw new ForbiddenException(response);
 		}
 		gameRepository.deleteGame(tournament.getTournamentId(), gameId);
 		return true;
