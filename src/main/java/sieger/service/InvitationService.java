@@ -2,8 +2,11 @@ package sieger.service;
 
 import java.util.Optional;
 
+import sieger.exception.ForbiddenException;
+import sieger.exception.ResourceNotFoundException;
 import sieger.model.Invitation;
 import sieger.model.User;
+import sieger.payload.ApiResponse;
 import sieger.repository.InvitationRepository;
 
 public class InvitationService {
@@ -15,11 +18,17 @@ public class InvitationService {
 		this.userService = userService;
 	}
 	
-	public Optional<Invitation> getInvitation(String invitationId) {
+	public Optional<Invitation> getInvitation(String currentUserId, String invitationId) {
 		Optional<Invitation> invitationOpt = invitationRepository
 				.retrieveInvitationById(invitationId);
 		if (invitationOpt.isEmpty()) {
-			// throw resource not found exception
+			throw new ResourceNotFoundException("Invitation", "id", invitationId);
+		}
+		User user = userService.getUserById(currentUserId).get();
+		if (!invitationOpt.get().getRecipientUsername().equals(user.getUserName())) {
+			ApiResponse response = new ApiResponse(false, "You can't view the <" 
+					+ invitationId + "> invitation");
+			throw new ForbiddenException(response);
 		}
  		return invitationOpt; 
 	}
@@ -27,19 +36,18 @@ public class InvitationService {
 	public boolean createInvitation(String currentUserId, Invitation invitation) {
 		User user = userService.getUserById(currentUserId).get();
 		if (!user.getUserName().equals(invitation.getSenderUsername())) {
-			// throw forbidden exception
+			ApiResponse response = new ApiResponse(false, "You can't create an "
+					+ "invitation for other people.");
+			throw new ForbiddenException(response);
 		}
 		invitationRepository.createInvitation(invitation);
 		return true;
 	}
 	
 	public boolean acceptInvitation(String currentUserId, String invitationId) {
-		Invitation invitation = getInvitation(invitationId).get();
+		Invitation invitation = getInvitation(currentUserId, invitationId).get();
 		User user = userService.getUserById(currentUserId).get();
-		
-		if (!invitation.getRecipientUsername().equals(user.getUserName())) {
-			// throw forbidden
-		}
+
 		user.removeInvitation(invitationId);
 		user.addTournament(invitation.getTournamentId());
 		invitationRepository.deleteInvitation(invitationId);
@@ -48,12 +56,7 @@ public class InvitationService {
 	}
 	
 	public boolean declineInvitation(String currentUserId, String invitationId) {
-		Invitation invitation = getInvitation(invitationId).get();
 		User user = userService.getUserById(currentUserId).get();
-		
-		if (!invitation.getRecipientUsername().equals(user.getUserName())) {
-			// throw forbidden
-		}
 		user.removeInvitation(invitationId);
 		invitationRepository.deleteInvitation(invitationId);
 		userService.updateUserById(currentUserId, user);
