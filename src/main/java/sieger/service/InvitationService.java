@@ -15,16 +15,12 @@ import sieger.repository.InvitationRepository;
 
 @Service
 public class InvitationService {
+	@Qualifier("invitationDB")
+	@Autowired
 	private InvitationRepository invitationRepository;
-	private UserService userService;
 	
 	@Autowired
-	public InvitationService(
-			@Qualifier("invitationDB") InvitationRepository invitationRepository, 
-			UserService userService) {
-		this.invitationRepository = invitationRepository;
-		this.userService = userService;
-	}
+	private UserService userService;
 	
 	public Optional<Invitation> getInvitation(String currentUserId, String invitationId) {
 		Optional<Invitation> invitationOpt = invitationRepository

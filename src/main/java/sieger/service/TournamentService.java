@@ -21,16 +21,12 @@ import sieger.repository.TournamentRepository;
 
 @Service
 public class TournamentService {
+	@Autowired
+	@Qualifier("tournamentDB")
 	private TournamentRepository tournamentRepository;
-	private UserService userService;
 	
 	@Autowired
-	public TournamentService(
-			@Qualifier("tournamentDB") TournamentRepository tournamentRepository, 
-			UserService userService) {
-		this.tournamentRepository = tournamentRepository;
-		this.userService = userService;
-	}
+	private UserService userService;
 	
 	public List<Tournament> getTournamentsByKeyword(String keyword) {
 		return null;
@@ -77,7 +73,7 @@ public class TournamentService {
 		return tournamentRepository.retrieveTournamentParticipants(tournamentId, pf);
 	}
 	
-	public boolean createNewTournament(Tournament tournament) {
+	public boolean createNewTournament(String currentUserId, Tournament tournament) {
 		Optional<Tournament> tournamentOpt = 
 				tournamentRepository.retrieveTournamentByName(tournament.getTournamentName());
 		if (tournamentOpt.isPresent()) {
@@ -85,7 +81,10 @@ public class TournamentService {
 					+ tournamentOpt.get().getTournamentName() + " already exist.");
 			throw new BadRequestException(response);
 		}
+		User user = userService.getUserById(currentUserId).get();
+		user.addTournament(tournamentOpt.get().getTournamentId());
 		tournamentRepository.createTournament(tournament);
+		userService.updateUserById(currentUserId, user);
 		return true;
 	}
 	

@@ -17,24 +17,18 @@ import sieger.repository.UserRepository;
 @Service
 public class UserService {
 	
+	@Autowired
+	@Qualifier("userDB")
 	private UserRepository userRepository;
 	
+	@Autowired
 	private TournamentService tournamentService;
 	
+	@Autowired
 	private TeamService teamService;
 	
-	private InvitationService invitationService;
-
 	@Autowired
-	public UserService(
-			@Qualifier("userDB") UserRepository userRepository, 
-			TournamentService tournamentService, TeamService teamService,
-			InvitationService invitationService) {
-		this.userRepository = userRepository;
-		this.tournamentService = tournamentService;
-		this.teamService = teamService;
-		this.invitationService = invitationService;
-	}
+	private InvitationService invitationService;
 	
 	public Optional<User> getUserByUsername(String username) {
 		return userRepository.retrieveUserByUsername(username);

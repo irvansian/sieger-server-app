@@ -15,19 +15,15 @@ import sieger.repository.TeamRepository;
 
 @Service
 public class TeamService {
+	@Autowired
+	@Qualifier("teamDB")
 	private TeamRepository teamRepository;
 	
+	@Autowired
 	private UserService userService;
 	
-	private TournamentService tournamentService;
-
 	@Autowired
-	public TeamService(@Qualifier("teamDB") TeamRepository teamRepository, 
-			UserService userService, TournamentService tournamentService) {
-		this.teamRepository = teamRepository;
-		this.userService = userService;
-		this.tournamentService = tournamentService;
-	}
+	private TournamentService tournamentService;
 	
 	public Optional<Team> getTeamByName(String currentUserId, 
 			String teamName) {

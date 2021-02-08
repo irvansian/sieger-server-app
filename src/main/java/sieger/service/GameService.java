@@ -16,16 +16,12 @@ import sieger.repository.GameRepository;
 
 @Service
 public class GameService {
+	@Autowired
+	@Qualifier("gameDB")
 	private GameRepository gameRepository;
 	
-	private TournamentService tournamentService;
-
 	@Autowired
-	public GameService(@Qualifier("gameDB") GameRepository gameRepository, 
-			TournamentService tournamentService) {
-		this.gameRepository = gameRepository;
-		this.tournamentService = tournamentService;
-	}
+	private TournamentService tournamentService;
 	
 	public List<Game> getAllGame(String currentUserId, String tournamentName) {
 		Tournament tournament = tournamentService

@@ -8,16 +8,14 @@ import sieger.model.Tournament;
 
 @Service
 public class ParticipantService {
+	@Autowired
 	private UserService userService;
-	private TeamService teamService;
-	private TournamentService tournamentService;
 	
 	@Autowired
-	public ParticipantService(UserService userService, TeamService teamService, TournamentService tournamentService) {
-		this.userService = userService;
-		this.teamService = teamService;
-		this.tournamentService = tournamentService;
-	}
+	private TeamService teamService;
+	
+	@Autowired
+	private TournamentService tournamentService;
 	
 	public boolean joinTournament(String participantId, String tournamentId) {
 		Tournament tournament = tournamentService.getTournamentById(participantId,tournamentId).get();
