@@ -7,7 +7,6 @@ import sieger.model.Game;
 
 public interface GameRepository {
 	Optional<Game> retrieveGameById(String tournmanetId, String gameId);
-	List<Game> retrieveMultipleGamesById(String[] ids);
 	boolean createGame(String tournamentId, Game game);
 	boolean updateGame(String tournamentId, String gameId, Game game);
 	boolean deleteGame(String tournamentId, String gameId);
