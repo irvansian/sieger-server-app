@@ -164,7 +164,7 @@ public class User extends Participant{
 		this.surname = surname;
 	}
 	
-	public void setUsername(String username) {
+	public void setUserName(String username) {
 		this.userName = username;
 	}
 	
