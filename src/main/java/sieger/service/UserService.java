@@ -52,6 +52,19 @@ public class UserService {
 		return user;
 	}
 	
+	public User getUserById(String currentUserId, String userToGetId) {
+		User user = userRepository.retrieveUserById(userToGetId)
+				.orElseThrow(() -> new ResourceNotFoundException("User", "id", 
+						userToGetId));
+		
+		if (!userToGetId.equals(currentUserId)) {
+			ApiResponse response = new ApiResponse(false, "You don't have permission "
+					+ "to view the user.");
+			throw new ForbiddenException(response);
+		}
+		return user;
+	}
+	
 	public List<Tournament> getUserTournaments(String currentUserId, String username) {
 		User user = getUserByUsername(currentUserId, username);
 		List<Tournament> tournaments = new ArrayList<Tournament>();

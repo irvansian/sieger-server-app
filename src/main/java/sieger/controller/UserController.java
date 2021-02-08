@@ -37,35 +37,35 @@ public class UserController {
 	
 	@GetMapping("/{username}")
 	public ResponseEntity<User> getUserByUsername(
-			@PathVariable("username") String username) {
-		Optional<User> user = userService.getUserByUsername(username);
-		if (user.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-		return ResponseEntity.ok(user.get());
+			@PathVariable("username") String username,
+			String currentUserId) {
+		User user = userService.getUserByUsername(currentUserId, username);
+
+		return ResponseEntity.ok(user);
 	}
 	
 	@GetMapping
 	public ResponseEntity<User> getUserById(
-			@RequestParam(name = "id") String userId) {
-		Optional<User> user = userService.getUserById(userId);
-		if (user.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-		return ResponseEntity.ok(user.get());
+			@RequestParam(name = "id") String userToGetId,
+			String currentUserId) {
+		User user = userService.getUserById(currentUserId, userToGetId);
+		return ResponseEntity.ok(user);
 	}
 	
 	@GetMapping("/{username}/tournaments")
 	public ResponseEntity<List<Tournament>> getUserTournaments(
-			@PathVariable("username") String username) {
-		List<Tournament> tournaments = userService.getUserTournaments(username);
+			@PathVariable("username") String username,
+			String currentUserId) {
+		List<Tournament> tournaments = userService
+				.getUserTournaments(currentUserId, username);
 		return ResponseEntity.ok(tournaments);
 	}
 	
 	@GetMapping("/{username}/teams")
 	public ResponseEntity<List<Team>> getUserTeams(
-			@PathVariable("username") String username) {
-		List<Team> teams = userService.getUserTeams(username);
+			@PathVariable("username") String username,
+			String currentUserId) {
+		List<Team> teams = userService.getUserTeams(currentUserId, username);
 		return ResponseEntity.ok(teams);
 	}
 	
@@ -73,7 +73,8 @@ public class UserController {
 	public ResponseEntity<List<Invitation>> getUserInvitations(
 			@PathVariable("username") String username,
 			String currentUserId) {
-		List<Invitation> invitations = userService.getUserInvitations(currentUserId, username);
+		List<Invitation> invitations = userService
+				.getUserInvitations(currentUserId, username);
 		return ResponseEntity.ok(invitations);
 	}
 	

@@ -18,7 +18,9 @@ import sieger.model.Tournament;
 import sieger.model.TournamentDetail;
 import sieger.model.User;
 import sieger.payload.ApiResponse;
+import sieger.repository.TeamRepository;
 import sieger.repository.TournamentRepository;
+import sieger.repository.UserRepository;
 
 @Service
 public class TournamentService {
@@ -27,50 +29,50 @@ public class TournamentService {
 	private TournamentRepository tournamentRepository;
 	
 	@Autowired
-	private UserService userService;
+	@Qualifier("userDB")
+	private UserRepository userRepository;
 	
 	@Autowired
-	private TeamService teamService;
+	@Qualifier("teamDB")
+	private TeamRepository teamRepository;
 	
 	public List<Tournament> getTournamentsByKeyword(String keyword) {
 		return null;
 	}
 	
-	public Optional<Tournament> getTournamentById(String currentUserId, 
+	public Tournament getTournamentById(String currentUserId, 
 			String tournamentId) {
-		Optional<Tournament> tournamentOpt = tournamentRepository
-				.retrieveTournamentById(tournamentId);
-		if (tournamentOpt.isEmpty()) {
-			throw new ResourceNotFoundException("Tournament", "id", tournamentId);
-		}
-		Optional<User> user = userService.getUserById(currentUserId);
-		if (!tournamentOpt.get().isParticipant(user.get())) {
-			ApiResponse response = new ApiResponse(false, "You don't have permission "
-					+ "to view the tournament.");
-			throw new ForbiddenException(response);
-		}
-		return tournamentOpt;
-	}
-	
-	
-	public Optional<Tournament> getTournamentByName(String currentUserId, 
-			String tournamentName) {
-		Optional<Tournament> tournamentOpt = tournamentRepository
-				.retrieveTournamentByName(tournamentName);
-		if (tournamentOpt.isEmpty()) {
-			throw new ResourceNotFoundException("Tournament", "name", tournamentName);
-		}
-		Optional<User> user = userService.getUserById(currentUserId);
-		if (!tournamentOpt.get().isParticipant(user.get())) {
+		Tournament tournament = tournamentRepository
+				.retrieveTournamentById(tournamentId)
+				.orElseThrow(() -> 
+				new ResourceNotFoundException("Tournament", "id", tournamentId));
+		User user = userRepository.retrieveUserById(currentUserId).get();
+		if (!tournament.isParticipant(user)) {
 			ApiResponse response = new ApiResponse(false, "You don't have permission "
 					+ "to view the tournament");
 			throw new ForbiddenException(response);
 		}
-		return tournamentOpt;
+		return tournament;
+	}
+	
+	
+	public Tournament getTournamentByName(String currentUserId, 
+			String tournamentName) {
+		Tournament tournament = tournamentRepository
+				.retrieveTournamentByName(tournamentName)
+				.orElseThrow(() -> 
+				new ResourceNotFoundException("Tournament", "name", tournamentName));
+		User user = userRepository.retrieveUserById(currentUserId).get();
+		if (!tournament.isParticipant(user)) {
+			ApiResponse response = new ApiResponse(false, "You don't have permission "
+					+ "to view the tournament");
+			throw new ForbiddenException(response);
+		}
+		return tournament;
 	}
 	
 	public List<Participant> getTournamentParticipants(String currentUserId, String tournamentName) {
-		Tournament tournament = getTournamentByName(currentUserId, tournamentName).get();
+		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
 		String tournamentId = tournament.getTournamentId();
 		ParticipantForm pf = tournament.getTournamentDetail()
 				.getParticipantForm();
@@ -85,10 +87,10 @@ public class TournamentService {
 					+ tournamentOpt.get().getTournamentName() + " already exist.");
 			throw new BadRequestException(response);
 		}
-		User user = userService.getUserById(currentUserId).get();
+		User user = userRepository.retrieveUserById(currentUserId).get();
 		user.addTournament(tournamentOpt.get().getTournamentId());
 		tournamentRepository.createTournament(tournament);
-		userService.updateUserById(currentUserId, user);
+		userRepository.updateUserById(currentUserId, user);
 		return true;
 	}
 	
@@ -103,8 +105,7 @@ public class TournamentService {
 	}
 	
 	public boolean deleteTournament(String currentUserId, String tournamentName) {
-		Tournament tournament = getTournamentByName(currentUserId, tournamentName)
-				.get();
+		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
 		if (!tournament.isAdmin(currentUserId)) {
 			ApiResponse response = new ApiResponse(false, "You don't have permission "
 					+ "to delete the tournament");
@@ -120,15 +121,15 @@ public class TournamentService {
 			ParticipantForm pc, String tournamentId) {
 		if (pc.equals(ParticipantForm.SINGLE)) {
 			for (String userId : participantList) {
-				User user = userService.getUserById(userId).get();
+				User user = userRepository.retrieveUserById(userId).get();
 				user.getTournamentList().remove(tournamentId);
-				userService.updateUserById(userId, user);
+				userRepository.updateUserById(userId, user);
 			}
 		} else {
 			for (String teamId : participantList) {
-				Team team = teamService.getTeamById(teamId).get();
+				Team team = teamRepository.retrieveTeamById(teamId).get();
 				team.getTournamentList().remove(tournamentId);
-				teamService.updateTeamById(teamId, team);
+				teamRepository.updateTeam(teamId, team);
 			}
 		}
 	}
