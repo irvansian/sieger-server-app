@@ -3,6 +3,7 @@ package sieger.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import sieger.exception.ForbiddenException;
@@ -18,7 +19,9 @@ public class InvitationService {
 	private UserService userService;
 	
 	@Autowired
-	public InvitationService(InvitationRepository invitationRepository, UserService userService) {
+	public InvitationService(
+			@Qualifier("invitationDB") InvitationRepository invitationRepository, 
+			UserService userService) {
 		this.invitationRepository = invitationRepository;
 		this.userService = userService;
 	}

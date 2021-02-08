@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import sieger.exception.ForbiddenException;
@@ -20,7 +21,8 @@ public class GameService {
 	private TournamentService tournamentService;
 
 	@Autowired
-	public GameService(GameRepository gameRepository, TournamentService tournamentService) {
+	public GameService(@Qualifier("gameDB") GameRepository gameRepository, 
+			TournamentService tournamentService) {
 		this.gameRepository = gameRepository;
 		this.tournamentService = tournamentService;
 	}

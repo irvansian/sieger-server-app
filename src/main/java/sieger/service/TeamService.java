@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import sieger.model.Team;
@@ -21,7 +22,8 @@ public class TeamService {
 	private TournamentService tournamentService;
 
 	@Autowired
-	public TeamService(TeamRepository teamRepository, UserService userService, TournamentService tournamentService) {
+	public TeamService(@Qualifier("teamDB") TeamRepository teamRepository, 
+			UserService userService, TournamentService tournamentService) {
 		this.teamRepository = teamRepository;
 		this.userService = userService;
 		this.tournamentService = tournamentService;

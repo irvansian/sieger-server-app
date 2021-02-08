@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import sieger.model.Invitation;
@@ -25,7 +26,9 @@ public class UserService {
 	private InvitationService invitationService;
 
 	@Autowired
-	public UserService(UserRepository userRepository, TournamentService tournamentService, TeamService teamService,
+	public UserService(
+			@Qualifier("userDB") UserRepository userRepository, 
+			TournamentService tournamentService, TeamService teamService,
 			InvitationService invitationService) {
 		this.userRepository = userRepository;
 		this.tournamentService = tournamentService;
