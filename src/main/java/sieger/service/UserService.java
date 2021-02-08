@@ -60,12 +60,13 @@ public class UserService {
 		return userTeams;
 	}
 	
-	public List<Invitation> getUserInvitations(String userId) {
+	public List<Invitation> getUserInvitations(String currentUserId, String userId) {
 		List<Invitation> userInvitations = new ArrayList<>();
 		Optional<User> user = userRepository.retrieveUserById(userId);
-		if(!user.isEmpty()) {
+		if(user.isPresent()) {
 			for(String invitationId: user.get().getInvitationList()) {
-				userInvitations.add(invitationService.getInvitation(invitationId).get());
+				userInvitations.add(invitationService.getInvitation(currentUserId, 
+						invitationId).get());
 			}
 		}
 		return userInvitations;
