@@ -1,4 +1,4 @@
-package payload;
+package sieger.payload;
 
 import lombok.Data;
 
