@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
+import org.springframework.stereotype.Repository;
+
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
@@ -21,6 +23,7 @@ import sieger.model.User;
 import sieger.model.Team;
 import sieger.repository.TournamentRepository;
 
+@Repository("tournamentDB")
 public class TournamentDatabase implements TournamentRepository {
 	private String path = "tournaments";
 

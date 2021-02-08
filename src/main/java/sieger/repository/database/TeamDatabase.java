@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
+import org.springframework.stereotype.Repository;
+
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
@@ -15,6 +17,7 @@ import sieger.model.Tournament;
 import sieger.model.User;
 import sieger.repository.TeamRepository;
 
+@Repository("teamDB")
 public class TeamDatabase implements TeamRepository {
 	
 	private String path = "team";

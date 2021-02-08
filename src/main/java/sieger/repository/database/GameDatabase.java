@@ -3,12 +3,15 @@ package sieger.repository.database;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.cloud.FirestoreClient;
 
 import sieger.model.Game;
 import sieger.repository.GameRepository;
 
+@Repository("gameDB")
 public class GameDatabase implements GameRepository {
 	
 	private String path = "games";

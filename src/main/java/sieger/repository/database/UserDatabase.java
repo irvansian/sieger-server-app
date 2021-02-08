@@ -15,7 +15,7 @@ import com.google.firebase.cloud.FirestoreClient;
 import sieger.model.User;
 import sieger.repository.UserRepository;
 
-@Repository("firebase")
+@Repository("userDB")
 public class UserDatabase implements UserRepository {
 	
 	private String path = "users";

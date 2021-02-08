@@ -3,6 +3,8 @@ package sieger.repository.database;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
+import org.springframework.stereotype.Repository;
+
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
@@ -12,6 +14,7 @@ import sieger.model.Invitation;
 import sieger.model.Team;
 import sieger.repository.InvitationRepository;
 
+@Repository("invitationDB")
 public class InvitationDatabase implements InvitationRepository {
 	
 	private String path = "invitations";
