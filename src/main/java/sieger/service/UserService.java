@@ -117,7 +117,7 @@ public class UserService {
 	public User updateUserDetail(String currentUserId, String username, 
 			String surname, String forename) {
 		User user = getUserByUsername(currentUserId, username);
-		user.setUsername(username);
+		user.setUserName(username);
 		user.setForename(forename);
 		user.setSurname(surname);
 		userRepository.updateUserById(user.getUserId(), user);
