@@ -13,6 +13,7 @@ import sieger.exception.ForbiddenException;
 import sieger.exception.ResourceNotFoundException;
 import sieger.model.Participant;
 import sieger.model.ParticipantForm;
+import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.model.TournamentDetail;
 import sieger.model.User;
@@ -27,6 +28,9 @@ public class TournamentService {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private TeamService teamService;
 	
 	public List<Tournament> getTournamentsByKeyword(String keyword) {
 		return null;
@@ -106,8 +110,27 @@ public class TournamentService {
 					+ "to delete the tournament");
 			throw new ForbiddenException(response);
 		}
+		removeTournamentIdFromParticipant(tournament.getParticipantList(), 
+				tournament.getTournamentDetail().getParticipantForm(), tournament.getTournamentId());
 		tournamentRepository.deleteTournament(tournament.getTournamentId());
 		return false;
-	}	
+	}
+	
+	private void removeTournamentIdFromParticipant(List<String> participantList, 
+			ParticipantForm pc, String tournamentId) {
+		if (pc.equals(ParticipantForm.SINGLE)) {
+			for (String userId : participantList) {
+				User user = userService.getUserById(userId).get();
+				user.getTournamentList().remove(tournamentId);
+				userService.updateUserById(userId, user);
+			}
+		} else {
+			for (String teamId : participantList) {
+				Team team = teamService.getTeamById(teamId).get();
+				team.getTournamentList().remove(tournamentId);
+				teamService.updateTeamById(teamId, team);
+			}
+		}
+	}
 	
 }
