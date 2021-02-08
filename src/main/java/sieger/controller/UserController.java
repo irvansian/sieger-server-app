@@ -71,8 +71,9 @@ public class UserController {
 	
 	@GetMapping("/{username}/invitations")
 	public ResponseEntity<List<Invitation>> getUserInvitations(
-			@PathVariable("username") String username) {
-		List<Invitation> invitations = userService.getUserInvitations(username);
+			@PathVariable("username") String username,
+			String currentUserId) {
+		List<Invitation> invitations = userService.getUserInvitations(currentUserId, username);
 		return ResponseEntity.ok(invitations);
 	}
 	
