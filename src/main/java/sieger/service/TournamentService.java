@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import sieger.exception.BadRequestException;
 import sieger.exception.ForbiddenException;
 import sieger.exception.ResourceNotFoundException;
+import sieger.model.Game;
 import sieger.model.Participant;
 import sieger.model.ParticipantForm;
 import sieger.model.Team;
@@ -18,6 +19,7 @@ import sieger.model.Tournament;
 import sieger.model.TournamentDetail;
 import sieger.model.User;
 import sieger.payload.ApiResponse;
+import sieger.repository.GameRepository;
 import sieger.repository.TeamRepository;
 import sieger.repository.TournamentRepository;
 import sieger.repository.UserRepository;
@@ -35,6 +37,10 @@ public class TournamentService {
 	@Autowired
 	@Qualifier("teamDB")
 	private TeamRepository teamRepository;
+	
+	@Autowired
+	@Qualifier("gameDb")
+	private GameRepository gameRepository;
 	
 	public List<Tournament> getTournamentsByKeyword(String keyword) {
 		return null;
@@ -132,6 +138,63 @@ public class TournamentService {
 				teamRepository.updateTeam(teamId, team);
 			}
 		}
+	}
+	
+	public List<Game> getAllGame(String currentUserId, String tournamentName) {
+		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
+		String[] ids = (String[]) tournament.getGameList().toArray();
+		List<Game> gameList = gameRepository.retrieveMultipleGamesById(ids);
+		return gameList;
+		
+	}
+	
+	public Optional<Game> getGameById(String currentUserId, 
+			String tournamentName, String gameId) {
+		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
+		Optional<Game> gameOpt = gameRepository
+				.retrieveGameById(tournament.getTournamentId(), gameId);
+		if (gameOpt.isEmpty()) {
+			throw new ResourceNotFoundException("Game", "id", gameId);
+		}
+		return gameOpt;
+	}
+	
+	public boolean updateGameById(String currentUserId, 
+			String tournamentName, String gameId, Game game) {
+		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
+		if (!tournament.isAdmin(currentUserId)) {
+			ApiResponse response = new ApiResponse(false, "You don't have "
+					+ "permission to update this game.");
+			throw new ForbiddenException(response);
+		}
+		gameRepository.updateGame(tournament.getTournamentId(), gameId, game);
+		return true;
+	}
+	
+	public boolean createNewGame(String currentUserId, 
+			String tournamentName, Game game) {
+		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
+		if (!tournament.isAdmin(currentUserId)) {
+			ApiResponse response = new ApiResponse(false, "You don't have "
+					+ "permission to create a game in <" + tournamentName + "> tournament.");
+			throw new ForbiddenException(response);
+		}
+		tournament.getGameList().add(game.getGameId());
+		gameRepository.createGame(tournament.getTournamentId(), game);
+		return true;
+	}
+	
+	public boolean deleteGame(String currentUserId, 
+			String tournamentName, String gameId) {
+		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
+		if (!tournament.isAdmin(currentUserId)) {
+			ApiResponse response = new ApiResponse(false, "You don't have "
+					+ "permission to delete a game in <" + tournamentName + "> tournament.");
+			throw new ForbiddenException(response);
+		}
+		tournament.getGameList().remove(gameId);
+		gameRepository.deleteGame(tournament.getTournamentId(), gameId);
+		return true;
 	}
 	
 }
