@@ -28,4 +28,12 @@ public class RestControllerExceptionHandler {
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(BadRequestException.class)
+	@ResponseBody
+	public ResponseEntity<ApiResponse> resolveException(BadRequestException exception) {
+		ApiResponse apiResponse = exception.getApiResponse();
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+	}
 }
