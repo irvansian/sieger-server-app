@@ -2,16 +2,22 @@ package sieger.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import sieger.exception.BadRequestException;
+import sieger.exception.ForbiddenException;
+import sieger.exception.ResourceNotFoundException;
 import sieger.model.Invitation;
 import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.model.User;
+import sieger.payload.ApiResponse;
+import sieger.repository.InvitationRepository;
+import sieger.repository.TeamRepository;
+import sieger.repository.TournamentRepository;
 import sieger.repository.UserRepository;
 
 @Service
@@ -22,78 +28,87 @@ public class UserService {
 	private UserRepository userRepository;
 	
 	@Autowired
-	private TournamentService tournamentService;
+	@Qualifier("tournamentDB")
+	private TournamentRepository tournamentRepository;
 	
 	@Autowired
-	private TeamService teamService;
+	@Qualifier("teamDB")
+	private TeamRepository teamRepository;
 	
 	@Autowired
-	private InvitationService invitationService;
+	@Qualifier("invitationDB")
+	private InvitationRepository invitationRepository;
 	
-	public Optional<User> getUserByUsername(String username) {
-		return userRepository.retrieveUserByUsername(username);
-	}
-	
-	public Optional<User> getUserById(String userId) {
-		return userRepository.retrieveUserById(userId);
-	}
-	
-	public List<Tournament> getUserTournaments(String userId) {
-		List<Tournament> userTournaments = new ArrayList<>();
-		Optional<User> user = userRepository.retrieveUserById(userId);
-		if(!user.isEmpty()) {
-			for(String tournamentid: user.get().getTournamentList()) {
-				userTournaments.add(tournamentService.getTournamentById(userId,tournamentid).get());
-			}
+	public User getUserByUsername(String currentUserId, String username) {
+		User user = userRepository.retrieveUserByUsername(username)
+				.orElseThrow(() -> 
+				new ResourceNotFoundException("User", "username", username));
+		
+		if (!user.getUserId().equals(currentUserId)) {
+			ApiResponse response = new ApiResponse(false, "You don't have permission "
+					+ "to view the user.");
+			throw new ForbiddenException(response);
 		}
-		return userTournaments;
+		return user;
 	}
 	
-	public List<Team> getUserTeams(String userId) {
-		List<Team> userTeams = new ArrayList<>();
-		Optional<User> user = userRepository.retrieveUserById(userId);
-		if(!user.isEmpty()) {
-			for(String teamId: user.get().getTeamList()) {
-				userTeams.add(teamService.getTeamById(teamId).get());
-			}
+	public List<Tournament> getUserTournaments(String currentUserId, String username) {
+		User user = getUserByUsername(currentUserId, username);
+		List<Tournament> tournaments = new ArrayList<Tournament>();
+		for (String id : user.getTournamentList()) {
+			tournaments.add(tournamentRepository
+					.retrieveTournamentById(id).get());
 		}
-		return userTeams;
+		return tournaments;
 	}
 	
-	public List<Invitation> getUserInvitations(String currentUserId, String userId) {
-		List<Invitation> userInvitations = new ArrayList<>();
-		Optional<User> user = userRepository.retrieveUserById(userId);
-		if(user.isPresent()) {
-			for(String invitationId: user.get().getInvitationList()) {
-				userInvitations.add(invitationService.getInvitation(currentUserId, 
-						invitationId).get());
-			}
+	public List<Team> getUserTeams(String currentUserId, String username) {
+		User user = getUserByUsername(currentUserId, username);
+		List<Team> teams = new ArrayList<Team>();
+		for (String id : user.getTeamList()) {
+			teams.add(teamRepository
+					.retrieveTeamById(id).get());
 		}
-		return userInvitations;
+		return teams;
 	}
 	
-	public boolean createNewUser(User user) {
-		return userRepository.createUser(user);
+	public List<Invitation> getUserInvitations(String currentUserId, String username) {
+		User user = getUserByUsername(currentUserId, username);
+		List<Invitation> invitations = new ArrayList<Invitation>();
+		for (String id : user.getTeamList()) {
+			invitations.add(invitationRepository
+					.retrieveInvitationById(id).get());
+		}
+		return invitations;
 	}
 	
-	public boolean deleteUser(String userId) {
-		return userRepository.deleteUser(userId);
+	public User createNewUser(User user) {
+		if (userRepository.retrieveUserByUsername(user.getUserName())
+				.isPresent()) {
+			ApiResponse response = new ApiResponse(false, "User with the username < " 
+					+ user.getUserName() + "> already exist.");
+			throw new BadRequestException(response);
+		}
+		userRepository.createUser(user);
+		return user;
 	}
 	
-	public boolean updateUserDetail(String userId, String username, String surname, String forename) {
-		Optional<User> user = getUserById(userId);
-		if (user.isEmpty()) return false;
-		user.get().setUsername(username);
-		user.get().setForename(forename);
-		user.get().setSurname(surname);
-		return true;
+	public ApiResponse deleteUser(String currentUserId, String username) {
+		User user = getUserByUsername(currentUserId, username);
+		userRepository.deleteUser(user.getUserId());
+		ApiResponse res = new ApiResponse(true, "User <" + username + "> "
+				+ "is successfully deleted");
+		return res;
 	}
 	
-	public boolean updateUserById(String userId, User user) {
-		Optional<User> retrievedUser = getUserById(userId);
-		if (retrievedUser.isEmpty()) return false;
-		userRepository.updateUserById(userId, user);
-		return true;
+	public User updateUserDetail(String currentUserId, String username, 
+			String surname, String forename) {
+		User user = getUserByUsername(currentUserId, username);
+		user.setUsername(username);
+		user.setForename(forename);
+		user.setSurname(surname);
+		userRepository.updateUserById(user.getUserId(), user);
+		return user;
 	}	
 
 }
