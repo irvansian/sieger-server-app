@@ -1,26 +1,27 @@
 package sieger.service;
 
 import java.util.List;
+
 import java.util.Optional;
 
+import sieger.exception.BadRequestException;
+import sieger.exception.ForbiddenException;
+import sieger.exception.ResourceNotFoundException;
 import sieger.model.Participant;
 import sieger.model.ParticipantForm;
 import sieger.model.Tournament;
 import sieger.model.TournamentDetail;
-import sieger.model.TournamentTypes;
 import sieger.model.User;
+import sieger.payload.ApiResponse;
 import sieger.repository.TournamentRepository;
 
 public class TournamentService {
 	private TournamentRepository tournamentRepository;
 	private UserService userService;
-	private TeamService teamService;
 	
-	public TournamentService(TournamentRepository tournamentRepository, UserService userService,
-			TeamService teamService) {
+	public TournamentService(TournamentRepository tournamentRepository, UserService userService) {
 		this.tournamentRepository = tournamentRepository;
 		this.userService = userService;
-		this.teamService = teamService;
 	}
 	
 	public List<Tournament> getTournamentsByKeyword(String keyword) {
@@ -32,11 +33,13 @@ public class TournamentService {
 		Optional<Tournament> tournamentOpt = tournamentRepository
 				.retrieveTournamentById(tournamentId);
 		if (tournamentOpt.isEmpty()) {
-			//throw resource not found exception
+			throw new ResourceNotFoundException("Tournament", "id", tournamentId);
 		}
 		Optional<User> user = userService.getUserById(currentUserId);
 		if (!tournamentOpt.get().isParticipant(user.get())) {
-			//throw forbidden exception
+			ApiResponse response = new ApiResponse(false, "You don't have permission "
+					+ "to view the tournament.");
+			throw new ForbiddenException(response);
 		}
 		return tournamentOpt;
 	}
@@ -47,11 +50,13 @@ public class TournamentService {
 		Optional<Tournament> tournamentOpt = tournamentRepository
 				.retrieveTournamentByName(tournamentName);
 		if (tournamentOpt.isEmpty()) {
-			//throw resource not found exception
+			throw new ResourceNotFoundException("Tournament", "name", tournamentName);
 		}
 		Optional<User> user = userService.getUserById(currentUserId);
 		if (!tournamentOpt.get().isParticipant(user.get())) {
-			//throw forbidden exception
+			ApiResponse response = new ApiResponse(false, "You don't have permission "
+					+ "to view the tournament");
+			throw new ForbiddenException(response);
 		}
 		return tournamentOpt;
 	}
@@ -68,7 +73,9 @@ public class TournamentService {
 		Optional<Tournament> tournamentOpt = 
 				tournamentRepository.retrieveTournamentByName(tournament.getTournamentName());
 		if (tournamentOpt.isPresent()) {
-			//throw an exception
+			ApiResponse response = new ApiResponse(false, "Tournament with the name " 
+					+ tournamentOpt.get().getTournamentName() + " already exist.");
+			throw new BadRequestException(response);
 		}
 		tournamentRepository.createTournament(tournament);
 		return true;
@@ -88,7 +95,9 @@ public class TournamentService {
 		Tournament tournament = getTournamentByName(currentUserId, tournamentName)
 				.get();
 		if (!tournament.isAdmin(currentUserId)) {
-			//throw forbidden exception
+			ApiResponse response = new ApiResponse(false, "You don't have permission "
+					+ "to delete the tournament");
+			throw new ForbiddenException(response);
 		}
 		tournamentRepository.deleteTournament(tournament.getTournamentId());
 		return false;
