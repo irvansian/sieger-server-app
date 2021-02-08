@@ -36,4 +36,12 @@ public class RestControllerExceptionHandler {
 
 		return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
 	}
+	
+	@ExceptionHandler(ForbiddenException.class)
+	@ResponseBody
+	public ResponseEntity<ApiResponse> resolveException(ForbiddenException exception) {
+		ApiResponse apiResponse = exception.getApiResponse();
+
+		return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+	}
 }
