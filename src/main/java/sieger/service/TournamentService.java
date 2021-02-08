@@ -1,5 +1,6 @@
 package sieger.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Optional;
@@ -126,8 +127,11 @@ public class TournamentService {
 	
 	public List<Game> getAllGame(String currentUserId, String tournamentName) {
 		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
-		String[] ids = (String[]) tournament.getGameList().toArray();
-		List<Game> gameList = gameRepository.retrieveMultipleGamesById(ids);
+		List<Game> gameList = new ArrayList<Game>();
+		for (String id : tournament.getGameList()) {
+			gameList.add(gameRepository
+					.retrieveGameById(tournament.getTournamentId(), id).get());
+		}
 		return gameList;
 		
 	}
