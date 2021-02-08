@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,6 +17,7 @@ import com.google.firebase.auth.FirebaseToken;
 import sieger.exception.BadRequestException;
 import sieger.payload.ApiResponse;
 
+@Component
 public class AuthFilter extends OncePerRequestFilter {
 
 	@Override
