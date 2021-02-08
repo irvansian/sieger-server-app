@@ -66,6 +66,7 @@ public class GameService {
 					+ "permission to create a game in <" + tournamentName + "> tournament.");
 			throw new ForbiddenException(response);
 		}
+		tournament.getGameList().add(game.getGameId());
 		gameRepository.createGame(tournament.getTournamentId(), game);
 		return true;
 	}
@@ -79,6 +80,7 @@ public class GameService {
 					+ "permission to delete a game in <" + tournamentName + "> tournament.");
 			throw new ForbiddenException(response);
 		}
+		tournament.getGameList().remove(gameId);
 		gameRepository.deleteGame(tournament.getTournamentId(), gameId);
 		return true;
 	}
