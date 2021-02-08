@@ -1,6 +1,6 @@
-package com.sopromadze.blogapi.exception;
+package sieger.exception;
 
-import com.sopromadze.blogapi.payload.ApiResponse;
+import sieger.payload.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
