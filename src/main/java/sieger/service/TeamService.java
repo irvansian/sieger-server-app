@@ -77,6 +77,11 @@ public class TeamService {
 			throw new ForbiddenException(res);
 		}
 		teamRepository.deleteTeam(teamName);
+		for (String id : team.getMemberList()) {
+			User user = userRepository.retrieveUserById(id).get();
+			user.removeTeam(team.getTeamId());
+			userRepository.updateUserById(id, user);
+		}
 		return new ApiResponse(true, "You deleted the team <" + teamName + ">");	
 	}
 	

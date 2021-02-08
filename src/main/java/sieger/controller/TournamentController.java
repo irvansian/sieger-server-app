@@ -1,14 +1,10 @@
 package sieger.controller;
 
-import sieger.service.GameService;
-import sieger.service.ParticipantService;
 import sieger.service.TournamentService;
 
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,17 +22,15 @@ import sieger.model.Game;
 import sieger.model.Participant;
 import sieger.model.Tournament;
 import sieger.model.TournamentDetail;
+import sieger.payload.ApiResponse;
 
 @RestController
 @RequestMapping("tournaments")
 public class TournamentController {
 	private TournamentService tournamentService;
-	private GameService gameService;
-	private ParticipantService participantService;
 
 	@Autowired
-	public TournamentController(TournamentService tournamentService, 
-			GameService gameService, ParticipantService participantService) {
+	public TournamentController(TournamentService tournamentService) {
 		this.tournamentService = tournamentService;
 	}
 	
@@ -48,24 +42,18 @@ public class TournamentController {
 	public ResponseEntity<Tournament> getTournamentById(
 			@RequestParam(name = "id") String tournamentId,
 			String currentUserId) {
-		Optional<Tournament> tournament = tournamentService
+		Tournament tournament = tournamentService
 				.getTournamentById(currentUserId, tournamentId);
-		if (tournament.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-		return ResponseEntity.ok(tournament.get());
+		return ResponseEntity.ok(tournament);
 	}
 	
 	@GetMapping("/{tournamentName}")
 	public ResponseEntity<Tournament> getTournamentByName(
 			@PathVariable("tournamentName") String tournamentName,
 			String currentUserId) {
-		Optional<Tournament> tournament = 
+		Tournament tournament = 
 				tournamentService.getTournamentByName(currentUserId, tournamentName);
-		if (tournament.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-		return ResponseEntity.ok(tournament.get());
+		return ResponseEntity.ok(tournament);
 	}
 	
 	@GetMapping("/{tournamentName}/participants")
@@ -78,59 +66,52 @@ public class TournamentController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<String> createNewTournament(Tournament tournament) {
-		if (tournamentService.createNewTournament(tournament)) {
-			return ResponseEntity.ok(null);
-		}
-		
-		return new ResponseEntity<String>(null, null, 
-				HttpStatus.SC_UNPROCESSABLE_ENTITY);
+	public ResponseEntity<Tournament> createNewTournament(Tournament tournament,
+			String currentUserId) {
+		Tournament tournamentReady = tournamentService.createNewTournament(currentUserId, 
+				tournament);
+		return ResponseEntity.ok(tournamentReady);
 	}
 	
 	@PutMapping("/{tournamentName}")
-	public ResponseEntity<String> updateTournamentDetailById(
+	public ResponseEntity<Tournament> updateTournamentDetailById(
 			@PathVariable("tournamentName") String tournamentName, 
 			@RequestBody TournamentDetail tournamentDetail,
 			String currentUserId) {
-		if (tournamentService.updateTournamentDetailById(currentUserId, 
-				tournamentName, tournamentDetail)) {
-			return ResponseEntity.ok(null);
-		}
-		
-		return new ResponseEntity<String>(null, null, 
-				HttpStatus.SC_UNPROCESSABLE_ENTITY);
+		Tournament tournament = tournamentService.updateTournamentDetailById(currentUserId, 
+				tournamentName, tournamentDetail);
+		return ResponseEntity.ok(tournament);
 	}
 	
 	@DeleteMapping("/{tournamentName}")
-	public ResponseEntity<String> deleteTournament(
+	public ResponseEntity<ApiResponse> deleteTournament(
 			@PathVariable("tournamentName") String tournamentName,
 			String currentUserId) {
-		if (tournamentService.deleteTournament(currentUserId, tournamentName)) {
-			return ResponseEntity.ok(null);
-		}
-		return new ResponseEntity<String>(null, null, 
-				HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		ApiResponse res = tournamentService.deleteTournament(currentUserId, 
+				tournamentName);
+		return ResponseEntity.ok(res);
 	}
 	
 	@PostMapping("/{tournamentName}")
-	public ResponseEntity<String> handleParticipation(
+	public ResponseEntity<ApiResponse> handleParticipation(
 			@PathVariable("tournamentName") String tournamentName,
 			@RequestBody Map<String, Boolean> participation,
 			String currentUserId) {
 		boolean participationVal = participation.get("participation").booleanValue();
+		ApiResponse res = null;
 		if (participationVal == true) {
-			participantService.joinTournament(currentUserId, tournamentName);
+			 res = tournamentService.joinTournament(currentUserId, tournamentName);
 		} else if (participationVal == false) {
-			participantService.quitTournament(currentUserId, tournamentName);
+			res = tournamentService.quitTournament(currentUserId, tournamentName);
 		}
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(res);
 	}
 	
 	@GetMapping("/{tournamentName}/games")
 	public ResponseEntity<List<Game>> getTournamentGames(
 			@PathVariable("tournamentName") String tournamentName,
 			String currentUserId) {
-		List<Game> games = gameService.getAllGame(currentUserId, tournamentName);
+		List<Game> games = tournamentService.getAllGame(currentUserId, tournamentName);
 		return ResponseEntity.ok(games);
 	}
 	
@@ -139,48 +120,38 @@ public class TournamentController {
 			@PathVariable("tournamentName") String tournamentName, 
 			@PathVariable("id") String gameId,
 			String currentUserId) {
-		Optional<Game> game = gameService.getGameById(currentUserId, 
+		Game game = tournamentService.getGameById(currentUserId, 
 				tournamentName, gameId);
-		if (game.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-		return ResponseEntity.ok(game.get());
+		return ResponseEntity.ok(game);
 	}
 	
 	@PutMapping("/{tournamentName}/games/{id}")
-	public ResponseEntity<String> updateGameById(
+	public ResponseEntity<Game> updateGameById(
 			@PathVariable("tournamentName") String tournamentName, 
 			@PathVariable("id") String gameId, 
 			Game game,
 			String currentUserId) {
-		if (gameService.updateGameById(currentUserId, tournamentName, gameId, game))
-			return ResponseEntity.ok(null);
-		return new ResponseEntity<String>(null, null, 
-				HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		Game gameReady = tournamentService.updateGameById(currentUserId, 
+				tournamentName, gameId, game);
+		return ResponseEntity.ok(gameReady);
 	}
 	
 	@PostMapping("/{tournamentName}/games")
-	public ResponseEntity<String> createNewGame(
+	public ResponseEntity<Game> createNewGame(
 			@PathVariable("tournamentName") String tournamentName, Game game,
 			String currentUserId) {
-		if (gameService.createNewGame(currentUserId, tournamentName, game)) {
-			return new ResponseEntity<String>(null, null, HttpStatus.SC_CREATED);
-		}
-		return new ResponseEntity<String>(null, null, 
-				HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		Game gameReady = tournamentService.createNewGame(currentUserId, tournamentName, game);
+		return new ResponseEntity<Game>(gameReady, null, HttpStatus.SC_CREATED);
 	}
 	
 	@DeleteMapping("/{tournamentName}/games/{id}")
-	public ResponseEntity<String> deleteGame(
+	public ResponseEntity<ApiResponse> deleteGame(
 			@PathVariable("tournamentName") String tournamentName, 
 			@PathVariable("id") String gameId,
 			String currentUserId) {
-		if (gameService.deleteGame(currentUserId, tournamentName, gameId)) {
-			return ResponseEntity.ok(null);
-		}
-		
-		return new ResponseEntity<String>(null, null, 
-				HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		ApiResponse res = tournamentService.deleteGame(currentUserId, 
+				tournamentName, gameId);
+		return ResponseEntity.ok(res);
 	}
 	
 	

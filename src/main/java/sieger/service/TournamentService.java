@@ -85,7 +85,7 @@ public class TournamentService {
 		return tournamentRepository.retrieveTournamentParticipants(tournamentId, pf);
 	}
 	
-	public boolean createNewTournament(String currentUserId, Tournament tournament) {
+	public Tournament createNewTournament(String currentUserId, Tournament tournament) {
 		Optional<Tournament> tournamentOpt = 
 				tournamentRepository.retrieveTournamentByName(tournament.getTournamentName());
 		if (tournamentOpt.isPresent()) {
@@ -97,20 +97,20 @@ public class TournamentService {
 		user.addTournament(tournamentOpt.get().getTournamentId());
 		tournamentRepository.createTournament(tournament);
 		userRepository.updateUserById(currentUserId, user);
-		return true;
+		return tournament;
 	}
 	
-	public boolean updateTournamentDetailById(String currentUserId, 
+	public Tournament updateTournamentDetailById(String currentUserId, 
 			String tournamentName, TournamentDetail tournamentDetail) {
 		
-		return false;
+		return null;
 	}
 	
 	public boolean updateTournamentById(String tournamentId, Tournament tournament) {
 		return false;
 	}
 	
-	public boolean deleteTournament(String currentUserId, String tournamentName) {
+	public ApiResponse deleteTournament(String currentUserId, String tournamentName) {
 		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
 		if (!tournament.isAdmin(currentUserId)) {
 			ApiResponse response = new ApiResponse(false, "You don't have permission "
@@ -120,7 +120,8 @@ public class TournamentService {
 		removeTournamentIdFromParticipant(tournament.getParticipantList(), 
 				tournament.getTournamentDetail().getParticipantForm(), tournament.getTournamentId());
 		tournamentRepository.deleteTournament(tournament.getTournamentId());
-		return false;
+		ApiResponse res = new ApiResponse(true, "Successfully deleted the tournament");
+		return res;
 	}
 	
 	public List<Game> getAllGame(String currentUserId, String tournamentName) {
@@ -142,7 +143,7 @@ public class TournamentService {
 		return gameOpt.get();
 	}
 	
-	public ApiResponse updateGameById(String currentUserId, 
+	public Game updateGameById(String currentUserId, 
 			String tournamentName, String gameId, Game game) {
 		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
 		if (!tournament.isAdmin(currentUserId)) {
@@ -151,11 +152,10 @@ public class TournamentService {
 			throw new ForbiddenException(response);
 		}
 		gameRepository.updateGame(tournament.getTournamentId(), gameId, game);
-		ApiResponse res = new ApiResponse(true, "Successfully update the game");
-		return res;
+		return game;
 	}
 	
-	public ApiResponse createNewGame(String currentUserId, 
+	public Game createNewGame(String currentUserId, 
 			String tournamentName, Game game) {
 		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
 		if (!tournament.isAdmin(currentUserId)) {
@@ -165,8 +165,7 @@ public class TournamentService {
 		}
 		tournament.getGameList().add(game.getGameId());
 		gameRepository.createGame(tournament.getTournamentId(), game);
-		ApiResponse res = new ApiResponse(true, "Successfully create a game");
-		return res;
+		return game;
 	}
 	
 	public ApiResponse deleteGame(String currentUserId, 
