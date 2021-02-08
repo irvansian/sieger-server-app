@@ -123,6 +123,111 @@ public class TournamentService {
 		return false;
 	}
 	
+	public List<Game> getAllGame(String currentUserId, String tournamentName) {
+		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
+		String[] ids = (String[]) tournament.getGameList().toArray();
+		List<Game> gameList = gameRepository.retrieveMultipleGamesById(ids);
+		return gameList;
+		
+	}
+	
+	public Game getGameById(String currentUserId, 
+			String tournamentName, String gameId) {
+		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
+		Optional<Game> gameOpt = gameRepository
+				.retrieveGameById(tournament.getTournamentId(), gameId);
+		if (gameOpt.isEmpty()) {
+			throw new ResourceNotFoundException("Game", "id", gameId);
+		}
+		return gameOpt.get();
+	}
+	
+	public ApiResponse updateGameById(String currentUserId, 
+			String tournamentName, String gameId, Game game) {
+		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
+		if (!tournament.isAdmin(currentUserId)) {
+			ApiResponse response = new ApiResponse(false, "You don't have "
+					+ "permission to update this game.");
+			throw new ForbiddenException(response);
+		}
+		gameRepository.updateGame(tournament.getTournamentId(), gameId, game);
+		ApiResponse res = new ApiResponse(true, "Successfully update the game");
+		return res;
+	}
+	
+	public ApiResponse createNewGame(String currentUserId, 
+			String tournamentName, Game game) {
+		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
+		if (!tournament.isAdmin(currentUserId)) {
+			ApiResponse response = new ApiResponse(false, "You don't have "
+					+ "permission to create a game in <" + tournamentName + "> tournament.");
+			throw new ForbiddenException(response);
+		}
+		tournament.getGameList().add(game.getGameId());
+		gameRepository.createGame(tournament.getTournamentId(), game);
+		ApiResponse res = new ApiResponse(true, "Successfully create a game");
+		return res;
+	}
+	
+	public ApiResponse deleteGame(String currentUserId, 
+			String tournamentName, String gameId) {
+		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
+		if (!tournament.isAdmin(currentUserId)) {
+			ApiResponse response = new ApiResponse(false, "You don't have "
+					+ "permission to delete a game in <" + tournamentName + "> tournament.");
+			throw new ForbiddenException(response);
+		}
+		tournament.getGameList().remove(gameId);
+		gameRepository.deleteGame(tournament.getTournamentId(), gameId);
+		ApiResponse res = new ApiResponse(true, "Successfully delete the game");
+		return res;
+	}
+	
+	public ApiResponse joinTournament(String participantId, String tournamentName) {
+		Tournament tournament = tournamentRepository
+				.retrieveTournamentByName(tournamentName).orElseThrow(() -> 
+				new ResourceNotFoundException("Tournament", "name", tournamentName));
+		Participant participant;
+		if(tournament.allowUserToJoin()) {
+			participant = userRepository.retrieveUserById(participantId)
+					.orElseThrow(() -> 
+					new ResourceNotFoundException("User", "id", participantId));
+			participant.joinTournament(tournament);
+		} else if(tournament.allowTeamToJoin()) {
+			participant = teamRepository.retrieveTeamById(participantId)
+					.orElseThrow(() -> 
+					new ResourceNotFoundException("Team", "id", participantId));
+			participant.joinTournament(tournament);
+		} else {
+			ApiResponse res = new ApiResponse(false, "Failed to join tournament");
+			throw new BadRequestException(res);
+		}
+		ApiResponse res = new ApiResponse(true, "Successfully joined the tournament");
+		throw new BadRequestException(res);
+		
+	}
+	
+	public ApiResponse quitTournament(String participantId, String tournamentName) {
+		Tournament tournament = getTournamentByName(participantId, tournamentName);
+		Participant participant;
+		if(tournament.allowUserToJoin()) {
+			participant = userRepository.retrieveUserById(participantId)
+					.orElseThrow(() -> 
+					new ResourceNotFoundException("User", "id", participantId));
+			participant.quitTournament(tournament);
+		} else if(tournament.allowTeamToJoin()) {
+			participant = teamRepository.retrieveTeamById(participantId)
+					.orElseThrow(() -> 
+					new ResourceNotFoundException("Team", "id", participantId));
+			participant.quitTournament(tournament);
+		} else {
+			ApiResponse res = new ApiResponse(false, "Failed to join tournament");
+			throw new BadRequestException(res);
+		}
+		ApiResponse res = new ApiResponse(true, "Successfully joined the tournament");
+		throw new BadRequestException(res);
+	}
+	
 	private void removeTournamentIdFromParticipant(List<String> participantList, 
 			ParticipantForm pc, String tournamentId) {
 		if (pc.equals(ParticipantForm.SINGLE)) {
@@ -140,61 +245,6 @@ public class TournamentService {
 		}
 	}
 	
-	public List<Game> getAllGame(String currentUserId, String tournamentName) {
-		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
-		String[] ids = (String[]) tournament.getGameList().toArray();
-		List<Game> gameList = gameRepository.retrieveMultipleGamesById(ids);
-		return gameList;
-		
-	}
 	
-	public Optional<Game> getGameById(String currentUserId, 
-			String tournamentName, String gameId) {
-		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
-		Optional<Game> gameOpt = gameRepository
-				.retrieveGameById(tournament.getTournamentId(), gameId);
-		if (gameOpt.isEmpty()) {
-			throw new ResourceNotFoundException("Game", "id", gameId);
-		}
-		return gameOpt;
-	}
-	
-	public boolean updateGameById(String currentUserId, 
-			String tournamentName, String gameId, Game game) {
-		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
-		if (!tournament.isAdmin(currentUserId)) {
-			ApiResponse response = new ApiResponse(false, "You don't have "
-					+ "permission to update this game.");
-			throw new ForbiddenException(response);
-		}
-		gameRepository.updateGame(tournament.getTournamentId(), gameId, game);
-		return true;
-	}
-	
-	public boolean createNewGame(String currentUserId, 
-			String tournamentName, Game game) {
-		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
-		if (!tournament.isAdmin(currentUserId)) {
-			ApiResponse response = new ApiResponse(false, "You don't have "
-					+ "permission to create a game in <" + tournamentName + "> tournament.");
-			throw new ForbiddenException(response);
-		}
-		tournament.getGameList().add(game.getGameId());
-		gameRepository.createGame(tournament.getTournamentId(), game);
-		return true;
-	}
-	
-	public boolean deleteGame(String currentUserId, 
-			String tournamentName, String gameId) {
-		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
-		if (!tournament.isAdmin(currentUserId)) {
-			ApiResponse response = new ApiResponse(false, "You don't have "
-					+ "permission to delete a game in <" + tournamentName + "> tournament.");
-			throw new ForbiddenException(response);
-		}
-		tournament.getGameList().remove(gameId);
-		gameRepository.deleteGame(tournament.getTournamentId(), gameId);
-		return true;
-	}
 	
 }
