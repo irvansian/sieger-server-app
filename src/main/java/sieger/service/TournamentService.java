@@ -40,7 +40,7 @@ public class TournamentService {
 	private TeamRepository teamRepository;
 	
 	@Autowired
-	@Qualifier("gameDb")
+	@Qualifier("gameDB")
 	private GameRepository gameRepository;
 	
 	public List<Tournament> getTournamentsByKeyword(String keyword) {
