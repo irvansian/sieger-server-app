@@ -13,7 +13,6 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +28,7 @@ public class MyFilter implements Filter {
 
 
 
-    @Value("${filter.config.excludeUrls}")
+    
     private String excludeUrls; 
 
     private List<String> excludes;
@@ -39,7 +38,7 @@ public class MyFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
-    	
+    	excludeUrls = "/user/login,/user/register";
         excludes = Splitter.on(",").trimResults().splitToList(this.excludeUrls); 
     }
 
@@ -91,4 +90,10 @@ public class MyFilter implements Filter {
         }
         return false;
     }
+
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+		
+	}
 }
