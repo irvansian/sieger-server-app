@@ -2,6 +2,7 @@ package sieger.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +17,8 @@ public class InvitationController {
 	private InvitationService invitationService;
 	
 	@PostMapping
-	public ResponseEntity<Invitation> createInvitation(String currentUserId, 
+	public ResponseEntity<Invitation> createInvitation(
+			@RequestAttribute("currentUserId") String currentUserId, 
 			@RequestBody Invitation invitation) {
 		Invitation invitationReady = invitationService.createInvitation(currentUserId, invitation);
 		return ResponseEntity.ok(invitationReady);
