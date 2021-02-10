@@ -114,10 +114,12 @@ public class UserService {
 		return res;
 	}
 	
-	public User updateUserDetail(String currentUserId, String username, 
+	public User updateUserDetail(String currentUserId,
+			String oldUsername,
+			String newUsername, 
 			String surname, String forename) {
-		User user = getUserByUsername(currentUserId, username);
-		user.setUserName(username);
+		User user = getUserByUsername(currentUserId, oldUsername);
+		user.setUserName(newUsername);
 		user.setForename(forename);
 		user.setSurname(surname);
 		userRepository.updateUserById(user.getUserId(), user);
