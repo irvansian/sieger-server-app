@@ -22,6 +22,23 @@ public class ParticipantActualStanding {
 		this.win = 0;
 		this.points = 0;
 	}
+	//participant win
+	public void winGame() {
+		setPlays(getPlays() + 1);
+		setWin(getWin() + 1);
+		setPoints(getPoints() + 2);
+	}
+	//participant lose
+	public void loseGame() {
+		setPlays(getPlays() + 1);
+		setLose(getLose() + 1);
+	}
+	//participant draw
+	public void drawGame() {
+		setPlays(getPlays() + 1);
+		setDraw(getDraw() + 1);
+		setPoints(getPoints() + 1);
+	}
 	//get name
 	public String getParticipant() {
 		return this.participant;
@@ -45,6 +62,26 @@ public class ParticipantActualStanding {
 	//get point
 	public int getPoints() {
 		return this.points;
+	}
+	//set plays
+	public void setPlays(int newPlays) {
+		this.plays = newPlays;
+	}
+	//set win
+	public void setWin(int newWin) {
+		this.win = newWin;
+	}
+	//set lose
+	public void setLose(int newLose) {
+		this.lose = newLose;
+	}
+	//set point
+	public void setPoints(int newPoints) {
+		this.points = newPoints;
+	}
+	//set draw
+	public void setDraw(int newDraw) {
+		this.draw = newDraw;
 	}
 
 }
