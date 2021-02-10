@@ -8,14 +8,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import sieger.filter.AuthFilter;
+import sieger.filter.JwtFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
-	private AuthFilter authFilter;
+	private JwtFilter authFilter;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {

@@ -18,7 +18,7 @@ import sieger.exception.BadRequestException;
 import sieger.payload.ApiResponse;
 
 @Component
-public class AuthFilter extends OncePerRequestFilter {
+public class JwtFilter extends OncePerRequestFilter {
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, 
