@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,7 +42,7 @@ public class TournamentController {
 	@GetMapping
 	public ResponseEntity<Tournament> getTournamentById(
 			@RequestParam(name = "id") String tournamentId,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		Tournament tournament = tournamentService
 				.getTournamentById(currentUserId, tournamentId);
 		return ResponseEntity.ok(tournament);
@@ -50,7 +51,7 @@ public class TournamentController {
 	@GetMapping("/{tournamentName}")
 	public ResponseEntity<Tournament> getTournamentByName(
 			@PathVariable("tournamentName") String tournamentName,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		Tournament tournament = 
 				tournamentService.getTournamentByName(currentUserId, tournamentName);
 		return ResponseEntity.ok(tournament);
@@ -59,7 +60,7 @@ public class TournamentController {
 	@GetMapping("/{tournamentName}/participants")
 	public ResponseEntity<List<Participant>> getTournamentParticipants(
 			@PathVariable("tournamentName") String tournamentName,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		List<Participant> participants = tournamentService
 				.getTournamentParticipants(currentUserId, tournamentName);
 		return ResponseEntity.ok(participants);
@@ -67,7 +68,7 @@ public class TournamentController {
 	
 	@PostMapping
 	public ResponseEntity<Tournament> createNewTournament(Tournament tournament,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		Tournament tournamentReady = tournamentService.createNewTournament(currentUserId, 
 				tournament);
 		return ResponseEntity.ok(tournamentReady);
@@ -77,7 +78,7 @@ public class TournamentController {
 	public ResponseEntity<Tournament> updateTournamentDetailById(
 			@PathVariable("tournamentName") String tournamentName, 
 			@RequestBody TournamentDetail tournamentDetail,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		Tournament tournament = tournamentService.updateTournamentDetailById(currentUserId, 
 				tournamentName, tournamentDetail);
 		return ResponseEntity.ok(tournament);
@@ -86,7 +87,7 @@ public class TournamentController {
 	@DeleteMapping("/{tournamentName}")
 	public ResponseEntity<ApiResponse> deleteTournament(
 			@PathVariable("tournamentName") String tournamentName,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		ApiResponse res = tournamentService.deleteTournament(currentUserId, 
 				tournamentName);
 		return ResponseEntity.ok(res);
@@ -96,7 +97,7 @@ public class TournamentController {
 	public ResponseEntity<ApiResponse> handleParticipation(
 			@PathVariable("tournamentName") String tournamentName,
 			@RequestBody Map<String, Boolean> participation,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		boolean participationVal = participation.get("participation").booleanValue();
 		ApiResponse res = null;
 		if (participationVal == true) {
@@ -110,7 +111,7 @@ public class TournamentController {
 	@GetMapping("/{tournamentName}/games")
 	public ResponseEntity<List<Game>> getTournamentGames(
 			@PathVariable("tournamentName") String tournamentName,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		List<Game> games = tournamentService.getAllGame(currentUserId, tournamentName);
 		return ResponseEntity.ok(games);
 	}
@@ -119,7 +120,7 @@ public class TournamentController {
 	public ResponseEntity<Game> getGameById(
 			@PathVariable("tournamentName") String tournamentName, 
 			@PathVariable("id") String gameId,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		Game game = tournamentService.getGameById(currentUserId, 
 				tournamentName, gameId);
 		return ResponseEntity.ok(game);
@@ -130,7 +131,7 @@ public class TournamentController {
 			@PathVariable("tournamentName") String tournamentName, 
 			@PathVariable("id") String gameId, 
 			Game game,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		Game gameReady = tournamentService.updateGameById(currentUserId, 
 				tournamentName, gameId, game);
 		return ResponseEntity.ok(gameReady);
@@ -139,7 +140,7 @@ public class TournamentController {
 	@PostMapping("/{tournamentName}/games")
 	public ResponseEntity<Game> createNewGame(
 			@PathVariable("tournamentName") String tournamentName, Game game,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		Game gameReady = tournamentService.createNewGame(currentUserId, tournamentName, game);
 		return new ResponseEntity<Game>(gameReady, null, HttpStatus.SC_CREATED);
 	}
@@ -148,7 +149,7 @@ public class TournamentController {
 	public ResponseEntity<ApiResponse> deleteGame(
 			@PathVariable("tournamentName") String tournamentName, 
 			@PathVariable("id") String gameId,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		ApiResponse res = tournamentService.deleteGame(currentUserId, 
 				tournamentName, gameId);
 		return ResponseEntity.ok(res);
