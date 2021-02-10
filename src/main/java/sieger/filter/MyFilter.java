@@ -34,11 +34,11 @@ public class MyFilter implements Filter {
     private List<String> excludes;
 
     
-    private static final String VALID_ERROR = "{\"code\": \"6000\",\"message\": \"TOKEN 验证失败\"}";
+    private static final String VALID_ERROR = "{\"code\": \"6000\",\"message\": \"TOKEN failed\"}";
 
     @Override
     public void init(FilterConfig filterConfig) {
-    	excludeUrls = "/user/login,/user/register";
+    	excludeUrls = "/user/register";
         excludes = Splitter.on(",").trimResults().splitToList(this.excludeUrls); 
     }
 
