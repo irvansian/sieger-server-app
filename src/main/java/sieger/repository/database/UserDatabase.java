@@ -31,7 +31,7 @@ public class UserDatabase implements UserRepository {
 	public boolean createUser(User user) {
 		Firestore db = FirestoreClient.getFirestore();
 		Map<String, Object> userDoc = new HashMap<String, Object>();
-		userDoc.put("username", user.getUserName());
+		userDoc.put("username", user.getUsername());
 		userDoc.put("surname", user.getSurname());
 		userDoc.put("forename", user.getForename());
 		userDoc.put("notificationList", user.getNotificationList());
@@ -39,7 +39,7 @@ public class UserDatabase implements UserRepository {
 		userDoc.put("tournamentList", user.getTournamentList());
 		userDoc.put("invitationList", user.getInvitationList());
 		System.out.println(user.getUserId());
-		System.out.println("username " + user.getUserName());
+		System.out.println("username " + user.getUsername());
 		db.collection(path).document(user.getUserId()).set(userDoc);
 		return true;
 	}
