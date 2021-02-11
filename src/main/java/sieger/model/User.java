@@ -20,6 +20,10 @@ public class User extends Participant{
 	private List<String> teamList;
 	//list of invitation
 	private List<String> invitationList;
+	
+	public User() {
+		
+	}
 	//constructor
 	public User(String userName, String surname, String forename) {
 		this.userName = userName;
