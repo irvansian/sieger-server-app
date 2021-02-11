@@ -93,7 +93,7 @@ public class TeamService {
 			UserProfile up = new UserProfile(user.getUserId(),
 					user.getForename(),
 					user.getSurname(),
-					user.getUserName());
+					user.getUsername());
 			members.add(up);
 		}
 		return members;
