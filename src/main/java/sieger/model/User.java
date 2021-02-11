@@ -9,7 +9,7 @@ public class User extends Participant{
 	//user id
 	private String userId;
 	//user name
-	private String userName;
+	private String username;
 	//surname
 	private String surname;
 	//forname
@@ -25,8 +25,8 @@ public class User extends Participant{
 		
 	}
 	//constructor
-	public User(String userName, String surname, String forename) {
-		this.userName = userName;
+	public User(String username, String surname, String forename) {
+		this.username = username;
 		this.forename = forename;
 		this.surname = surname;
 		this.userId = randomId();
@@ -41,7 +41,7 @@ public class User extends Participant{
 	//implement getparticipantname()
 	@Override
 	public String getParticipantName() {
-		return this.userName;
+		return this.username;
 	}
 	//implement joinTournament
 	@Override
@@ -140,8 +140,8 @@ public class User extends Participant{
 		return this.userId;
 	}
 	//get username
-	public String getUserName() {
-		return this.userName;
+	public String getUsername() {
+		return this.username;
 	}
 	//get surname
 	public String getSurname() {
@@ -168,8 +168,8 @@ public class User extends Participant{
 		this.surname = surname;
 	}
 	
-	public void setUserName(String username) {
-		this.userName = username;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	
 	public void setForename(String forename) {
