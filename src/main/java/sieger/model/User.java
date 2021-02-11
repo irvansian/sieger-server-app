@@ -20,8 +20,10 @@ public class User extends Participant{
 	private List<String> teamList;
 	//list of invitation
 	private List<String> invitationList;
+
 	//constructor
 	public User(String userName, String surname, String forename) {
+		super.tournamentList = new ArrayList<>();
 		this.userName = userName;
 		this.forename = forename;
 		this.surname = surname;
