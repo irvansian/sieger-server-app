@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,7 +44,7 @@ public class UserController {
 	@GetMapping("/{username}")
 	public ResponseEntity<User> getUserByUsername(
 			@PathVariable("username") String username,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		User user = userService.getUserByUsername(currentUserId, username);
 
 		return ResponseEntity.ok(user);
@@ -52,7 +53,7 @@ public class UserController {
 	@GetMapping
 	public ResponseEntity<User> getUserById(
 			@RequestParam(name = "id") String userToGetId,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		User user = userService.getUserById(currentUserId, userToGetId);
 		return ResponseEntity.ok(user);
 	}
@@ -60,7 +61,7 @@ public class UserController {
 	@GetMapping("/{username}/tournaments")
 	public ResponseEntity<List<Tournament>> getUserTournaments(
 			@PathVariable("username") String username,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		List<Tournament> tournaments = userService
 				.getUserTournaments(currentUserId, username);
 		return ResponseEntity.ok(tournaments);
@@ -69,7 +70,7 @@ public class UserController {
 	@GetMapping("/{username}/teams")
 	public ResponseEntity<List<Team>> getUserTeams(
 			@PathVariable("username") String username,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		List<Team> teams = userService.getUserTeams(currentUserId, username);
 		return ResponseEntity.ok(teams);
 	}
@@ -77,25 +78,28 @@ public class UserController {
 	@GetMapping("/{username}/invitations")
 	public ResponseEntity<List<Invitation>> getUserInvitations(
 			@PathVariable("username") String username,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		List<Invitation> invitations = userService
 				.getUserInvitations(currentUserId, username);
 		return ResponseEntity.ok(invitations);
 	}
 	
 	@PutMapping("/{username}")
-	public ResponseEntity<String> updateUserDetail(@PathVariable("username") String oldUsername, 
+	public ResponseEntity<String> updateUserDetail(
+			@RequestAttribute("currentUserId") String currentUserId,
+			@PathVariable("username") String oldUsername, 
 			@RequestBody Map<String, String> userDetail) {
 		String newUsername = userDetail.get("username");
 		String forename = userDetail.get("forename");
 		String surname = userDetail.get("surname");
-		userService.updateUserDetail(oldUsername, newUsername, surname, forename);
+		userService.updateUserDetail(currentUserId, oldUsername, newUsername, 
+				surname, forename);
 		return ResponseEntity.ok(null);
 	}
 	
 	@PostMapping("/{username}/invitations/{id}")
 	public ResponseEntity<String> handleInvitationAcceptation(
-			String currentUserId, 
+			@RequestAttribute("currentUserId") String currentUserId, 
 			@PathVariable("id") String invitationId,
 			@RequestBody Map<String, Boolean> acceptation) {
 		boolean acceptationVal = acceptation.get("accept").booleanValue();

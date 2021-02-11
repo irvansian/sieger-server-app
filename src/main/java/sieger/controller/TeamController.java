@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +35,7 @@ public class TeamController {
 	@GetMapping("/{teamName}")
 	public ResponseEntity<Team> getTeamByName(
 			@PathVariable("teamName") String teamName,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		Team team = 
 				teamService.getTeamByName(currentUserId,teamName);
 		return ResponseEntity.ok(team);
@@ -43,21 +44,21 @@ public class TeamController {
 	@GetMapping
 	public ResponseEntity<Team> getTeamById(
 			@RequestParam(name = "id") String teamId,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		Team team = teamService.getTeamById(currentUserId, teamId);
 		return ResponseEntity.ok(team);
 	}
 	
 	@PostMapping
 	public ResponseEntity<Team> createNewTeam(@RequestBody Team team,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		Team res = teamService.createNewTeam(team);
 		return ResponseEntity.ok(res);
 	}
 	
 	@DeleteMapping("/{teamName}")
 	public ResponseEntity<ApiResponse> deleteTeam(@PathVariable("teamName") String teamName,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		ApiResponse res = teamService.deleteTeam(currentUserId, teamName);
 		return ResponseEntity.ok(res);
 	}
@@ -65,7 +66,7 @@ public class TeamController {
 	@GetMapping("/{teamName}/members")
 	public ResponseEntity<List<UserProfile>> getTeamMembers(
 			@PathVariable("teamName") String teamName,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		List<UserProfile> members = teamService.getTeamMembers(currentUserId, teamName);
 		return ResponseEntity.ok(members);
 	}
@@ -73,7 +74,7 @@ public class TeamController {
 	@GetMapping("/{teamName}/tournaments")
 	public ResponseEntity<List<Tournament>> getTeamTournaments(
 			@PathVariable("teamName") String teamName,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		List<Tournament> tournaments = teamService.getTeamTournaments(currentUserId, 
 				teamName);
 		return ResponseEntity.ok(tournaments);
@@ -83,7 +84,7 @@ public class TeamController {
 	public ResponseEntity<ApiResponse> kickTeamMember(String adminId, 
 			@PathVariable("id") String userToKickId, 
 			@PathVariable("teamName") String teamName,
-			String currentUserId) {
+			@RequestAttribute("currentUserId") String currentUserId) {
 		ApiResponse res = teamService.kickTeamMembers(currentUserId, 
 				userToKickId, teamName);
 		return ResponseEntity.ok(res);
@@ -91,7 +92,8 @@ public class TeamController {
 	}
 	
 	@PostMapping("/{teamName}")
-	public ResponseEntity<ApiResponse> handleMembership(String currentUserId, 
+	public ResponseEntity<ApiResponse> handleMembership(
+			@RequestAttribute("currentUserId") String currentUserId, 
 			@PathVariable("teamName") String teamName, 
 			@RequestBody Map<String, String> payload) {
 		ApiResponse res = null;
