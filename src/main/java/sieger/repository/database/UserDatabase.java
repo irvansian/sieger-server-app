@@ -67,29 +67,21 @@ public class UserDatabase implements UserRepository {
 	@Override
 	public Optional<User> retrieveUserByUsername(String username) {
 		User user = null;
-//		Firestore db = FirestoreClient.getFirestore();
-//		ApiFuture<QuerySnapshot> future = db.collection(path)
-//				.whereEqualTo("username", username).get();
-//		try {
-//			for (DocumentSnapshot ds : future.get().getDocuments()) {
-//				user = ds.toObject(User.class);
-//				break;
-//			}
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (ExecutionException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		Firestore db = FirestoreClient.getFirestore();
-//		ApiFuture<QuerySnapshot> future =
-//			    db.collection(path).whereEqualTo("username", username).get();
-//			// future.get() blocks on response
-//		List<QueryDocumentSnapshot> documents = future.get().getDocuments();
-//		for (DocumentSnapshot document : documents) {
-//			System.out.println(document.getId() + " => " + document.toObject(City.class));
-//		}
+		Firestore db = FirestoreClient.getFirestore();
+		ApiFuture<QuerySnapshot> future = db.collection(path)
+				.whereEqualTo("username", username).get();
+		try {
+			for (DocumentSnapshot ds : future.get().getDocuments()) {
+				user = ds.toObject(User.class);
+				break;
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return Optional.ofNullable(user);
 	}
 
