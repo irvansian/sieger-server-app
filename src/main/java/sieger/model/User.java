@@ -22,20 +22,17 @@ public class User extends Participant{
 	private List<String> invitationList;
 
 	//constructor
-	public User(String userName, String surname, String forename) {
+	public User(String userName, String surname, String forename, String id) {
 		super.tournamentList = new ArrayList<>();
 		this.userName = userName;
 		this.forename = forename;
 		this.surname = surname;
-		this.userId = randomId();
+		this.userId = id;
 		this.notificationList = new ArrayList<>();
 		this.teamList = new ArrayList<>();
 		this.invitationList = new ArrayList<>();
 	}
-	//get random Id
-	private String randomId() {
-		return UUID.randomUUID().toString();
-	}
+
 	//implement getparticipantname()
 	@Override
 	public String getParticipantName() {

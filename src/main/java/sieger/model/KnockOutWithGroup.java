@@ -1,9 +1,16 @@
 package sieger.model;
 
-public class KnockOutWithGroup {
+public class KnockOutWithGroup extends Tournament {
 
-	public KnockOutWithGroup() {
-		// TODO Auto-generated constructor stub
+	public KnockOutWithGroup(int participantSize, String name, TournamentDetail tournamentDetail) {
+		super(participantSize, name, tournamentDetail);
+		
+	}
+
+	@Override
+	public void createGames() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
