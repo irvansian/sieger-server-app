@@ -9,6 +9,7 @@ public class SiegerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SiegerApplication.class, args);
+		
 	}
 
 }

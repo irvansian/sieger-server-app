@@ -1,6 +1,9 @@
 package sieger.model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,9 +19,9 @@ public abstract class Tournament implements Searchable {
 	//temp notification
 	private List<Notification> notificationList;
     //name of tournament
-    private String tournamentName;
+	private String tournamentName;
     //mac number
-    private int maxParticipantNumber;
+	private int maxParticipantNumber;
 	//constructor
 	public Tournament(int participantSize, String name, TournamentDetail tournamentDetail) {
 		this.tournamentid = randomId();
@@ -120,6 +123,34 @@ public abstract class Tournament implements Searchable {
 		+ "\r\n" + "Game:" + tournamentDetail.getTypeOfGame()
 		+ "\r\n" + "Time: from" + tournamentDetail.getStartTime() + "to" + tournamentDetail.getEndTime()
 		+ "\r\n" + "Register: before" + tournamentDetail.getRegistrationDeadline().toString();
+	}
+	//calculate the Date of game
+	public Date calculateDate(int index) {
+		Date date = this.tournamentDetail.getStartTime();
+		int temp = index / calculateCapacity();
+		Calendar calendar = new GregorianCalendar(); 
+		calendar.setTime(date); 
+		calendar.add(Calendar.DATE,temp); 
+		date = calendar.getTime(); 
+		return date;
+	}
+	//get capacity
+	private int calculateCapacity() {
+		int daysBetween = daysBetween(this.tournamentDetail.getStartTime(), this.tournamentDetail.getEndTime());
+		if(this.maxParticipantNumber % daysBetween == 0) {
+			return (maxParticipantNumber / daysBetween);
+		} else {
+			return (maxParticipantNumber / daysBetween) + 1;
+		}
+	}
+	private int daysBetween(Date smdate,Date bdate){
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(smdate);
+		long time1 = cal.getTimeInMillis();
+		cal.setTime(bdate);
+		long time2 = cal.getTimeInMillis();
+		long between_days=(time2-time1)/(1000*3600*24);
+		return Integer.parseInt(String.valueOf(between_days));
 	}
 	//get maxparticipantnumber
 	public int getMaxParticipantNumber() {

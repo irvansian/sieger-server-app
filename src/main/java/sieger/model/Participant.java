@@ -4,7 +4,7 @@ import java.util.List;
 
 public abstract class Participant {
 	//tournament list of participant
-	private List<String> tournamentList;
+	public List<String> tournamentList;
 	//get participant name.
 	abstract public String getParticipantName();
 	//join a tournament

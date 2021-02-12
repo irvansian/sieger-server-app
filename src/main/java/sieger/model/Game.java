@@ -62,4 +62,8 @@ public class Game {
 	public void setResult(Result result) {
 		this.result = result;
 	}
+	//set time
+	public void setTime(Date date) {
+		this.time = date;
+	}
 }

@@ -17,6 +17,7 @@ public class Team extends Participant{
 	private List<String> memberList;
 	//constructor
 	public Team(String adminId, String name, String password) {
+		super.tournamentList = new ArrayList<>();
 		this.adminId = adminId;
 		this.teamName = name;
 		this.teamPassword = password;
