@@ -33,7 +33,7 @@ public class InvitationService {
 		User user = userRepository.retrieveUserById(currentUserId)
 				.orElseThrow(() -> new ResourceNotFoundException(
 						"User", "id", currentUserId));
-		if (!invitationOpt.get().getRecipientUsername().equals(user.getUserName())) {
+		if (!invitationOpt.get().getRecipientUsername().equals(user.getUsername())) {
 			ApiResponse response = new ApiResponse(false, "You can't view the <" 
 					+ invitationId + "> invitation");
 			throw new ForbiddenException(response);
@@ -43,7 +43,7 @@ public class InvitationService {
 	
 	public Invitation createInvitation(String currentUserId, Invitation invitation) {
 		User user = userRepository.retrieveUserById(currentUserId).get();
-		if (!user.getUserName().equals(invitation.getSenderUsername())) {
+		if (!user.getUsername().equals(invitation.getSenderUsername())) {
 			ApiResponse response = new ApiResponse(false, "You can't create an "
 					+ "invitation for other people.");
 			throw new ForbiddenException(response);

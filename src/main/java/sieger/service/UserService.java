@@ -96,10 +96,10 @@ public class UserService {
 	}
 	
 	public User createNewUser(User user) {
-		if (userRepository.retrieveUserByUsername(user.getUserName())
+		if (userRepository.retrieveUserByUsername(user.getUsername())
 				.isPresent()) {
 			ApiResponse response = new ApiResponse(false, "User with the username < " 
-					+ user.getUserName() + "> already exist.");
+					+ user.getUsername() + "> already exist.");
 			throw new BadRequestException(response);
 		}
 		userRepository.createUser(user);
@@ -119,7 +119,7 @@ public class UserService {
 			String newUsername, 
 			String surname, String forename) {
 		User user = getUserByUsername(currentUserId, oldUsername);
-		user.setUserName(newUsername);
+		user.setUsername(newUsername);
 		user.setForename(forename);
 		user.setSurname(surname);
 		userRepository.updateUserById(user.getUserId(), user);
