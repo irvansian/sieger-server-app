@@ -40,7 +40,7 @@ public class ParticipantActualStanding {
 		setPoints(getPoints() + 1);
 	}
 	//get name
-	public String getParticipant() {
+	public String getParticipantId() {
 		return this.participantId;
 	}
 	//get plays

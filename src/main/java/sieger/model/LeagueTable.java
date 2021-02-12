@@ -36,7 +36,7 @@ public class LeagueTable {
 	//get participant standing
 	public ParticipantActualStanding getParticipantStandingById(String participant) {
 		for(ParticipantActualStanding participantStanding: tables) {
-			if(participantStanding.getParticipant().equals(participant)) {
+			if(participantStanding.getParticipantId().equals(participant)) {
 				return participantStanding;
 			}
 		}
@@ -62,6 +62,10 @@ public class LeagueTable {
 		if (standing != null) {
 			standing.drawGame();
 		}
+	}
+	//getter
+	public List<ParticipantActualStanding> getTables(){
+		return this.tables;
 	}
 
 }
