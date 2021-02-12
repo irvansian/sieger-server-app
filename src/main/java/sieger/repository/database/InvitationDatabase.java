@@ -11,7 +11,6 @@ import com.google.cloud.firestore.Firestore;
 import com.google.firebase.cloud.FirestoreClient;
 
 import sieger.model.Invitation;
-import sieger.model.Team;
 import sieger.repository.InvitationRepository;
 
 @Repository("invitationDB")

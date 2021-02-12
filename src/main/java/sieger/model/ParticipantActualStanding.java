@@ -2,7 +2,7 @@ package sieger.model;
 
 public class ParticipantActualStanding {
 	//name of participant
-	private String participant;
+	private String participantId;
 	//number of game
 	private int plays;
 	//number of win
@@ -14,8 +14,8 @@ public class ParticipantActualStanding {
 	//number of points
 	private int points;
 	//constructor
-	public ParticipantActualStanding(String participant) {
-		this.participant = participant;
+	public ParticipantActualStanding(String participantId) {
+		this.participantId = participantId;
 		this.draw = 0;
 		this.lose = 0;
 		this.plays = 0;
@@ -41,7 +41,7 @@ public class ParticipantActualStanding {
 	}
 	//get name
 	public String getParticipant() {
-		return this.participant;
+		return this.participantId;
 	}
 	//get plays
 	public int getPlays() {

@@ -14,7 +14,16 @@ public class LeagueTable {
 	}
 	//sort
 	public void sort() {
-		
+		ParticipantActualStanding temp;
+		for (int i = tables.size()- 1; i > 0; --i) {
+            for (int j = 0; j < i; ++j) {
+            	if(tables.get(j+1).getPoints() > tables.get(j).getPoints()){           		
+            		temp = tables.get(j);
+            		tables.set(j, tables.get(j+1));
+            		tables.set(j+1, temp);
+            	}
+            }
+        }
 	}
 	//add participant standing
 	public void addParticipantActualStanding(ParticipantActualStanding standing) {
