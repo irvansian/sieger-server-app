@@ -2,7 +2,7 @@ package sieger.repository.database;
 
 
 import java.util.HashMap;
-
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -15,6 +15,7 @@ import com.google.api.core.ApiFutureCallback;
 import com.google.api.core.ApiFutures;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
@@ -30,7 +31,7 @@ public class UserDatabase implements UserRepository {
 	@Override
 	public boolean createUser(User user) {
 		Firestore db = FirestoreClient.getFirestore();
-		Map<String, Object> userDoc = new HashMap<String, Object>();
+		Map<String, Object> userDoc = new HashMap<>();
 		userDoc.put("username", user.getUsername());
 		userDoc.put("surname", user.getSurname());
 		userDoc.put("forename", user.getForename());
@@ -38,8 +39,6 @@ public class UserDatabase implements UserRepository {
 		userDoc.put("teamList", user.getTeamList());
 		userDoc.put("tournamentList", user.getTournamentList());
 		userDoc.put("invitationList", user.getInvitationList());
-		System.out.println(user.getUserId());
-		System.out.println("username " + user.getUsername());
 		db.collection(path).document(user.getUserId()).set(userDoc);
 		return true;
 	}
@@ -68,21 +67,29 @@ public class UserDatabase implements UserRepository {
 	@Override
 	public Optional<User> retrieveUserByUsername(String username) {
 		User user = null;
-		Firestore db = FirestoreClient.getFirestore();
-		ApiFuture<QuerySnapshot> future = db.collection(path)
-				.whereEqualTo("username", username).get();
-		try {
-			for (DocumentSnapshot ds : future.get().getDocuments()) {
-				user = ds.toObject(User.class);
-				break;
-			}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		Firestore db = FirestoreClient.getFirestore();
+//		ApiFuture<QuerySnapshot> future = db.collection(path)
+//				.whereEqualTo("username", username).get();
+//		try {
+//			for (DocumentSnapshot ds : future.get().getDocuments()) {
+//				user = ds.toObject(User.class);
+//				break;
+//			}
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (ExecutionException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		Firestore db = FirestoreClient.getFirestore();
+//		ApiFuture<QuerySnapshot> future =
+//			    db.collection(path).whereEqualTo("username", username).get();
+//			// future.get() blocks on response
+//		List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+//		for (DocumentSnapshot document : documents) {
+//			System.out.println(document.getId() + " => " + document.toObject(City.class));
+//		}
 		return Optional.ofNullable(user);
 	}
 

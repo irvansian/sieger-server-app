@@ -21,9 +21,9 @@ public class User extends Participant{
 	//list of invitation
 	private List<String> invitationList;
 	
-	public User() {
-		
-	}
+//	public User() {
+//		
+//	}
 	//constructor
 	public User(String username, String surname, String forename) {
 		this.username = username;

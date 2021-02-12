@@ -27,7 +27,7 @@ import sieger.service.UserService;
 @RequestMapping("users")
 public class UserController {
 	
-	private final UserService userService;
+	private UserService userService;
 	private InvitationService invitationService;
 	
 	@Autowired
@@ -37,6 +37,7 @@ public class UserController {
 	
 	@PostMapping
 	public ResponseEntity<User> createNewUser(@RequestBody User user) {
+		System.out.println("id " + user.getUserId());
 		User resUser = userService.createNewUser(user);
 		return ResponseEntity.ok(resUser);
 	}
