@@ -6,6 +6,9 @@ import java.util.List;
 public class League extends Tournament{
 	//table
 	private LeagueTable table;
+	public League() {
+		super();
+	}
 	//constructor
 	public League(int participantSize, String name, TournamentDetail tournamentDetail) {
 		super(participantSize, name, tournamentDetail);

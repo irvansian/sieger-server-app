@@ -40,8 +40,8 @@ public class User extends Participant{
 
 	//implement getparticipantname()
 	@Override
-	public String getParticipantName() {
-		return this.username;
+	public String findParticipantName() {
+		return getUsername();
 	}
 	//implement joinTournament
 	@Override

@@ -22,9 +22,14 @@ public abstract class Tournament implements Searchable {
 	private String tournamentName;
     //mac number
 	private int maxParticipantNumber;
+	public Tournament() {
+		this.tournamentid = randomId();
+		this.gameList = new ArrayList<>();
+		this.notificationList = new ArrayList<>();
+		this.participantList = new ArrayList<String>();
+	}
 	//constructor
 	public Tournament(int participantSize, String name, TournamentDetail tournamentDetail) {
-		this.tournamentid = randomId();
 		this.tournamentDetail = tournamentDetail;
 		this.gameList = new ArrayList<>();
 		this.notificationList = new ArrayList<>();

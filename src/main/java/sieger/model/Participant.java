@@ -6,7 +6,7 @@ public abstract class Participant {
 	//tournament list of participant
 	public List<String> tournamentList;
 	//get participant name.
-	abstract public String getParticipantName();
+	abstract public String findParticipantName();
 	//join a tournament
 	abstract public boolean joinTournament(Tournament tournament);
 	//quit tournament

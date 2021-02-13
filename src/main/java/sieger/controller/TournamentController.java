@@ -67,7 +67,8 @@ public class TournamentController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Tournament> createNewTournament(Tournament tournament,
+	public ResponseEntity<Tournament> createNewTournament(
+			@RequestBody Tournament tournament,
 			@RequestAttribute("currentUserId") String currentUserId) {
 		Tournament tournamentReady = tournamentService.createNewTournament(currentUserId, 
 				tournament);
