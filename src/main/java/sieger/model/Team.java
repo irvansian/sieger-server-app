@@ -23,6 +23,7 @@ public class Team extends Participant{
 		this.teamPassword = password;
 		this.teamId = randomId();
 		this.memberList = new ArrayList<>();
+		memberList.add(adminId);
 	}
 	//get random Id
 	private String randomId() {
