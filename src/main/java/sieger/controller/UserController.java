@@ -37,8 +37,9 @@ public class UserController {
 	
 	@PostMapping
 	public ResponseEntity<User> createNewUser(@RequestBody User user) {
-		System.out.println("id " + user.getUserId());
+		
 		User resUser = userService.createNewUser(user);
+		System.out.println("id " + user.getUserId());
 		return ResponseEntity.ok(resUser);
 	}
 	

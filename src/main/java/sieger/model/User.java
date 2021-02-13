@@ -20,14 +20,19 @@ public class User extends Participant{
 	private List<String> teamList;
 	//list of invitation
 	private List<String> invitationList;
-
-	//constructor
-	public User(String userName, String surname, String forename) {
+	public User(){
 		super.tournamentList = new ArrayList<>();
-		this.username = userName;
+		this.notificationList = new ArrayList<>();
+		this.teamList = new ArrayList<>();
+		this.invitationList = new ArrayList<>();
+    }
+	//constructor
+	public User(String username, String surname, String forename, String userId) {
+		super.tournamentList = new ArrayList<>();
+		this.username = username;
 		this.forename = forename;
 		this.surname = surname;
-		this.userId = null;
+		this.userId = userId;
 		this.notificationList = new ArrayList<>();
 		this.teamList = new ArrayList<>();
 		this.invitationList = new ArrayList<>();
@@ -171,7 +176,9 @@ public class User extends Participant{
 		this.forename = forename;
 	}
 	
-	
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 	
 	
 }

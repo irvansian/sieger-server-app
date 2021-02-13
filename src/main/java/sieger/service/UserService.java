@@ -43,7 +43,7 @@ public class UserService {
 		User user = userRepository.retrieveUserByUsername(username)
 				.orElseThrow(() -> 
 				new ResourceNotFoundException("User", "username", username));
-		
+		System.out.println("id " + user.getSurname());
 		if (!user.getUserId().equals(currentUserId)) {
 			ApiResponse response = new ApiResponse(false, "You don't have permission "
 					+ "to view the user.");
