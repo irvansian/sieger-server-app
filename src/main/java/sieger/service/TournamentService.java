@@ -54,7 +54,7 @@ public class TournamentService {
 				.orElseThrow(() -> 
 				new ResourceNotFoundException("Tournament", "id", tournamentId));
 		User user = userRepository.retrieveUserById(currentUserId).get();
-		if (!tournament.isParticipant(user)) {
+		if (!tournament.isParticipant(user) && !tournament.isAdmin(user.getUserId())) {
 			ApiResponse response = new ApiResponse(false, "You don't have permission "
 					+ "to view the tournament");
 			throw new ForbiddenException(response);
@@ -70,7 +70,7 @@ public class TournamentService {
 				.orElseThrow(() -> 
 				new ResourceNotFoundException("Tournament", "name", tournamentName));
 		User user = userRepository.retrieveUserById(currentUserId).get();
-		if (!tournament.isParticipant(user)) {
+		if (!tournament.isParticipant(user) && !tournament.isAdmin(user.getUserId())) {
 			ApiResponse response = new ApiResponse(false, "You don't have permission "
 					+ "to view the tournament");
 			throw new ForbiddenException(response);
@@ -95,7 +95,6 @@ public class TournamentService {
 			throw new BadRequestException(response);
 		}
 		User user = userRepository.retrieveUserById(currentUserId).get();
-		user.addTournament(tournamentOpt.get().getTournamentId());
 		tournamentRepository.createTournament(tournament);
 		userRepository.updateUserById(currentUserId, user);
 		return tournament;
@@ -190,21 +189,23 @@ public class TournamentService {
 		Tournament tournament = tournamentRepository
 				.retrieveTournamentByName(tournamentName).orElseThrow(() -> 
 				new ResourceNotFoundException("Tournament", "name", tournamentName));
-		Participant participant;
 		if(tournament.allowUserToJoin()) {
-			participant = userRepository.retrieveUserById(participantId)
+			User user = userRepository.retrieveUserById(participantId)
 					.orElseThrow(() -> 
 					new ResourceNotFoundException("User", "id", participantId));
-			participant.joinTournament(tournament);
+			user.joinTournament(tournament);
+			userRepository.updateUserById(participantId, user);
 		} else if(tournament.allowTeamToJoin()) {
-			participant = teamRepository.retrieveTeamById(participantId)
+			Team team = teamRepository.retrieveTeamById(participantId)
 					.orElseThrow(() -> 
 					new ResourceNotFoundException("Team", "id", participantId));
-			participant.joinTournament(tournament);
+			team.joinTournament(tournament);
+			teamRepository.updateTeam(participantId, team);
 		} else {
 			ApiResponse res = new ApiResponse(false, "Failed to join tournament");
 			throw new BadRequestException(res);
 		}
+		tournamentRepository.updateTournament(tournament.getTournamentId(), tournament);
 		ApiResponse res = new ApiResponse(true, "Successfully joined the tournament");
 		throw new BadRequestException(res);
 		
@@ -212,21 +213,25 @@ public class TournamentService {
 	
 	public ApiResponse quitTournament(String participantId, String tournamentName) {
 		Tournament tournament = getTournamentByName(participantId, tournamentName);
-		Participant participant;
+		
 		if(tournament.allowUserToJoin()) {
-			participant = userRepository.retrieveUserById(participantId)
+			User user = userRepository.retrieveUserById(participantId)
 					.orElseThrow(() -> 
 					new ResourceNotFoundException("User", "id", participantId));
-			participant.quitTournament(tournament);
+			user.quitTournament(tournament);
+			userRepository.updateUserById(participantId, user);
+
 		} else if(tournament.allowTeamToJoin()) {
-			participant = teamRepository.retrieveTeamById(participantId)
+			Team team = teamRepository.retrieveTeamById(participantId)
 					.orElseThrow(() -> 
 					new ResourceNotFoundException("Team", "id", participantId));
-			participant.quitTournament(tournament);
+			team.quitTournament(tournament);
+			teamRepository.updateTeam(participantId, team);
 		} else {
 			ApiResponse res = new ApiResponse(false, "Failed to join tournament");
 			throw new BadRequestException(res);
 		}
+		tournamentRepository.updateTournament(tournament.getTournamentId(), tournament);
 		ApiResponse res = new ApiResponse(true, "Successfully joined the tournament");
 		throw new BadRequestException(res);
 	}

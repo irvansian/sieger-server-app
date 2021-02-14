@@ -1,5 +1,7 @@
 package sieger.repository.database;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -19,10 +21,15 @@ public class InvitationDatabase implements InvitationRepository {
 	private String path = "invitations";
 
 	@Override
-	public boolean createInvitation(Invitation invitation) {
+	public String createInvitation(Invitation invitation) {
 		Firestore db = FirestoreClient.getFirestore();
-		db.collection(path).document(invitation.getInvitationId()).set(invitation);
-		return true;
+		Map<String, Object> invitationDoc = new HashMap<>();
+		invitationDoc.put("senderUsername", invitation.getSenderUsername());
+		invitationDoc.put("recipientUsername", invitation.getRecipientUsername());
+		invitationDoc.put("tournamentId", invitation.getTournamentId());
+		invitationDoc.put("invitationId", invitation.getInvitationId());
+		db.collection(path).document(invitation.getInvitationId()).set(invitationDoc);
+		return invitation.getInvitationId();
 	}
 
 	@Override

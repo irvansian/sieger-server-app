@@ -7,6 +7,21 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type",
+        visible = true
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(name = "League", value = League.class),
+        @JsonSubTypes.Type(name = "KnockOut", value = KnockOut.class),
+        @JsonSubTypes.Type(name = "KnockOutWithGroup", value = KnockOutWithGroup.class),
+})
 public abstract class Tournament implements Searchable {
 	//random id 
 	private String tournamentid;
@@ -23,15 +38,14 @@ public abstract class Tournament implements Searchable {
     //mac number
 	private int maxParticipantNumber;
 	public Tournament() {
-		this.tournamentid = randomId();
-		this.gameList = new ArrayList<>();
-		this.notificationList = new ArrayList<>();
-		this.participantList = new ArrayList<String>();
+		
 	}
 	//constructor
-	public Tournament(int participantSize, String name, TournamentDetail tournamentDetail) {
+	@JsonCreator
+	public Tournament(@JsonProperty("participantSize")int participantSize, @JsonProperty("name")String name, @JsonProperty("tournamentDetail")TournamentDetail tournamentDetail) {
 		this.tournamentDetail = tournamentDetail;
 		this.gameList = new ArrayList<>();
+		this.tournamentid = randomId();
 		this.notificationList = new ArrayList<>();
 		this.participantList = new ArrayList<String>();
 		this.tournamentName = name;
@@ -53,12 +67,12 @@ public abstract class Tournament implements Searchable {
 		return false;
 	}
 	//if user participate as single.
-	public boolean participateAsSingle(User user) {
+	private boolean participateAsSingle(User user) {
 		String userId = user.getUserId();
 		return participantList.contains(userId);
 	}
 	//if user participate as team
-	public boolean participateAsTeam(User user) {
+	private boolean participateAsTeam(User user) {
 		for(String teamId: user.getTeamList()) {
 			if(participantList.contains(teamId)) {
 				return true;
@@ -67,7 +81,7 @@ public abstract class Tournament implements Searchable {
 		return false;
 	}
 	//check if participant list has place
-	public boolean checkSize(){
+	private boolean checkSize(){
 		if(participantList.size() < this.maxParticipantNumber) {
 			return true;
 		} else {
@@ -117,11 +131,11 @@ public abstract class Tournament implements Searchable {
 		}
 	}
 	//implement gettitle()
-	public String getTitle() {
+	public String Title() {
 		return "Tournament:" + getTournamentName();
 	}
 	//implement getInformation
-	public String getInformation() {
+	public String Information() {
 		return  "Tournament:" + getTournamentName() 
 		+ "\r\n" + "ParticipantForm:" + tournamentDetail.getParticipantForm() 
 		+ "\r\n" + "Location:" + tournamentDetail.getLocation()
@@ -182,9 +196,10 @@ public abstract class Tournament implements Searchable {
 		return this.participantList;
 	}
 	//get notificationList
-	public List<Notification> notificationList(){
+	public List<Notification> getNotificationList(){
 		return this.notificationList;
 	}
+
 	//add game
 	public void addGame(String gameId){
 		gameList.add(gameId);

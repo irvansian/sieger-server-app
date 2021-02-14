@@ -3,14 +3,20 @@ package sieger.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+@JsonTypeName("League")
 public class League extends Tournament{
 	//table
 	private LeagueTable table;
+	
 	public League() {
-		super();
 	}
+
 	//constructor
-	public League(int participantSize, String name, TournamentDetail tournamentDetail) {
+	@JsonCreator
+	public League(@JsonProperty("participantSize")int participantSize, @JsonProperty("name")String name, @JsonProperty("tournamentDetail")TournamentDetail tournamentDetail) {
 		super(participantSize, name, tournamentDetail);
 		this.table = null;
 	}

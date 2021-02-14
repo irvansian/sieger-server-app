@@ -1,14 +1,16 @@
 package sieger.repository.database;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.stereotype.Repository;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
@@ -16,9 +18,13 @@ import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.firebase.cloud.FirestoreClient;
 
+import sieger.model.KnockOut;
+import sieger.model.KnockOutWithGroup;
+import sieger.model.League;
 import sieger.model.Participant;
 import sieger.model.ParticipantForm;
 import sieger.model.Tournament;
+import sieger.model.TournamentDetail;
 import sieger.model.User;
 import sieger.model.Team;
 import sieger.repository.TournamentRepository;
@@ -36,7 +42,15 @@ public class TournamentDatabase implements TournamentRepository {
 		
 		try {
 			if (future.get().exists()) {
-				tournament = future.get().toObject(Tournament.class);
+				if(future.get().get("type").equals("League")){
+					tournament = future.get().toObject(League.class.asSubclass(Tournament.class));
+				}
+				if(future.get().get("type").equals("KnockOut")) {
+					tournament = future.get().toObject(KnockOut.class.asSubclass(Tournament.class));
+				}
+				if(future.get().get("type").equals("KnockOutWithGroup")) {
+					tournament = future.get().toObject(KnockOutWithGroup.class.asSubclass(Tournament.class));
+				}
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -56,8 +70,34 @@ public class TournamentDatabase implements TournamentRepository {
 
 	@Override
 	public boolean createTournament(Tournament tournament) {
+		ObjectMapper objectMapper = new ObjectMapper();
+	
 		Firestore db = FirestoreClient.getFirestore();
-		db.collection(path).document(tournament.getTournamentId()).set(tournament);
+		Map<String, Object> tournamentDoc = new HashMap<>();
+		try {
+			boolean league = objectMapper.writeValueAsString(tournament).contains("League");
+			boolean knockout = objectMapper.writeValueAsString(tournament).contains("KnockOut");
+			boolean knockoutwithgroup= objectMapper.writeValueAsString(tournament).contains("KnockOutWithGroup");
+			if(league) {
+				tournamentDoc.put("type", "League");
+			} else if(knockout) {
+				tournamentDoc.put("type", "KnockOut");
+			} else if(knockoutwithgroup) {
+				tournamentDoc.put("type", "KnockOutWithGroup");
+			}
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		tournamentDoc.put("tournamentDetail", tournament.getTournamentDetail());
+		tournamentDoc.put("gameList", tournament.getGameList());
+		tournamentDoc.put("tournamentid", tournament.getTournamentId());
+		tournamentDoc.put("notificationList", tournament.getNotificationList());
+		tournamentDoc.put("participantList", tournament.getParticipantList());
+		tournamentDoc.put("tournamentName", tournament.getTournamentName());
+		tournamentDoc.put("maxParticipantNumber", tournament.getMaxParticipantNumber());
+		db.collection(path).document(tournament.getTournamentId()).set(tournamentDoc);
 		return true;
 	}
 
@@ -83,7 +123,15 @@ public class TournamentDatabase implements TournamentRepository {
 				.whereEqualTo("tournamentName", tournamentName).get();
 		try {
 			for (DocumentSnapshot ds : future.get().getDocuments()) {
-				tournament = ds.toObject(Tournament.class);
+				if(ds.get("type").equals("League")){
+					tournament = ds.toObject(League.class.asSubclass(Tournament.class));
+				}
+				if(ds.get("type").equals("KnockOut")) {
+					tournament = ds.toObject(KnockOut.class.asSubclass(Tournament.class));
+				}
+				if(ds.get("type").equals("KnockOutWithGroup")) {
+					tournament = ds.toObject(KnockOutWithGroup.class.asSubclass(Tournament.class));
+				}
 				break;
 			}
 		} catch (InterruptedException e) {

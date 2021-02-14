@@ -3,10 +3,12 @@ package sieger.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.api.client.util.Objects;
 
 public class KnockOutMapping {
 	//map
+	@JsonIgnore
 	private Map<Integer, String> koMapping;
 	//constructor
 	public KnockOutMapping(int branchSize) {

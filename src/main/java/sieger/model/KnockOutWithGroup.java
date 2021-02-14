@@ -3,14 +3,26 @@ package sieger.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+@JsonTypeName("KnockOutWithGroup")
 public class KnockOutWithGroup extends Tournament {
 	//table list
+	@JsonIgnore
 	private List<LeagueTable> tables;
 	//ko map
+	@JsonIgnore
 	private KnockOutMapping koMapping;
 	//current games
 	private List<Game> currentGames;
-	public KnockOutWithGroup(int participantSize, String name, TournamentDetail tournamentDetail) {
+	public KnockOutWithGroup() {
+		super();
+	}
+
+	@JsonCreator
+	public KnockOutWithGroup(@JsonProperty("participantSize")int participantSize, @JsonProperty("name")String name, @JsonProperty("tournamentDetail")TournamentDetail tournamentDetail) {
 		super(participantSize, name, tournamentDetail);
 		this.tables = new ArrayList<>();
 		this.koMapping = null;

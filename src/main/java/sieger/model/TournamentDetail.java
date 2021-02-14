@@ -1,6 +1,9 @@
 package sieger.model;
 
-import java.sql.Date;
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TournamentDetail {
     //form of Participant
@@ -21,7 +24,13 @@ public class TournamentDetail {
     //end time
     private Date endTime;
     //constructor
-    public TournamentDetail(String organisatorId, TournamentTypes tournamentTypes, String typeOfGame, String location, Date registrationDeadline, Date startTime, Date endTime, ParticipantForm form){
+    public TournamentDetail() {
+    	
+    }
+    @JsonCreator
+    public TournamentDetail(@JsonProperty("organisatorId")String organisatorId, @JsonProperty("tournamentTypes")TournamentTypes tournamentTypes,
+    		@JsonProperty("typeOfGame")String typeOfGame, @JsonProperty("location")String location, @JsonProperty("registrationDeadline")Date registrationDeadline, 
+    		@JsonProperty("startTime")Date startTime, @JsonProperty("endTime")Date endTime, @JsonProperty("form")ParticipantForm form){
         this.adminId = organisatorId;
         
         this.tournamentTypes = tournamentTypes;

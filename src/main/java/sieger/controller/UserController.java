@@ -33,6 +33,7 @@ public class UserController {
 	@Autowired
 	public UserController(UserService userService, InvitationService invitationService) {
 		this.userService = userService;
+		this.invitationService = invitationService;
 	}
 	
 	@PostMapping
@@ -105,9 +106,9 @@ public class UserController {
 			@PathVariable("id") String invitationId,
 			@RequestBody Map<String, Boolean> acceptation) {
 		boolean acceptationVal = acceptation.get("accept").booleanValue();
-		if (acceptationVal == true) {
+		if (acceptationVal) {
 			invitationService.acceptInvitation(currentUserId, invitationId);
-		} else if (acceptationVal == false) {
+		} else {
 			invitationService.declineInvitation(currentUserId, invitationId);
 		}
 		return ResponseEntity.ok(null);

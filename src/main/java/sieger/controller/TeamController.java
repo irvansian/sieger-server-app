@@ -27,8 +27,9 @@ import sieger.service.UserService;
 public class TeamController {
 	private TeamService teamService;
 	
+	
 	@Autowired
-	public TeamController(TeamService teamService, UserService userService) {
+	public TeamController(TeamService teamService) {
 		this.teamService = teamService;
 	}
 	

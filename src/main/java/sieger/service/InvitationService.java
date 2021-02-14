@@ -48,7 +48,15 @@ public class InvitationService {
 					+ "invitation for other people.");
 			throw new ForbiddenException(response);
 		}
-		invitationRepository.createInvitation(invitation);
+		Optional<User> receive = userRepository.retrieveUserByUsername(invitation.getRecipientUsername());
+		if(receive.isEmpty()) {
+			ApiResponse response = new ApiResponse(false, "You can't send an "
+					+ "invitation to him.");
+			throw new ForbiddenException(response);
+		}
+		String invitationId = invitationRepository.createInvitation(invitation);
+		receive.get().addInvitation(invitationId);
+		userRepository.updateUserById(receive.get().getUserId(), receive.get());
 		return invitation;
 	}
 	

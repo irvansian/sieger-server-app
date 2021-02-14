@@ -1,6 +1,8 @@
 package sieger.repository.database;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -73,7 +75,14 @@ public class TeamDatabase implements TeamRepository {
 	@Override
 	public boolean createTeam(Team team) {
 		Firestore db = FirestoreClient.getFirestore();
-		db.collection(path).document(team.getTeamId()).set(team);
+		Map<String, Object> teamDoc = new HashMap<>();
+		teamDoc.put("tournamentList", team.getTournamentList());
+		teamDoc.put("adminId", team.getAdminId());
+		teamDoc.put("teamName", team.getTeamName());
+		teamDoc.put("teamPassword", team.getTeamPassword());
+		teamDoc.put("teamId", team.getTeamId());
+		teamDoc.put("memberList", team.getMemberList());
+		db.collection(path).document(team.getTeamId()).set(teamDoc);
 		return true;
 	}
 

@@ -66,6 +66,9 @@ public class TeamService {
 			throw new BadRequestException(response);
 		}
 		teamRepository.createTeam(team);
+		User user = userRepository.retrieveUserById(team.getAdminId()).get();
+		user.addTeam(team.getTeamId());
+		userRepository.updateUserById(user.getUserId(), user);
 		return team;
 	}
 	
@@ -76,12 +79,13 @@ public class TeamService {
 					+ "delete team <" + teamName + ">");
 			throw new ForbiddenException(res);
 		}
-		teamRepository.deleteTeam(teamName);
+		
 		for (String id : team.getMemberList()) {
 			User user = userRepository.retrieveUserById(id).get();
 			user.removeTeam(team.getTeamId());
 			userRepository.updateUserById(id, user);
 		}
+		teamRepository.deleteTeam(team.getTeamId());
 		return new ApiResponse(true, "You deleted the team <" + teamName + ">");	
 	}
 	

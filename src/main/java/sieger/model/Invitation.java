@@ -2,6 +2,9 @@ package sieger.model;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Invitation {
 	//id of invitation
 	private String invitationId;
@@ -11,8 +14,11 @@ public class Invitation {
 	private String recipientUsername;
 	//tournament id
 	private String tournamentId;
+	public Invitation() {
+	}
 	//constructor
-	public Invitation(String senderUsername, String recipientUsername, String tournamentId) {
+	@JsonCreator
+	public Invitation(@JsonProperty("senderUsername")String senderUsername, @JsonProperty("recipientUsername")String recipientUsername, @JsonProperty("tournamentId")String tournamentId) {
 		this.recipientUsername = recipientUsername;
 		this.senderUsername = senderUsername;
 		this.tournamentId = tournamentId;

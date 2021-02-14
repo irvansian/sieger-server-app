@@ -72,6 +72,7 @@ public class TournamentController {
 			@RequestAttribute("currentUserId") String currentUserId) {
 		Tournament tournamentReady = tournamentService.createNewTournament(currentUserId, 
 				tournament);
+
 		return ResponseEntity.ok(tournamentReady);
 	}
 	

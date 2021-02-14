@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class User extends Participant{
 	//user id
 	private String userId;
@@ -20,14 +23,11 @@ public class User extends Participant{
 	private List<String> teamList;
 	//list of invitation
 	private List<String> invitationList;
-	public User(){
-		super.tournamentList = new ArrayList<>();
-		this.notificationList = new ArrayList<>();
-		this.teamList = new ArrayList<>();
-		this.invitationList = new ArrayList<>();
-    }
+	public User() {
+	}
 	//constructor
-	public User(String username, String surname, String forename, String userId) {
+	@JsonCreator
+	public User(@JsonProperty("username")String username, @JsonProperty("surname")String surname, @JsonProperty("forename")String forename, @JsonProperty("userId")String userId) {
 		super.tournamentList = new ArrayList<>();
 		this.username = username;
 		this.forename = forename;
@@ -46,13 +46,11 @@ public class User extends Participant{
 	//implement joinTournament
 	@Override
 	public boolean joinTournament(Tournament tournament) {
-		if(tournament.allowUserToJoin()) {
+		
 			addTournament(tournament.getTournamentId());
 			tournament.addParticipant(userId);
 			return true;
-		} else {
-			return false;
-		}
+	
 	}
 	//implement quittournament
 	@Override
