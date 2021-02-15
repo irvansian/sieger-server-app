@@ -26,14 +26,16 @@ public class KnockOut extends Tournament {
 	}
 
 	@Override
-	public void createGames() {
+	public List<Game> createGames() {
 		if(readyToBeHeld()) {
 			List<Game> games = createGameList();
 			setCurrentGames(games);
 			for(int i = 0; i < games.size(); i++) {
 				games.get(i).setTime(calculateDate(i));
 			}
+			return games;
 		}
+		return null;
 	}
 	//getter
 	public KnockOutMapping getKoMapping() {
@@ -72,5 +74,8 @@ public class KnockOut extends Tournament {
 	public void setCurrentGames(List<Game> games) {
 		this.currentGames = games;
 	}
-
+	//get current games
+	public List<Game> getCurrentGames(){
+		return this.currentGames;
+	}
 }

@@ -22,14 +22,16 @@ public class League extends Tournament{
 	}
 
 	@Override
-	public void createGames() {
+	public List<Game> createGames() {
 		if(readyToBeHeld()) {
 			createTable();
 			List<Game> games = createGameList();
 			for(int i = 0; i < games.size(); i++) {
 				games.get(i).setTime(calculateDate(i));
 			}
-		}		
+			return games;
+		}
+		return null;
 	}
 	//create the table
 	private LeagueTable createTable() {

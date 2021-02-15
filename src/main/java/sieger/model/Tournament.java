@@ -56,7 +56,7 @@ public abstract class Tournament implements Searchable {
 		return UUID.randomUUID().toString();
 	}
 	//abstract methode
-	abstract public void createGames();
+	abstract List<Game> createGames();
 	//check if user participate the tournament
 	public boolean isParticipant(User user) {
 		if(tournamentDetail.getParticipantForm() == ParticipantForm.SINGLE) {

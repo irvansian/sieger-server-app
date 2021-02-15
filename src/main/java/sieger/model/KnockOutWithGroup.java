@@ -30,13 +30,15 @@ public class KnockOutWithGroup extends Tournament {
 	}
 
 	@Override
-	public void createGames() {
+	public List<Game> createGames() {
 		if(readyToBeHeld()) {
 			List<Game> games = createGameList();
 			for(int i = 0; i < games.size(); i++) {
 				games.get(i).setTime(calculateDate(i));
 			}
-		}		
+			return games;
+		}
+		return null;
 		
 	}
 	//first round of KO
@@ -75,6 +77,7 @@ public class KnockOutWithGroup extends Tournament {
 			tempgames.get(i - currentIndex).setTime(calculateDate(i));
 		}
 		setCurrentGames(tempgames);
+		
 	}
 	//get winner of group phase
 	private List<String> getWinnerOfGroup(){
