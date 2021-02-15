@@ -132,7 +132,7 @@ public class TournamentController {
 	public ResponseEntity<Game> updateGameById(
 			@PathVariable("tournamentName") String tournamentName, 
 			@PathVariable("id") String gameId, 
-			Game game,
+			@RequestBody Game game,
 			@RequestAttribute("currentUserId") String currentUserId) {
 		Game gameReady = tournamentService.updateGameById(currentUserId, 
 				tournamentName, gameId, game);
@@ -140,11 +140,13 @@ public class TournamentController {
 	}
 	
 	@PostMapping("/{tournamentName}/games")
-	public ResponseEntity<Game> createNewGame(
-			@PathVariable("tournamentName") String tournamentName, Game game,
+	public ResponseEntity<List<Game>> createGames(
+			@PathVariable("tournamentName") String tournamentName,
 			@RequestAttribute("currentUserId") String currentUserId) {
-		Game gameReady = tournamentService.createNewGame(currentUserId, tournamentName, game);
-		return new ResponseEntity<Game>(gameReady, null, HttpStatus.SC_CREATED);
+		List<Game> createdGames = tournamentService.createGames(currentUserId, 
+				tournamentName);
+		return new ResponseEntity<List<Game>>
+		(createdGames, null, HttpStatus.SC_CREATED);
 	}
 	
 	@DeleteMapping("/{tournamentName}/games/{id}")

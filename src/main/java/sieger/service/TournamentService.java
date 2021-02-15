@@ -158,17 +158,19 @@ public class TournamentService {
 		return game;
 	}
 	
-	public Game createNewGame(String currentUserId, 
-			String tournamentName, Game game) {
+	public List<Game> createGames(String currentUserId, 
+			String tournamentName) {
 		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
 		if (!tournament.isAdmin(currentUserId)) {
 			ApiResponse response = new ApiResponse(false, "You don't have "
-					+ "permission to create a game in <" + tournamentName + "> tournament.");
+					+ "permission to create games in <" + tournamentName + "> tournament.");
 			throw new ForbiddenException(response);
 		}
-		tournament.getGameList().add(game.getGameId());
-		gameRepository.createGame(tournament.getTournamentId(), game);
-		return game;
+		List<Game> games = tournament.createGames();
+		for (Game game : games) {
+			gameRepository.createGame(tournament.getTournamentId(), game);
+		}
+		return games;
 	}
 	
 	public ApiResponse deleteGame(String currentUserId, 
