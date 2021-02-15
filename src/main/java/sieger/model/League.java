@@ -8,6 +8,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("League")
 public class League extends Tournament{
+	enum TournamentState{
+		START,
+		FINISH
+	}
 	//table
 	private LeagueTable table;
 	
@@ -19,6 +23,7 @@ public class League extends Tournament{
 	public League(@JsonProperty("participantSize")int participantSize, @JsonProperty("name")String name, @JsonProperty("tournamentDetail")TournamentDetail tournamentDetail) {
 		super(participantSize, name, tournamentDetail);
 		this.table = null;
+	    setTournamentState(TournamentState.START);
 	}
 
 	@Override
@@ -29,14 +34,14 @@ public class League extends Tournament{
 			for(int i = 0; i < games.size(); i++) {
 				games.get(i).setTime(calculateDate(i));
 			}
+			setTournamentState(this.TournamentState.FINISH);
 			return games;
 		}
 		return null;
 	}
 	//create the table
-	private LeagueTable createTable() {
-		this.table = new LeagueTable(getParticipantList());
-		return this.table;
+	private void createTable() {
+		setLeagueTable(new LeagueTable(getParticipantList()));
 	}
 	//get table
 	public LeagueTable getLeagueTable() {
@@ -53,6 +58,10 @@ public class League extends Tournament{
 			}
 		}
 		return games;
+	}
+	//set table
+	public void setLeagueTable(LeagueTable table) {
+		this.table = table;
 	}
 	
 }

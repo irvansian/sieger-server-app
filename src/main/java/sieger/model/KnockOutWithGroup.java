@@ -9,6 +9,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("KnockOutWithGroup")
 public class KnockOutWithGroup extends Tournament {
+	private enum TournamentState{
+		START,
+		GROUP,
+		KOROUND,
+		FINISH
+	}
 	//table list
 	@JsonIgnore
 	private List<LeagueTable> tables;
@@ -36,6 +42,7 @@ public class KnockOutWithGroup extends Tournament {
 			for(int i = 0; i < games.size(); i++) {
 				games.get(i).setTime(calculateDate(i));
 			}
+			setTournamentState(TournamentState.GROUP);
 			return games;
 		}
 		return null;
@@ -59,6 +66,7 @@ public class KnockOutWithGroup extends Tournament {
 			games.get(i - currentIndex).setTime(calculateDate(i));
 		}
 		setCurrentGames(games);
+		setTournamentState(TournamentState.KOROUND);
 	}
 	//create game of next round
 	public void nextRoundGames() {
@@ -77,6 +85,7 @@ public class KnockOutWithGroup extends Tournament {
 			tempgames.get(i - currentIndex).setTime(calculateDate(i));
 		}
 		setCurrentGames(tempgames);
+		isFinalRound();
 		
 	}
 	//get winner of group phase
@@ -144,5 +153,11 @@ public class KnockOutWithGroup extends Tournament {
 	//get current games
 	public List<Game> getCurrentGames(){
 		return this.currentGames;
+	}
+	//tournament finish
+	public void isFinalRound() {
+		if(this.currentGames.size() == 1) {
+			setTournamentState(TournamentState.FINISH);
+		}
 	}
 }

@@ -23,6 +23,12 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(name = "KnockOutWithGroup", value = KnockOutWithGroup.class),
 })
 public abstract class Tournament implements Searchable {
+    enum TournamentState{
+		START,
+		GROUP,
+		KOROUND,
+		FINISH
+	}
 	//random id 
 	private String tournamentid;
 	//detail of tournament
@@ -37,6 +43,8 @@ public abstract class Tournament implements Searchable {
 	private String tournamentName;
     //mac number
 	private int maxParticipantNumber;
+	//state of tournament
+	private TournamentState state;
 	public Tournament() {
 		
 	}
@@ -56,7 +64,7 @@ public abstract class Tournament implements Searchable {
 		return UUID.randomUUID().toString();
 	}
 	//abstract methode
-	abstract List<Game> createGames();
+	public abstract List<Game> createGames();
 	//check if user participate the tournament
 	public boolean isParticipant(User user) {
 		if(tournamentDetail.getParticipantForm() == ParticipantForm.SINGLE) {
@@ -198,6 +206,14 @@ public abstract class Tournament implements Searchable {
 	//get notificationList
 	public List<Notification> getNotificationList(){
 		return this.notificationList;
+	}
+	//get state
+	public TournamentState getTournamentState() {
+		return this.state;
+	}
+	//set state
+	public void setTournamentState(TournamentState state) {
+		this.state = state;
 	}
 	//set detail
 	public void setTournamentDetail(TournamentDetail detail) {
