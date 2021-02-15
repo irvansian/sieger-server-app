@@ -2,6 +2,7 @@ package sieger.controller;
 
 import java.util.List;
 
+
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,6 @@ import sieger.model.Tournament;
 import sieger.payload.ApiResponse;
 import sieger.payload.UserProfile;
 import sieger.service.TeamService;
-import sieger.service.UserService;
 
 @RestController
 @RequestMapping("teams")

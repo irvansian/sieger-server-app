@@ -1,6 +1,5 @@
 package sieger.repository;
 
-import java.util.List;
 import java.util.Optional;
 import sieger.model.User;
 
