@@ -88,16 +88,16 @@ public class UserController {
 	}
 	
 	@PutMapping("/{username}")
-	public ResponseEntity<String> updateUserDetail(
+	public ResponseEntity<User> updateUserDetail(
 			@RequestAttribute("currentUserId") String currentUserId,
 			@PathVariable("username") String oldUsername, 
 			@RequestBody Map<String, String> userDetail) {
 		String newUsername = userDetail.get("username");
 		String forename = userDetail.get("forename");
 		String surname = userDetail.get("surname");
-		userService.updateUserDetail(currentUserId, oldUsername, newUsername, 
+		User user = userService.updateUserDetail(currentUserId, oldUsername, newUsername, 
 				surname, forename);
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(user);
 	}
 	
 	@PostMapping("/{username}/invitations/{id}")
