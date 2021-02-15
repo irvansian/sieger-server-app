@@ -31,8 +31,7 @@ public class TournamentDetail {
     public TournamentDetail(@JsonProperty("organisatorId")String organisatorId, @JsonProperty("tournamentTypes")TournamentTypes tournamentTypes,
     		@JsonProperty("typeOfGame")String typeOfGame, @JsonProperty("location")String location, @JsonProperty("registrationDeadline")Date registrationDeadline, 
     		@JsonProperty("startTime")Date startTime, @JsonProperty("endTime")Date endTime, @JsonProperty("form")ParticipantForm form){
-        this.adminId = organisatorId;
-        
+        this.adminId = organisatorId;   
         this.tournamentTypes = tournamentTypes;
         this.typeOfGame = typeOfGame;
         this.location = location;
@@ -73,5 +72,29 @@ public class TournamentDetail {
     //get end time
     public Date getEndTime(){
         return this.endTime;
+    }
+    //set the form
+    public void setParticipantForm(ParticipantForm form) {
+    	this.participantForm = form;
+    }
+    //set type of game
+    public void setTypeOfGame(String type){
+        this.typeOfGame = type;
+    }
+    //set location
+    public void setLocation(String location){
+        this.location = location;
+    }
+    //set registration deadline
+    public void setRegistrationDeadline(Date date){
+        this.registrationDeadline = date;
+    }
+    //set start time
+    public void setStartTime(Date date){
+        this.startTime = date;
+    }
+    //set end time
+    public void setEndTime(Date date){
+        this.endTime = date;
     }
 }

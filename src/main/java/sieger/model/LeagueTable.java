@@ -1,5 +1,6 @@
 package sieger.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LeagueTable {
@@ -7,6 +8,7 @@ public class LeagueTable {
 	private List<ParticipantActualStanding> tables;
 	//constructor
 	public LeagueTable(List<String >participants) {
+		this.tables = new ArrayList<>();
 		for(String participant: participants) {
 			ParticipantActualStanding newStanding = new ParticipantActualStanding(participant);
 			addParticipantActualStanding(newStanding);

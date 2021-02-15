@@ -199,6 +199,10 @@ public abstract class Tournament implements Searchable {
 	public List<Notification> getNotificationList(){
 		return this.notificationList;
 	}
+	//set detail
+	public void setTournamentDetail(TournamentDetail detail) {
+		this.tournamentDetail = detail;
+	}
 
 	//add game
 	public void addGame(String gameId){
