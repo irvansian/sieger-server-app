@@ -132,7 +132,7 @@ public class TournamentController {
 	public ResponseEntity<Game> updateGameById(
 			@PathVariable("tournamentName") String tournamentName, 
 			@PathVariable("id") String gameId, 
-			Game game,
+			@RequestBody Game game,
 			@RequestAttribute("currentUserId") String currentUserId) {
 		Game gameReady = tournamentService.updateGameById(currentUserId, 
 				tournamentName, gameId, game);
