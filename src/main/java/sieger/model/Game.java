@@ -3,6 +3,9 @@ package sieger.model;
 import java.util.Date;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Game {
 	//game Id
 	private String gameId;
@@ -14,12 +17,17 @@ public class Game {
 	private String firstParticipantId;
 	//second participant id
 	private String secondParticipantId;
+	public Game() {
+		
+	}
 	//constructor
-	public Game(Date time, String firstParticipantId, String secondParticipantId) {
+	@JsonCreator
+	public Game(@JsonProperty("time")Date time, @JsonProperty("firstParticipantId")String firstParticipantId, @JsonProperty("secondParticipantId")String secondParticipantId) {
 		this.time = time;
 		this.firstParticipantId = firstParticipantId;
 		this.secondParticipantId = secondParticipantId;
 		this.gameId = randomId();
+		this.result = null;
 	}
 	//get random Id
 	private String randomId() {
