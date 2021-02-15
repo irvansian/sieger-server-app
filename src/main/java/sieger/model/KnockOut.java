@@ -9,6 +9,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("KnockOut")
 public class KnockOut extends Tournament {
+	 enum TournamentState{
+		START,
+		KOROUND,
+		FINISH
+	}
 	//ko mapping
 	@JsonIgnore
 	private KnockOutMapping koMapping;
@@ -33,6 +38,7 @@ public class KnockOut extends Tournament {
 			for(int i = 0; i < games.size(); i++) {
 				games.get(i).setTime(calculateDate(i));
 			}
+			setTournamentState(TournamentState.KOROUND);
 			return games;
 		}
 		return null;
@@ -58,6 +64,7 @@ public class KnockOut extends Tournament {
 			tempgames.get(i - currentIndex).setTime(calculateDate(i));
 		}
 		setCurrentGames(tempgames);
+		isFinalRound();
 	}
 	//game to be planed
 	private List<Game> createGameList(){
@@ -69,6 +76,12 @@ public class KnockOut extends Tournament {
 			getGameList().add(game.getGameId());
 		}
 		return games;
+	}
+	//tournament finish
+	public void isFinalRound() {
+		if(this.currentGames.size() == 1) {
+			setTournamentState(TournamentState.FINISH);
+		}
 	}
 	//set current games
 	public void setCurrentGames(List<Game> games) {
