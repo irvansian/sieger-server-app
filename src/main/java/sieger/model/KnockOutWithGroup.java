@@ -141,4 +141,8 @@ public class KnockOutWithGroup extends Tournament {
 	public void setCurrentGames(List<Game> games) {
 		this.currentGames = games;
 	}
+	//get current games
+	public List<Game> getCurrentGames(){
+		return this.currentGames;
+	}
 }
