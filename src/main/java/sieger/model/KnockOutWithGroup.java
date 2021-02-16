@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+import sieger.model.KnockOut.TournamentState;
+
 
 @JsonTypeName("KnockOutWithGroup")
 public class KnockOutWithGroup extends Tournament {
@@ -39,8 +41,8 @@ public class KnockOutWithGroup extends Tournament {
 		this.currentState = TournamentState.START;
 	}
 
-	@Override
-	public List<Game> createGames() {
+	
+	private List<Game> createGroupGames() {
 		if(readyToBeHeld()) {
 			List<Game> games = createGameList();
 			for(int i = 0; i < games.size(); i++) {
@@ -53,7 +55,7 @@ public class KnockOutWithGroup extends Tournament {
 		
 	}
 	//first round of KO
-	public void createFirstKO() {
+	private List<Game> createFirstKO() {
 		List<String> participants = getWinnerOfGroup();
 		this.koMapping = new KnockOutMapping(participants.size() / 2);
 		int currentIndex = getGameList().size();
@@ -71,9 +73,11 @@ public class KnockOutWithGroup extends Tournament {
 		}
 		setCurrentGames(games);
 		setCurrentState(TournamentState.KOROUND);
+		isFinalRound();
+		return games;
 	}
 	//create game of next round
-	public void nextRoundGames() {
+	private List<Game> nextRoundGames() {
 		int currentIndex = getGameList().size();
 		List<Game> tempgames = new ArrayList<>();
 		//create game without date
@@ -90,7 +94,7 @@ public class KnockOutWithGroup extends Tournament {
 		}
 		setCurrentGames(tempgames);
 		isFinalRound();
-		
+		return tempgames;
 	}
 	//get winner of group phase
 	private List<String> getWinnerOfGroup(){
@@ -159,7 +163,7 @@ public class KnockOutWithGroup extends Tournament {
 		return this.currentGames;
 	}
 	//tournament finish
-	public void isFinalRound() {
+	private void isFinalRound() {
 		if(this.currentGames.size() == 1) {
 			setCurrentState(TournamentState.FINISH);
 		}
@@ -170,5 +174,17 @@ public class KnockOutWithGroup extends Tournament {
 
 	public void setCurrentState(TournamentState currentState) {
 		this.currentState = currentState;
+	}
+
+	@Override
+	public List<Game> createGames() {
+		if(this.currentState == TournamentState.START) {
+			return createGroupGames();
+		} else if (this.currentState == TournamentState.GROUP) {
+			return createFirstKO();
+		} else if(this.currentState == TournamentState.KOROUND) {
+			return nextRoundGames();
+		}
+		return null;
 	}
 }

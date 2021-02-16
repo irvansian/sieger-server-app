@@ -35,8 +35,8 @@ public class KnockOut extends Tournament {
 		this.currentState = TournamentState.START;
 	}
 
-	@Override
-	public List<Game> createGames() {
+	
+	private List<Game> createFirstRoundGames() {
 		if(readyToBeHeld()) {
 			List<Game> games = createGameList();
 			setCurrentGames(games);
@@ -53,7 +53,7 @@ public class KnockOut extends Tournament {
 		return this.koMapping;
 	}
 	//create game of next round
-	public void nextRoundGames() {
+	private List<Game> nextRoundGames() {
 		int currentIndex = getGameList().size();
 		List<Game> tempgames = new ArrayList<>();
 		//create game without date
@@ -70,6 +70,7 @@ public class KnockOut extends Tournament {
 		}
 		setCurrentGames(tempgames);
 		isFinalRound();
+		return tempgames;
 	}
 	//game to be planed
 	private List<Game> createGameList(){
@@ -83,7 +84,7 @@ public class KnockOut extends Tournament {
 		return games;
 	}
 	//tournament finish
-	public void isFinalRound() {
+	private void isFinalRound() {
 		if(this.currentGames.size() == 1) {
 			setCurrentState(TournamentState.FINISH);
 		}
@@ -102,5 +103,14 @@ public class KnockOut extends Tournament {
 
 	public void setCurrentState(TournamentState currentState) {
 		this.currentState = currentState;
+	}
+	@Override
+	public List<Game> createGames() {
+		if(this.currentState == TournamentState.START) {
+			return createFirstRoundGames();
+		} else if (this.currentState == TournamentState.KOROUND) {
+			return nextRoundGames();
+		}
+		return null;
 	}
 }

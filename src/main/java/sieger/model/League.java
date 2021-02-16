@@ -28,8 +28,7 @@ public class League extends Tournament{
 	    this.setCurrentState(TournamentState.START);
 	}
 
-	@Override
-	public List<Game> createGames() {
+	private List<Game> createAllGames() {
 		if(readyToBeHeld()) {
 			createTable();
 			List<Game> games = createGameList();
@@ -72,6 +71,14 @@ public class League extends Tournament{
 
 	public void setCurrentState(TournamentState currentState) {
 		this.currentState = currentState;
+	}
+
+	@Override
+	public List<Game> createGames() {
+		if(this.currentState == TournamentState.START) {
+			return createAllGames();
+		}
+		return null;
 	}
 	
 }
