@@ -14,6 +14,8 @@ public class League extends Tournament{
 	}
 	//table
 	private LeagueTable table;
+	//
+	private TournamentState currentState;
 	
 	public League() {
 	}
@@ -23,18 +25,17 @@ public class League extends Tournament{
 	public League(@JsonProperty("participantSize")int participantSize, @JsonProperty("name")String name, @JsonProperty("tournamentDetail")TournamentDetail tournamentDetail) {
 		super(participantSize, name, tournamentDetail);
 		this.table = null;
-	    setTournamentState(TournamentState.START);
+	    this.setCurrentState(TournamentState.START);
 	}
 
-	@Override
-	public List<Game> createGames() {
+	private List<Game> createAllGames() {
 		if(readyToBeHeld()) {
 			createTable();
 			List<Game> games = createGameList();
 			for(int i = 0; i < games.size(); i++) {
 				games.get(i).setTime(calculateDate(i));
 			}
-			setTournamentState(this.TournamentState.FINISH);
+			this.setCurrentState(TournamentState.FINISH);
 			return games;
 		}
 		return null;
@@ -62,6 +63,22 @@ public class League extends Tournament{
 	//set table
 	public void setLeagueTable(LeagueTable table) {
 		this.table = table;
+	}
+
+	public TournamentState getCurrentState() {
+		return currentState;
+	}
+
+	public void setCurrentState(TournamentState currentState) {
+		this.currentState = currentState;
+	}
+
+	@Override
+	public List<Game> createGames() {
+		if(this.currentState == TournamentState.START) {
+			return createAllGames();
+		}
+		return null;
 	}
 	
 }

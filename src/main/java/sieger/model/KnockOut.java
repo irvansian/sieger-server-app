@@ -7,6 +7,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
+
 @JsonTypeName("KnockOut")
 public class KnockOut extends Tournament {
 	 enum TournamentState{
@@ -17,6 +20,7 @@ public class KnockOut extends Tournament {
 	//ko mapping
 	@JsonIgnore
 	private KnockOutMapping koMapping;
+	private TournamentState currentState;
 	//current games
 	private List<Game> currentGames;
 	public KnockOut() {
@@ -28,17 +32,18 @@ public class KnockOut extends Tournament {
 		super(participantSize, name, tournamentDetail);
 		this.koMapping = new KnockOutMapping(participantSize / 2);
 		this.currentGames = null;
+		this.currentState = TournamentState.START;
 	}
 
-	@Override
-	public List<Game> createGames() {
+	
+	private List<Game> createFirstRoundGames() {
 		if(readyToBeHeld()) {
 			List<Game> games = createGameList();
 			setCurrentGames(games);
 			for(int i = 0; i < games.size(); i++) {
 				games.get(i).setTime(calculateDate(i));
 			}
-			setTournamentState(TournamentState.KOROUND);
+			setCurrentState(TournamentState.KOROUND);
 			return games;
 		}
 		return null;
@@ -48,7 +53,7 @@ public class KnockOut extends Tournament {
 		return this.koMapping;
 	}
 	//create game of next round
-	public void nextRoundGames() {
+	private List<Game> nextRoundGames() {
 		int currentIndex = getGameList().size();
 		List<Game> tempgames = new ArrayList<>();
 		//create game without date
@@ -65,6 +70,7 @@ public class KnockOut extends Tournament {
 		}
 		setCurrentGames(tempgames);
 		isFinalRound();
+		return tempgames;
 	}
 	//game to be planed
 	private List<Game> createGameList(){
@@ -78,9 +84,9 @@ public class KnockOut extends Tournament {
 		return games;
 	}
 	//tournament finish
-	public void isFinalRound() {
+	private void isFinalRound() {
 		if(this.currentGames.size() == 1) {
-			setTournamentState(TournamentState.FINISH);
+			setCurrentState(TournamentState.FINISH);
 		}
 	}
 	//set current games
@@ -90,5 +96,21 @@ public class KnockOut extends Tournament {
 	//get current games
 	public List<Game> getCurrentGames(){
 		return this.currentGames;
+	}
+	public TournamentState getCurrentState() {
+		return currentState;
+	}
+
+	public void setCurrentState(TournamentState currentState) {
+		this.currentState = currentState;
+	}
+	@Override
+	public List<Game> createGames() {
+		if(this.currentState == TournamentState.START) {
+			return createFirstRoundGames();
+		} else if (this.currentState == TournamentState.KOROUND) {
+			return nextRoundGames();
+		}
+		return null;
 	}
 }
