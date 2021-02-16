@@ -7,6 +7,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+
+
+
 @JsonTypeName("KnockOut")
 public class KnockOut extends Tournament {
 	 enum TournamentState{
@@ -17,6 +20,7 @@ public class KnockOut extends Tournament {
 	//ko mapping
 	@JsonIgnore
 	private KnockOutMapping koMapping;
+	private TournamentState currentState;
 	//current games
 	private List<Game> currentGames;
 	public KnockOut() {
@@ -28,6 +32,7 @@ public class KnockOut extends Tournament {
 		super(participantSize, name, tournamentDetail);
 		this.koMapping = new KnockOutMapping(participantSize / 2);
 		this.currentGames = null;
+		this.currentState = TournamentState.START;
 	}
 
 	@Override
@@ -38,7 +43,7 @@ public class KnockOut extends Tournament {
 			for(int i = 0; i < games.size(); i++) {
 				games.get(i).setTime(calculateDate(i));
 			}
-			setTournamentState(TournamentState.KOROUND);
+			setCurrentState(TournamentState.KOROUND);
 			return games;
 		}
 		return null;
@@ -80,7 +85,7 @@ public class KnockOut extends Tournament {
 	//tournament finish
 	public void isFinalRound() {
 		if(this.currentGames.size() == 1) {
-			setTournamentState(TournamentState.FINISH);
+			setCurrentState(TournamentState.FINISH);
 		}
 	}
 	//set current games
@@ -90,5 +95,12 @@ public class KnockOut extends Tournament {
 	//get current games
 	public List<Game> getCurrentGames(){
 		return this.currentGames;
+	}
+	public TournamentState getCurrentState() {
+		return currentState;
+	}
+
+	public void setCurrentState(TournamentState currentState) {
+		this.currentState = currentState;
 	}
 }

@@ -23,12 +23,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(name = "KnockOutWithGroup", value = KnockOutWithGroup.class),
 })
 public abstract class Tournament implements Searchable {
-    enum TournamentState{
-		START,
-		GROUP,
-		KOROUND,
-		FINISH
-	}
+
 	//random id 
 	private String tournamentid;
 	//detail of tournament
@@ -43,8 +38,7 @@ public abstract class Tournament implements Searchable {
 	private String tournamentName;
     //mac number
 	private int maxParticipantNumber;
-	//state of tournament
-	private TournamentState state;
+
 	public Tournament() {
 		
 	}
@@ -116,7 +110,7 @@ public abstract class Tournament implements Searchable {
 	}
 	//check if ready to be held
 	public boolean readyToBeHeld() {
-		if(!checkSize()) {
+		if(!checkSize() && getTournamentDetail().getRegistrationDeadline().before(new Date())) {
 			return true;
 		}else {
 			return false;
@@ -177,7 +171,7 @@ public abstract class Tournament implements Searchable {
 		cal.setTime(bdate);
 		long time2 = cal.getTimeInMillis();
 		long between_days=(time2-time1)/(1000*3600*24);
-		return Integer.parseInt(String.valueOf(between_days));
+		return Integer.parseInt(String.valueOf(between_days)) + 1;
 	}
 	//get maxparticipantnumber
 	public int getMaxParticipantNumber() {
@@ -207,14 +201,7 @@ public abstract class Tournament implements Searchable {
 	public List<Notification> getNotificationList(){
 		return this.notificationList;
 	}
-	//get state
-	public TournamentState getTournamentState() {
-		return this.state;
-	}
-	//set state
-	public void setTournamentState(TournamentState state) {
-		this.state = state;
-	}
+
 	//set detail
 	public void setTournamentDetail(TournamentDetail detail) {
 		this.tournamentDetail = detail;
