@@ -5,23 +5,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ScoreResult implements Result{
 	//score of first participant
-	private int firstParticipantScore;
+	private int firstParticipantResult;
 	//score of second participant
-	private int secondParticipantScore;
+	private int secondParticipantResult;
 	private String type;
 	public ScoreResult() {
 		
 	}
 	//constructor
 	@JsonCreator
-	public ScoreResult(@JsonProperty("firstParticipantScore")int firstParticipantScore, @JsonProperty("secondParticipantScore")int secondParticipantScore) {
-		this.firstParticipantScore = firstParticipantScore;
-		this.secondParticipantScore = secondParticipantScore;
+	public ScoreResult(@JsonProperty("firstParticipantResult")int firstParticipantResult, @JsonProperty("secondParticipantResult")int secondParticipantResult) {
+		this.firstParticipantResult = firstParticipantResult;
+		this.secondParticipantResult = secondParticipantResult;
 		this.setType("Score");
 	}
 	@Override
 	public boolean firstWins() {
-		if(firstParticipantScore > secondParticipantScore) {
+		if(firstParticipantResult > secondParticipantResult) {
 			return true;
 		} else {
 			return false;
@@ -29,7 +29,7 @@ public class ScoreResult implements Result{
 	}
 	@Override
 	public boolean secondWins() {
-		if(firstParticipantScore < secondParticipantScore) {
+		if(firstParticipantResult < secondParticipantResult) {
 			return true;
 		} else {
 			return false;
@@ -37,7 +37,7 @@ public class ScoreResult implements Result{
 	}
 	@Override
 	public boolean draws() {
-		if(firstParticipantScore == secondParticipantScore) {
+		if(firstParticipantResult == secondParticipantResult) {
 			return true;
 		} else {
 			return false;
@@ -45,16 +45,16 @@ public class ScoreResult implements Result{
 	}
 
 	public int getFirstParticipantResult() {
-		return this.firstParticipantScore;
+		return this.firstParticipantResult;
 	}
 	public int getSecondParticipantResult() {
-		return this.secondParticipantScore;
+		return this.secondParticipantResult;
 	}
 	public void setFirstParticipantResult(int score) {
-		this.firstParticipantScore = score;
+		this.firstParticipantResult = score;
 	}
 	public void setSecondParticipantResult(int score) {
-		this.secondParticipantScore = score;
+		this.secondParticipantResult = score;
 	}
 	public String getType() {
 		return type;

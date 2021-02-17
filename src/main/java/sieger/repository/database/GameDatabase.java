@@ -1,5 +1,7 @@
 package sieger.repository.database;
 
+
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,14 +13,18 @@ import org.springframework.stereotype.Repository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.core.ApiFuture;
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.cloud.FirestoreClient;
 
 import sieger.model.Game;
+import sieger.model.GameOutcome;
 import sieger.model.Invitation;
 import sieger.model.Result;
+import sieger.model.ScoreResult;
+import sieger.model.WinLoseResult;
 import sieger.repository.GameRepository;
 
 @Repository("gameDB")
@@ -26,15 +32,48 @@ public class GameDatabase implements GameRepository {
 	
 	private String path = "games";
 
+	@SuppressWarnings({ "unchecked" })
 	@Override
 	public Optional<Game> retrieveGameById(String tournamentId, String gameId) {
 		Firestore db = FirestoreClient.getFirestore();
 		ApiFuture<DocumentSnapshot> future = db.collection("tournaments")
 				.document(tournamentId).collection(path).document(gameId).get();
-		Game game = null;
+		Game game = new Game();
 		try {
+			HashMap<String,Object> result = (HashMap<String, Object>) future.get().get("result");
+			Result resultRes = null;
+			if(result != null) {
+				if(result.containsValue("Winlose")) {
+					GameOutcome first = null;
+					GameOutcome second = null;
+					if(result.get("firstParticipantResult").equals(GameOutcome.WIN.toString())) {
+						 first = GameOutcome.WIN;
+					} else if (result.get("firstParticipantResult").equals(GameOutcome.LOSE.toString())) {
+						 first = GameOutcome.LOSE;
+					} else if (result.get("firstParticipantResult").equals(GameOutcome.DRAW.toString())) {
+						 first = GameOutcome.DRAW;
+					}
+					if(result.get("secondParticipantResult").equals(GameOutcome.WIN.toString())) {
+						 second = GameOutcome.WIN;
+					} else if (result.get("secondParticipantResult").equals(GameOutcome.LOSE.toString())) {
+						 second = GameOutcome.LOSE;
+					} else if (result.get("secondParticipantResult").equals(GameOutcome.DRAW.toString())) {
+						 second = GameOutcome.DRAW;
+					}
+					resultRes = new WinLoseResult(first, second);
+				}
+				if(result.containsValue("Score")) {
+					int first = Integer.parseInt(String.valueOf(result.get("firstParticipantResult")));
+					int second = Integer.parseInt(String.valueOf(result.get("secondParticipantResult")));
+					resultRes = new ScoreResult(first,second);
+				}
+				game.setResult(resultRes);
+			}
 			
-			game = future.get().toObject(Game.class);
+			game.setTime(((Timestamp)future.get().get("time")).toDate());
+			game.setFirstParticipantId((String)future.get().get("firstParticipantId"));
+			game.setSecondParticipantId((String)future.get().get("secondParticipantId"));
+			game.setGameId((String)future.get().get("gameId"));
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
