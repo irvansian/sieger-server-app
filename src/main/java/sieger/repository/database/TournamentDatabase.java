@@ -166,11 +166,13 @@ public class TournamentDatabase implements TournamentRepository {
 			} else if(knockout) {
 				tournamentDoc.put("type", "KnockOut");
 				tournamentDoc.put("koMapping", ((KnockOut)tournament).getKoMapping());
+				tournamentDoc.put("currentGames", ((KnockOut)tournament).getCurrentGames());
 				
 			} else if(knockoutwithgroup) {
 				tournamentDoc.put("type", "KnockOutWithGroup");
 				tournamentDoc.put("tables", ((KnockOutWithGroup)tournament).getTables());
 				tournamentDoc.put("koMapping", ((KnockOutWithGroup)tournament).getKoMapping());
+				tournamentDoc.put("currentGames", ((KnockOutWithGroup)tournament).getCurrentGames());
 			}
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
