@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import sieger.model.Invitation;
 import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.payload.ApiResponse;
@@ -79,6 +80,15 @@ public class TeamController {
 		List<Tournament> tournaments = teamService.getTeamTournaments(currentUserId, 
 				teamName);
 		return ResponseEntity.ok(tournaments);
+	}
+	
+	@GetMapping("/{teamName}/invitations")
+	public ResponseEntity<List<Invitation>> getTeamInvitations(
+			@PathVariable("teamName") String teamName,
+			@RequestAttribute("currentUserId") String currentUserId) {
+		List<Invitation> invitations = teamService.getTeamInvitations(currentUserId, 
+				teamName);
+		return ResponseEntity.ok(invitations);
 	}
 	
 	@DeleteMapping("/{teamName}/members/{id}")
