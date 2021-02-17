@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonTypeName("KnockOut")
 public class KnockOut extends Tournament {
-	 enum TournamentState{
+	public enum TournamentState{
 		START,
 		KOROUND,
 		FINISH
@@ -97,8 +97,9 @@ public class KnockOut extends Tournament {
 	public List<Game> getCurrentGames(){
 		return this.currentGames;
 	}
+	
 	public TournamentState getCurrentState() {
-		return currentState;
+		return this.currentState;
 	}
 
 	public void setCurrentState(TournamentState currentState) {
@@ -111,6 +112,11 @@ public class KnockOut extends Tournament {
 		} else if (this.currentState == TournamentState.KOROUND) {
 			return nextRoundGames();
 		}
+		return null;
+	}
+	@Override
+	public String getState() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }

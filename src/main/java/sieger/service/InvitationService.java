@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import sieger.exception.ForbiddenException;
 import sieger.exception.ResourceNotFoundException;
 import sieger.model.Invitation;
+import sieger.model.Tournament;
 import sieger.model.User;
 import sieger.payload.ApiResponse;
 import sieger.repository.InvitationRepository;
+import sieger.repository.TournamentRepository;
 import sieger.repository.UserRepository;
 
 @Service
@@ -24,6 +26,9 @@ public class InvitationService {
 	@Qualifier("userDB")
 	private UserRepository userRepository;
 	
+	@Autowired
+	@Qualifier("tournamentDB")
+	private TournamentRepository tournamentRepository;
 	public Optional<Invitation> getInvitation(String currentUserId, String invitationId) {
 		Optional<Invitation> invitationOpt = invitationRepository
 				.retrieveInvitationById(invitationId);
@@ -65,9 +70,11 @@ public class InvitationService {
 		User user = userRepository.retrieveUserById(currentUserId).get();
 
 		user.removeInvitation(invitationId);
-		user.addTournament(invitation.getTournamentId());
+		Tournament tournament = tournamentRepository.retrieveTournamentById(invitation.getTournamentId()).get();
+		user.joinTournament(tournament);
 		invitationRepository.deleteInvitation(invitationId);
 		userRepository.updateUserById(currentUserId, user);
+		tournamentRepository.updateTournament(tournament.getTournamentId(), tournament);
 		ApiResponse res = new ApiResponse(true, "Successfully accepted the invitation");
 		return res;
 	}

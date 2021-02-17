@@ -97,6 +97,7 @@ public class TournamentDatabase implements TournamentRepository {
 		tournamentDoc.put("participantList", tournament.getParticipantList());
 		tournamentDoc.put("tournamentName", tournament.getTournamentName());
 		tournamentDoc.put("maxParticipantNumber", tournament.getMaxParticipantNumber());
+		
 		db.collection(path).document(tournament.getTournamentId()).set(tournamentDoc);
 		return true;
 	}
@@ -104,6 +105,7 @@ public class TournamentDatabase implements TournamentRepository {
 	@Override
 	public boolean updateTournament(String tournamentId, Tournament tournament) {
 		Firestore db = FirestoreClient.getFirestore();
+		System.out.print(path);
 		db.collection(path).document(tournamentId).set(tournament);
 		return true;
 	}

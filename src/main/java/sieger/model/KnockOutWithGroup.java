@@ -187,4 +187,10 @@ public class KnockOutWithGroup extends Tournament {
 		}
 		return null;
 	}
+
+	@Override
+	public String getState() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
