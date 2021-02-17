@@ -27,7 +27,7 @@ public class InvitationController {
 		return ResponseEntity.ok(invitationReady);
 	}
 	
-	@PostMapping("/invitations/{id}")
+	@PostMapping("/{id}")
 	public ResponseEntity<String> handleInvitationAcceptation(
 			@RequestAttribute("currentUserId") String currentUserId, 
 			@PathVariable("id") String invitationId,
