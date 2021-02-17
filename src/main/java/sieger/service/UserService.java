@@ -1,13 +1,12 @@
 package sieger.service;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
-import com.google.firebase.auth.UserImportHash;
 
 import sieger.exception.BadRequestException;
 import sieger.exception.ForbiddenException;
@@ -89,7 +88,7 @@ public class UserService {
 	public List<Invitation> getUserInvitations(String currentUserId, String username) {
 		User user = getUserByUsername(currentUserId, username);
 		List<Invitation> invitations = new ArrayList<Invitation>();
-		for (String id : user.getTeamList()) {
+		for (String id : user.getInvitationList()) {
 			invitations.add(invitationRepository
 					.retrieveInvitationById(id).get());
 		}

@@ -18,6 +18,9 @@ public class Team extends Participant{
 	private String teamPassword;
 	//member list
 	private List<String> memberList;
+	
+	private List<String> invitationList;
+	
 	public Team() {
 		
 	}
@@ -85,6 +88,14 @@ public class Team extends Participant{
 	public void removeMember(String userId) {
 		memberList.remove(userId);
 	}
+	
+	public void addInvitation(String invitationId) {
+		invitationList.add(invitationId);
+	}
+	
+	public void removeInvitation(String invitationId) {
+		invitationList.remove(invitationId);
+	}
 	//get teamid
 	public String getTeamId() {
 		return this.teamId;
@@ -104,5 +115,12 @@ public class Team extends Participant{
 	//get memberlist
 	public List<String> getMemberList(){
 		return this.memberList;
+	}
+	
+	public List<String> getInvitationList() {
+		return invitationList;
+	}
+	public void setInvitationList(List<String> invitationList) {
+		this.invitationList = invitationList;
 	}
 }

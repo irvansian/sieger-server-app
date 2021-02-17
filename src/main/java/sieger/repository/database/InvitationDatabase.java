@@ -21,15 +21,16 @@ public class InvitationDatabase implements InvitationRepository {
 	private String path = "invitations";
 
 	@Override
-	public String createInvitation(Invitation invitation) {
+	public Invitation createInvitation(Invitation invitation) {
 		Firestore db = FirestoreClient.getFirestore();
 		Map<String, Object> invitationDoc = new HashMap<>();
-		invitationDoc.put("senderUsername", invitation.getSenderUsername());
-		invitationDoc.put("recipientUsername", invitation.getRecipientUsername());
+		invitationDoc.put("senderId", invitation.getSenderId());
+		invitationDoc.put("recipientId", invitation.getRecipientId());
 		invitationDoc.put("tournamentId", invitation.getTournamentId());
 		invitationDoc.put("invitationId", invitation.getInvitationId());
+		invitationDoc.put("participantForm", invitation.getParticipantForm());
 		db.collection(path).document(invitation.getInvitationId()).set(invitationDoc);
-		return invitation.getInvitationId();
+		return invitation;
 	}
 
 	@Override

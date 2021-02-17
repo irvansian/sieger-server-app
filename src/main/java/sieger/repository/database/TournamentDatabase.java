@@ -1,6 +1,7 @@
 package sieger.repository.database;
 
 import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,6 @@ import sieger.model.League;
 import sieger.model.Participant;
 import sieger.model.ParticipantForm;
 import sieger.model.Tournament;
-import sieger.model.TournamentDetail;
 import sieger.model.User;
 import sieger.model.Team;
 import sieger.repository.TournamentRepository;
@@ -69,35 +69,9 @@ public class TournamentDatabase implements TournamentRepository {
 	}
 
 	@Override
-	public boolean createTournament(Tournament tournament) {
-		ObjectMapper objectMapper = new ObjectMapper();
-	
+	public boolean createTournament(Tournament tournament) {	
 		Firestore db = FirestoreClient.getFirestore();
-		Map<String, Object> tournamentDoc = new HashMap<>();
-		try {
-			boolean league = objectMapper.writeValueAsString(tournament).contains("League");
-			boolean knockout = objectMapper.writeValueAsString(tournament).contains("KnockOut");
-			boolean knockoutwithgroup= objectMapper.writeValueAsString(tournament).contains("KnockOutWithGroup");
-			if(league) {
-				tournamentDoc.put("type", "League");
-			} else if(knockout) {
-				tournamentDoc.put("type", "KnockOut");
-			} else if(knockoutwithgroup) {
-				tournamentDoc.put("type", "KnockOutWithGroup");
-			}
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	
-		tournamentDoc.put("tournamentDetail", tournament.getTournamentDetail());
-		tournamentDoc.put("gameList", tournament.getGameList());
-		tournamentDoc.put("tournamentid", tournament.getTournamentId());
-		tournamentDoc.put("notificationList", tournament.getNotificationList());
-		tournamentDoc.put("participantList", tournament.getParticipantList());
-		tournamentDoc.put("tournamentName", tournament.getTournamentName());
-		tournamentDoc.put("maxParticipantNumber", tournament.getMaxParticipantNumber());
-		
+		Map<String, Object> tournamentDoc = convertTournamentToMap(tournament);
 		db.collection(path).document(tournament.getTournamentId()).set(tournamentDoc);
 		return true;
 	}
@@ -105,8 +79,8 @@ public class TournamentDatabase implements TournamentRepository {
 	@Override
 	public boolean updateTournament(String tournamentId, Tournament tournament) {
 		Firestore db = FirestoreClient.getFirestore();
-		System.out.print(path);
-		db.collection(path).document(tournamentId).set(tournament);
+		Map<String, Object> tournamentDoc = convertTournamentToMap(tournament);
+		db.collection(path).document(tournamentId).set(tournamentDoc);
 		return true;
 	}
 
@@ -175,6 +149,37 @@ public class TournamentDatabase implements TournamentRepository {
 			e.printStackTrace();
 		}
 		return participants;
+		
+	}
+	
+	private Map<String, Object> convertTournamentToMap(Tournament tournament) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		
+		Map<String, Object> tournamentDoc = new HashMap<>();
+		try {
+			boolean league = objectMapper.writeValueAsString(tournament).contains("League");
+			boolean knockout = objectMapper.writeValueAsString(tournament).contains("KnockOut");
+			boolean knockoutwithgroup= objectMapper.writeValueAsString(tournament).contains("KnockOutWithGroup");
+			if(league) {
+				tournamentDoc.put("type", "League");
+			} else if(knockout) {
+				tournamentDoc.put("type", "KnockOut");
+			} else if(knockoutwithgroup) {
+				tournamentDoc.put("type", "KnockOutWithGroup");
+			}
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		tournamentDoc.put("tournamentDetail", tournament.getTournamentDetail());
+		tournamentDoc.put("gameList", tournament.getGameList());
+		tournamentDoc.put("tournamentid", tournament.getTournamentId());
+		tournamentDoc.put("notificationList", tournament.getNotificationList());
+		tournamentDoc.put("participantList", tournament.getParticipantList());
+		tournamentDoc.put("tournamentName", tournament.getTournamentName());
+		tournamentDoc.put("maxParticipantNumber", tournament.getMaxParticipantNumber());
+		return tournamentDoc;
 	}
 	
 	

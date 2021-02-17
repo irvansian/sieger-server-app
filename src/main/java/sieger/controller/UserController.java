@@ -2,6 +2,7 @@ package sieger.controller;
 
 import java.util.List;
 
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,6 @@ import sieger.model.Invitation;
 import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.model.User;
-import sieger.service.InvitationService;
 import sieger.service.UserService;
 
 @RestController
@@ -28,12 +28,10 @@ import sieger.service.UserService;
 public class UserController {
 	
 	private UserService userService;
-	private InvitationService invitationService;
 	
 	@Autowired
-	public UserController(UserService userService, InvitationService invitationService) {
+	public UserController(UserService userService) {
 		this.userService = userService;
-		this.invitationService = invitationService;
 	}
 	
 	@PostMapping
@@ -88,30 +86,16 @@ public class UserController {
 	}
 	
 	@PutMapping("/{username}")
-	public ResponseEntity<String> updateUserDetail(
+	public ResponseEntity<User> updateUserDetail(
 			@RequestAttribute("currentUserId") String currentUserId,
 			@PathVariable("username") String oldUsername, 
 			@RequestBody Map<String, String> userDetail) {
 		String newUsername = userDetail.get("username");
 		String forename = userDetail.get("forename");
 		String surname = userDetail.get("surname");
-		userService.updateUserDetail(currentUserId, oldUsername, newUsername, 
+		User user = userService.updateUserDetail(currentUserId, oldUsername, newUsername, 
 				surname, forename);
-		return ResponseEntity.ok(null);
-	}
-	
-	@PostMapping("/{username}/invitations/{id}")
-	public ResponseEntity<String> handleInvitationAcceptation(
-			@RequestAttribute("currentUserId") String currentUserId, 
-			@PathVariable("id") String invitationId,
-			@RequestBody Map<String, Boolean> acceptation) {
-		boolean acceptationVal = acceptation.get("accept").booleanValue();
-		if (acceptationVal) {
-			invitationService.acceptInvitation(currentUserId, invitationId);
-		} else {
-			invitationService.declineInvitation(currentUserId, invitationId);
-		}
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(user);
 	}
 	
 	

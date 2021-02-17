@@ -9,18 +9,24 @@ public class Invitation {
 	//id of invitation
 	private String invitationId;
 	//sender name
-	private String senderUsername;
+	private String senderId;
 	//recipient user name
-	private String recipientUsername;
+	private String recipientId;
 	//tournament id
 	private String tournamentId;
+	
+	private ParticipantForm participantForm;
+	
 	public Invitation() {
 	}
 	//constructor
 	@JsonCreator
-	public Invitation(@JsonProperty("senderUsername")String senderUsername, @JsonProperty("recipientUsername")String recipientUsername, @JsonProperty("tournamentId")String tournamentId) {
-		this.recipientUsername = recipientUsername;
-		this.senderUsername = senderUsername;
+	public Invitation(@JsonProperty("senderId")String senderId, 
+			@JsonProperty("recipientId")String recipientId, 
+			@JsonProperty("tournamentId")String tournamentId,
+			@JsonProperty("participantForm") ParticipantForm participantForm) {
+		this.recipientId = recipientId;
+		this.senderId = senderId;
 		this.tournamentId = tournamentId;
 		this.invitationId = randomId();
 	}
@@ -33,15 +39,19 @@ public class Invitation {
 		return this.invitationId;
 	}
 	//get sender name
-	public String getSenderUsername() {
-		return this.senderUsername;
+	public String getSenderId() {
+		return this.senderId;
 	}
 	//get recipient username
-	public String getRecipientUsername() {
-		return this.recipientUsername;
+	public String getRecipientId() {
+		return this.recipientId;
 	}
 	//get tournament id
 	public String getTournamentId() {
 		return this.tournamentId;
+	}
+	
+	public ParticipantForm getParticipantForm() {
+		return this.participantForm;
 	}
 }

@@ -170,6 +170,8 @@ public class TournamentService {
 		for (Game game : games) {
 			gameRepository.createGame(tournament.getTournamentId(), game);
 		}
+		tournamentRepository.updateTournament(
+				tournament.getTournamentId(), tournament);
 		return games;
 	}
 	
@@ -207,9 +209,10 @@ public class TournamentService {
 			ApiResponse res = new ApiResponse(false, "Failed to join tournament");
 			throw new BadRequestException(res);
 		}
+		
 		tournamentRepository.updateTournament(tournament.getTournamentId(), tournament);
 		ApiResponse res = new ApiResponse(true, "Successfully joined the tournament");
-		throw new BadRequestException(res);
+		return res;
 		
 	}
 	
@@ -230,12 +233,12 @@ public class TournamentService {
 			team.quitTournament(tournament);
 			teamRepository.updateTeam(participantId, team);
 		} else {
-			ApiResponse res = new ApiResponse(false, "Failed to join tournament");
+			ApiResponse res = new ApiResponse(false, "Failed to quit tournament");
 			throw new BadRequestException(res);
 		}
 		tournamentRepository.updateTournament(tournament.getTournamentId(), tournament);
-		ApiResponse res = new ApiResponse(true, "Successfully joined the tournament");
-		throw new BadRequestException(res);
+		ApiResponse res = new ApiResponse(true, "Successfully quit the tournament");
+		return res;
 	}
 	
 	private void removeTournamentIdFromParticipant(List<String> participantList, 
