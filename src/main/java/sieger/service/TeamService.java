@@ -11,11 +11,13 @@ import org.springframework.stereotype.Service;
 import sieger.exception.BadRequestException;
 import sieger.exception.ForbiddenException;
 import sieger.exception.ResourceNotFoundException;
+import sieger.model.Invitation;
 import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.model.User;
 import sieger.payload.ApiResponse;
 import sieger.payload.UserProfile;
+import sieger.repository.InvitationRepository;
 import sieger.repository.TeamRepository;
 import sieger.repository.TournamentRepository;
 import sieger.repository.UserRepository;
@@ -33,6 +35,10 @@ public class TeamService {
 	@Autowired
 	@Qualifier("tournamentDB")
 	private TournamentRepository tournamentRepository;
+	
+	@Autowired
+	@Qualifier("invitationDB")
+	private InvitationRepository invitationRepository;
 	
 	public Team getTeamByName(String currentUserId, 
 			String teamName) {
@@ -111,6 +117,16 @@ public class TeamService {
 			teamTournament.add(tournamentRepository.retrieveTournamentById(id).get());
 		}
 		return teamTournament;
+	}
+	
+	public List<Invitation> getTeamInvitations(String currentUserId, String teamName) {
+		Team team = getTeamByName(currentUserId, teamName);
+		List<Invitation> invitations = new ArrayList<Invitation>();
+		for (String id : team.getInvitationList()) {
+			invitations.add(invitationRepository
+					.retrieveInvitationById(id).get());
+		}
+		return invitations;
 	}
 	
 	public ApiResponse kickTeamMembers(String currentUserId, 

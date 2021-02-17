@@ -88,7 +88,7 @@ public class UserService {
 	public List<Invitation> getUserInvitations(String currentUserId, String username) {
 		User user = getUserByUsername(currentUserId, username);
 		List<Invitation> invitations = new ArrayList<Invitation>();
-		for (String id : user.getTeamList()) {
+		for (String id : user.getInvitationList()) {
 			invitations.add(invitationRepository
 					.retrieveInvitationById(id).get());
 		}
