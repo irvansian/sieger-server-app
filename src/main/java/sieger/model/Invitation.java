@@ -29,6 +29,7 @@ public class Invitation {
 		this.senderId = senderId;
 		this.tournamentId = tournamentId;
 		this.invitationId = randomId();
+		this.participantForm = participantForm;
 	}
 	//get random id
 	private String randomId() {

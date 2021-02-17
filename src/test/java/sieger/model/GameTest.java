@@ -11,20 +11,20 @@ class GameTest {
 		Game game = new Game(null, "first", "second");
 		Result result = new ScoreResult(10,1);
 		game.setResult(result);
-		assertTrue(game.getWinnerId().equals("first"));
+		assertTrue(game.returnWinnerId().equals("first"));
 	}
 	@Test
 	void testGetWinnerId_second() {
 		Game game = new Game(null, "first", "second");
 		Result result = new ScoreResult(1,10);
 		game.setResult(result);
-		assertTrue(game.getWinnerId().equals("second"));
+		assertTrue(game.returnWinnerId().equals("second"));
 	}
 	@Test
 	void testGetWinnerId_draw() {
 		Game game = new Game(null, "first", "second");
 		Result result = new ScoreResult(1,1);
 		game.setResult(result);
-		assertTrue(game.getWinnerId().equals("firstsecond"));
+		assertTrue(game.returnWinnerId().equals("firstsecond"));
 	}
 }

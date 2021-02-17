@@ -12,11 +12,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonTypeName("KnockOut")
 public class KnockOut extends Tournament {
-	public enum TournamentState{
-		START,
-		KOROUND,
-		FINISH
-	}
 	//ko mapping
 	@JsonIgnore
 	private KnockOutMapping koMapping;
@@ -32,7 +27,8 @@ public class KnockOut extends Tournament {
 		super(participantSize, name, tournamentDetail);
 		this.koMapping = new KnockOutMapping(participantSize / 2);
 		this.currentGames = null;
-		this.currentState = TournamentState.START;
+		setType("KnockOut");
+		
 	}
 
 	
@@ -58,7 +54,7 @@ public class KnockOut extends Tournament {
 		List<Game> tempgames = new ArrayList<>();
 		//create game without date
 		for(int i = 0; i < currentGames.size();i = i + 2) {
-			Game game = new Game(null, currentGames.get(i).getWinnerId(), currentGames.get(i + 1).getWinnerId());
+			Game game = new Game(null, currentGames.get(i).returnWinnerId(), currentGames.get(i + 1).returnWinnerId());
 			int newKey = (koMapping.getKeyByValue(currentGames.get(i).getGameId()) + koMapping.getKeyByValue(currentGames.get(i + 1).getGameId())) / 2;
 			koMapping.mapGameToKOBracket(newKey, game.getGameId());
 			tempgames.add(game);
@@ -98,13 +94,6 @@ public class KnockOut extends Tournament {
 		return this.currentGames;
 	}
 	
-	public TournamentState getCurrentState() {
-		return this.currentState;
-	}
-
-	public void setCurrentState(TournamentState currentState) {
-		this.currentState = currentState;
-	}
 	@Override
 	public List<Game> createGames() {
 		if(this.currentState == TournamentState.START) {
@@ -112,11 +101,6 @@ public class KnockOut extends Tournament {
 		} else if (this.currentState == TournamentState.KOROUND) {
 			return nextRoundGames();
 		}
-		return null;
-	}
-	@Override
-	public String getState() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

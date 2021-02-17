@@ -15,6 +15,7 @@ import sieger.exception.ResourceNotFoundException;
 import sieger.model.Game;
 import sieger.model.Participant;
 import sieger.model.ParticipantForm;
+import sieger.model.Result;
 import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.model.TournamentDetail;
@@ -147,13 +148,15 @@ public class TournamentService {
 	}
 	
 	public Game updateGameById(String currentUserId, 
-			String tournamentName, String gameId, Game game) {
+			String tournamentName, String gameId, Result result) {
 		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
 		if (!tournament.isAdmin(currentUserId)) {
 			ApiResponse response = new ApiResponse(false, "You don't have "
 					+ "permission to update this game.");
 			throw new ForbiddenException(response);
 		}
+		Game game = gameRepository.retrieveGameById(tournament.getTournamentId(), gameId).get();
+		game.setResult(result);
 		gameRepository.updateGame(tournament.getTournamentId(), gameId, game);
 		return game;
 	}
@@ -184,6 +187,7 @@ public class TournamentService {
 			throw new ForbiddenException(response);
 		}
 		tournament.getGameList().remove(gameId);
+		tournamentRepository.updateTournament(tournament.getTournamentId(), tournament);
 		gameRepository.deleteGame(tournament.getTournamentId(), gameId);
 		ApiResponse res = new ApiResponse(true, "Successfully delete the game");
 		return res;
@@ -219,14 +223,14 @@ public class TournamentService {
 	public ApiResponse quitTournament(String participantId, String tournamentName) {
 		Tournament tournament = getTournamentByName(participantId, tournamentName);
 		
-		if(tournament.allowUserToJoin()) {
+		if(tournament.getTournamentDetail().getParticipantForm() == ParticipantForm.SINGLE) {
 			User user = userRepository.retrieveUserById(participantId)
 					.orElseThrow(() -> 
 					new ResourceNotFoundException("User", "id", participantId));
 			user.quitTournament(tournament);
 			userRepository.updateUserById(participantId, user);
 
-		} else if(tournament.allowTeamToJoin()) {
+		} else if(tournament.getTournamentDetail().getParticipantForm() == ParticipantForm.TEAM) {
 			Team team = teamRepository.retrieveTeamById(participantId)
 					.orElseThrow(() -> 
 					new ResourceNotFoundException("Team", "id", participantId));

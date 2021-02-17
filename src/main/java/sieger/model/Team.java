@@ -33,6 +33,7 @@ public class Team extends Participant{
 		this.teamPassword = password;
 		this.teamId = randomId();
 		this.memberList = new ArrayList<>();
+		this.invitationList = new ArrayList<>();
 		memberList.add(adminId);
 	}
 	//get random Id
@@ -116,11 +117,8 @@ public class Team extends Participant{
 	public List<String> getMemberList(){
 		return this.memberList;
 	}
-	
-	public List<String> getInvitationList() {
-		return invitationList;
+	public List<String> getInvitationList(){
+		return this.invitationList;
 	}
-	public void setInvitationList(List<String> invitationList) {
-		this.invitationList = invitationList;
-	}
+
 }

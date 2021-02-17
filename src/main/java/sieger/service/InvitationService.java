@@ -46,11 +46,23 @@ public class InvitationService {
 		User user = userRepository.retrieveUserById(currentUserId)
 				.orElseThrow(() -> new ResourceNotFoundException(
 						"User", "id", currentUserId));
-		if (!invitationOpt.get().getRecipientId().equals(user.getUserId())) {
-			ApiResponse response = new ApiResponse(false, "You can't view the <" 
-					+ invitationId + "> invitation");
-			throw new ForbiddenException(response);
+		if(invitationOpt.get().getParticipantForm().equals(ParticipantForm.SINGLE)) {
+			if (!invitationOpt.get().getRecipientId().equals(user.getUserId())) {
+				ApiResponse response = new ApiResponse(false, "You can't view the <" 
+						+ invitationId + "> invitation");
+				throw new ForbiddenException(response);
+			}
 		}
+		if(invitationOpt.get().getParticipantForm().equals(ParticipantForm.TEAM)){
+			Team team = teamRepository.retrieveTeamById(invitationOpt.get().getRecipientId()).get();
+			if(!user.getUserId().equals(team.getAdminId())) {
+				ApiResponse response = new ApiResponse(false, "You can't view the <" 
+						+ invitationId + "> invitation");
+				throw new ForbiddenException(response);
+			}
+		}
+		
+	
  		return invitationOpt; 
 	}
 	

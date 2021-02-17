@@ -34,7 +34,7 @@ public class Game {
 		return UUID.randomUUID().toString();
 	}
 	//get winner id
-	public String getWinnerId() {
+	public String returnWinnerId() {
 		if(result.firstWins()) {
 			return this.firstParticipantId;
 		}

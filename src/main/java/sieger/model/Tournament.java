@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import sieger.model.League.TournamentState;
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
@@ -41,6 +40,8 @@ public abstract class Tournament implements Searchable {
     //mac number
 	private int maxParticipantNumber;
 	private String type;
+	//
+	private TournamentState currentState;
 
 	public Tournament() {
 		
@@ -55,6 +56,7 @@ public abstract class Tournament implements Searchable {
 		this.participantList = new ArrayList<String>();
 		this.tournamentName = name;
 		this.maxParticipantNumber = participantSize;
+		this.setCurrentState(TournamentState.START);
 		
 	}
 	//get random Id
@@ -235,11 +237,15 @@ public abstract class Tournament implements Searchable {
 	public void removeNotification(Notification notification) {
 		notificationList.remove(notification);
 	}
-	public String getType() {
-		return type;
-	}
+
 	public void setType(String type) {
 		this.type = type;
 	}
-	public abstract String getState();
+	public TournamentState getCurrentState() {
+		return currentState;
+	}
+	public void setCurrentState(TournamentState currentState) {
+		this.currentState = currentState;
+	}
+	
 }

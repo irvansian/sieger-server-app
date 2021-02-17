@@ -8,17 +8,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-import sieger.model.KnockOut.TournamentState;
+
 
 
 @JsonTypeName("KnockOutWithGroup")
 public class KnockOutWithGroup extends Tournament {
-	 enum TournamentState{
-		START,
-		GROUP,
-		KOROUND,
-		FINISH
-	}
+
 	//table list
 	@JsonIgnore
 	private List<LeagueTable> tables;
@@ -38,7 +33,7 @@ public class KnockOutWithGroup extends Tournament {
 		this.tables = new ArrayList<>();
 		this.koMapping = null;
 		this.currentGames = null;
-		this.currentState = TournamentState.START;
+		setType("KnockOutWithGroup");
 	}
 
 	
@@ -82,7 +77,7 @@ public class KnockOutWithGroup extends Tournament {
 		List<Game> tempgames = new ArrayList<>();
 		//create game without date
 		for(int i = 0; i < currentGames.size();i = i + 2) {
-			Game game = new Game(null, currentGames.get(i).getWinnerId(), currentGames.get(i + 1).getWinnerId());
+			Game game = new Game(null, currentGames.get(i).returnWinnerId(), currentGames.get(i + 1).returnWinnerId());
 			int newKey = (koMapping.getKeyByValue(currentGames.get(i).getGameId()) + koMapping.getKeyByValue(currentGames.get(i + 1).getGameId())) / 2;
 			koMapping.mapGameToKOBracket(newKey, game.getGameId());
 			tempgames.add(game);
@@ -168,13 +163,6 @@ public class KnockOutWithGroup extends Tournament {
 			setCurrentState(TournamentState.FINISH);
 		}
 	}
-	public TournamentState getCurrentState() {
-		return currentState;
-	}
-
-	public void setCurrentState(TournamentState currentState) {
-		this.currentState = currentState;
-	}
 
 	@Override
 	public List<Game> createGames() {
@@ -188,9 +176,4 @@ public class KnockOutWithGroup extends Tournament {
 		return null;
 	}
 
-	@Override
-	public String getState() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

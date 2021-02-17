@@ -171,7 +171,7 @@ public class TournamentDatabase implements TournamentRepository {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
+		tournamentDoc.put("currentState", tournament.getCurrentState());
 		tournamentDoc.put("tournamentDetail", tournament.getTournamentDetail());
 		tournamentDoc.put("gameList", tournament.getGameList());
 		tournamentDoc.put("tournamentid", tournament.getTournamentId());

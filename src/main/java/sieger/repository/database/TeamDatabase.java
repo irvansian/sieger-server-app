@@ -82,6 +82,7 @@ public class TeamDatabase implements TeamRepository {
 		teamDoc.put("teamPassword", team.getTeamPassword());
 		teamDoc.put("teamId", team.getTeamId());
 		teamDoc.put("memberList", team.getMemberList());
+		teamDoc.put("invitationList", team.getInvitationList());
 		db.collection(path).document(team.getTeamId()).set(teamDoc);
 		return true;
 	}
