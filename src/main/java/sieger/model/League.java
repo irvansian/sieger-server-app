@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class League extends Tournament{
 
 	//table
-	private LeagueTable table;
+	private LeagueTable leagueTable;
 	
 	
 	public League() {
@@ -20,7 +20,7 @@ public class League extends Tournament{
 	@JsonCreator
 	public League(@JsonProperty("participantSize")int participantSize, @JsonProperty("name")String name, @JsonProperty("tournamentDetail")TournamentDetail tournamentDetail) {
 		super(participantSize, name, tournamentDetail);
-		this.table = null;
+		this.leagueTable = null;
 	    setType("League");
 	}
 
@@ -53,11 +53,7 @@ public class League extends Tournament{
 		}
 		return games;
 	}
-	//set table
-	public void setLeagueTable(LeagueTable table) {
-		this.table = table;
-	}
-
+	
 
 
 	@Override
@@ -66,6 +62,34 @@ public class League extends Tournament{
 			return createAllGames();
 		}
 		return null;
+	}
+
+	public LeagueTable getLeagueTable() {
+		return leagueTable;
+	}
+
+	public void setLeagueTable(LeagueTable table) {
+		this.leagueTable = table;
+	}
+
+	@Override
+	public void updateGame(Game game) {
+		if(game.returnWinnerId() != null) {
+			String winner = game.returnWinnerId();
+			String loser;
+			if(game.getFirstParticipantId().equals(winner)) {
+				loser = game.getSecondParticipantId();
+			} else {
+				loser = game.getFirstParticipantId();
+			}
+			getLeagueTable().participantWin(winner);
+			getLeagueTable().participantLose(loser);
+		} else {
+			getLeagueTable().participantDraw(game.getFirstParticipantId());
+			getLeagueTable().participantDraw(game.getSecondParticipantId());
+		}
+		getLeagueTable().sort();
+		
 	}
 
 

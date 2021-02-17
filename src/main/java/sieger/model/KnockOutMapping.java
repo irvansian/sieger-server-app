@@ -8,31 +8,37 @@ import com.google.api.client.util.Objects;
 
 public class KnockOutMapping {
 	//map
-	@JsonIgnore
-	private Map<Integer, String> koMapping;
+	
+	private Map<String, String> koMapping;
 	//constructor
+	public KnockOutMapping() {
+		
+	}
 	public KnockOutMapping(int branchSize) {
-		this.koMapping = new HashMap<Integer, String>();
+		this.koMapping = new HashMap<String, String>();
 		for(int i = 1; i <= branchSize; i++) {
-			koMapping.put(i, null);
+			koMapping.put(String.valueOf(i), null);
 		}
 	}
 	//getter
-	public Map<Integer, String> getKoMapping(){
+	public Map<String, String> getKoMapping(){
 		return this.koMapping;
+	}
+	public void setKoMapping(Map<String, String> mapping) {
+		this.koMapping = mapping;
 	}
 	//put game in map
 	public void mapGameToKOBracket(int branchPosition, String game){
-		koMapping.put(branchPosition, game);
+		koMapping.put(String.valueOf(branchPosition), game);
 	}
 	//get key from value
-	public int getKeyByValue(String value) {
-		for (Map.Entry<Integer, String> m :koMapping.entrySet())  {
+	public String getKeyByValue(String value) {
+		for (Map.Entry<String, String> m :koMapping.entrySet())  {
 			if(Objects.equal(value, m.getValue())) {
 				return m.getKey();
 			}
 		}
-		return -1;
+		return null;
 	}
 
 }

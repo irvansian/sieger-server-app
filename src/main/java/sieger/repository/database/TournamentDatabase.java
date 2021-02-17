@@ -162,10 +162,15 @@ public class TournamentDatabase implements TournamentRepository {
 			boolean knockoutwithgroup= objectMapper.writeValueAsString(tournament).contains("KnockOutWithGroup");
 			if(league) {
 				tournamentDoc.put("type", "League");
+				tournamentDoc.put("leagueTable", ((League)tournament).getLeagueTable());
 			} else if(knockout) {
 				tournamentDoc.put("type", "KnockOut");
+				tournamentDoc.put("koMapping", ((KnockOut)tournament).getKoMapping());
+				
 			} else if(knockoutwithgroup) {
 				tournamentDoc.put("type", "KnockOutWithGroup");
+				tournamentDoc.put("tables", ((KnockOutWithGroup)tournament).getTables());
+				tournamentDoc.put("koMapping", ((KnockOutWithGroup)tournament).getKoMapping());
 			}
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block

@@ -17,7 +17,7 @@ public class KnockOutWithGroup extends Tournament {
 	//table list
 	@JsonIgnore
 	private List<LeagueTable> tables;
-	private TournamentState currentState;
+	
 	//ko map
 	@JsonIgnore
 	private KnockOutMapping koMapping;
@@ -78,7 +78,8 @@ public class KnockOutWithGroup extends Tournament {
 		//create game without date
 		for(int i = 0; i < currentGames.size();i = i + 2) {
 			Game game = new Game(null, currentGames.get(i).returnWinnerId(), currentGames.get(i + 1).returnWinnerId());
-			int newKey = (koMapping.getKeyByValue(currentGames.get(i).getGameId()) + koMapping.getKeyByValue(currentGames.get(i + 1).getGameId())) / 2;
+			int newKey = (Integer.parseInt(koMapping.getKeyByValue(currentGames.get(i).getGameId())) 
+					+ Integer.parseInt(koMapping.getKeyByValue(currentGames.get(i + 1).getGameId()))) / 2;
 			koMapping.mapGameToKOBracket(newKey, game.getGameId());
 			tempgames.add(game);
 		    getGameList().add(game.getGameId());
@@ -166,14 +167,56 @@ public class KnockOutWithGroup extends Tournament {
 
 	@Override
 	public List<Game> createGames() {
-		if(this.currentState == TournamentState.START) {
+		if(getCurrentState() == TournamentState.START) {
 			return createGroupGames();
-		} else if (this.currentState == TournamentState.GROUP) {
+		} else if (getCurrentState() == TournamentState.GROUP) {
 			return createFirstKO();
-		} else if(this.currentState == TournamentState.KOROUND) {
+		} else if(getCurrentState() == TournamentState.KOROUND) {
 			return nextRoundGames();
 		}
 		return null;
+	}
+	public KnockOutMapping getKoMapping() {
+		return this.koMapping;
+	}
+	public void setKoMapping(KnockOutMapping koMapping) {
+		this.koMapping = koMapping;
+	}
+	public List<LeagueTable> getTables(){
+		return this.tables;
+	}
+	@Override
+	public void updateGame(Game game) {
+		if(getCurrentState() == TournamentState.GROUP) {
+			if(game.returnWinnerId() != null) {
+				String winner = game.returnWinnerId();
+				String loser;
+				if(game.getFirstParticipantId().equals(winner)) {
+					loser = game.getSecondParticipantId();
+				} else {
+					loser = game.getFirstParticipantId();
+				}
+				for(LeagueTable table: tables) {
+					if(table.getParticipantStandingById(winner) != null) {
+						table.participantWin(winner);
+						table.participantLose(loser);
+						table.sort();
+						break;
+					}
+				}
+			} else {
+				for(LeagueTable table: tables) {
+					if(table.getParticipantStandingById(game.getFirstParticipantId()) != null) {
+						table.participantDraw(game.getFirstParticipantId());
+						table.participantDraw(game.getSecondParticipantId());
+						table.sort();
+						break;
+					}
+				}
+			}
+			
+		}
+		
 	}
 
 }

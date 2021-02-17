@@ -25,6 +25,6 @@ class GameTest {
 		Game game = new Game(null, "first", "second");
 		Result result = new ScoreResult(1,1);
 		game.setResult(result);
-		assertTrue(game.returnWinnerId().equals("firstsecond"));
+		assertTrue(game.returnWinnerId() == null);
 	}
 }

@@ -13,9 +13,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("KnockOut")
 public class KnockOut extends Tournament {
 	//ko mapping
-	@JsonIgnore
+
 	private KnockOutMapping koMapping;
-	private TournamentState currentState;
+	
 	//current games
 	private List<Game> currentGames;
 	public KnockOut() {
@@ -48,6 +48,9 @@ public class KnockOut extends Tournament {
 	public KnockOutMapping getKoMapping() {
 		return this.koMapping;
 	}
+	public void setKoMapping(KnockOutMapping koMapping) {
+		this.koMapping = koMapping;
+	}
 	//create game of next round
 	private List<Game> nextRoundGames() {
 		int currentIndex = getGameList().size();
@@ -55,7 +58,8 @@ public class KnockOut extends Tournament {
 		//create game without date
 		for(int i = 0; i < currentGames.size();i = i + 2) {
 			Game game = new Game(null, currentGames.get(i).returnWinnerId(), currentGames.get(i + 1).returnWinnerId());
-			int newKey = (koMapping.getKeyByValue(currentGames.get(i).getGameId()) + koMapping.getKeyByValue(currentGames.get(i + 1).getGameId())) / 2;
+			int newKey = (Integer.parseInt(koMapping.getKeyByValue(currentGames.get(i).getGameId())) 
+					+ Integer.parseInt(koMapping.getKeyByValue(currentGames.get(i + 1).getGameId()))) / 2;
 			koMapping.mapGameToKOBracket(newKey, game.getGameId());
 			tempgames.add(game);
 		    getGameList().add(game.getGameId());
@@ -96,11 +100,15 @@ public class KnockOut extends Tournament {
 	
 	@Override
 	public List<Game> createGames() {
-		if(this.currentState == TournamentState.START) {
+		if(getCurrentState() == TournamentState.START) {
 			return createFirstRoundGames();
-		} else if (this.currentState == TournamentState.KOROUND) {
+		} else if (getCurrentState() == TournamentState.KOROUND) {
 			return nextRoundGames();
 		}
 		return null;
+	}
+	@Override
+	public void updateGame(Game game) {
+		
 	}
 }

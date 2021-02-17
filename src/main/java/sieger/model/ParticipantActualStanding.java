@@ -14,6 +14,9 @@ public class ParticipantActualStanding {
 	//number of points
 	private int points;
 	//constructor
+	public ParticipantActualStanding() {
+		
+	}
 	public ParticipantActualStanding(String participantId) {
 		this.participantId = participantId;
 		this.draw = 0;

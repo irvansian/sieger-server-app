@@ -42,7 +42,7 @@ public class Game {
 			return this.secondParticipantId;
 		}
 		if(result.draws()) {
-			return this.firstParticipantId + this.secondParticipantId;
+			return null;
 		}
 		return null;
 	}

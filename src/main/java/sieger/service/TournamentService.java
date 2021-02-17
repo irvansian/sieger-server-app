@@ -157,6 +157,8 @@ public class TournamentService {
 		}
 		Game game = gameRepository.retrieveGameById(tournament.getTournamentId(), gameId).get();
 		game.setResult(result);
+		tournament.updateGame(game);
+		tournamentRepository.updateTournament(tournament.getTournamentId(), tournament);
 		gameRepository.updateGame(tournament.getTournamentId(), gameId, game);
 		return game;
 	}

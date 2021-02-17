@@ -65,6 +65,7 @@ public abstract class Tournament implements Searchable {
 	}
 	//abstract methode
 	public abstract List<Game> createGames();
+	public abstract void updateGame(Game game);
 	//check if user participate the tournament
 	public boolean isParticipant(User user) {
 		if(tournamentDetail.getParticipantForm() == ParticipantForm.SINGLE) {
