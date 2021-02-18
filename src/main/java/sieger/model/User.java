@@ -152,62 +152,114 @@ public class User extends Participant{
 		return true;
 	}
 	/**
+	 * Add the invitation to the list.
 	 * 
-	 * 
-	 * @param invitationId
+	 * @param invitationId The id of invitation.
 	 */
 	public void addInvitation(String invitationId) {
 		invitationList.add(invitationId);
 	}
-	//remove invitation
+	/**
+	 * Remove the invitation from the list.
+	 * 
+	 * @param invitationId The id of invitation.
+	 */
 	public void removeInvitation(String invitationId) {
 		invitationList.remove(invitationId);
 	}
-	//add team
+	/**
+	 * Add a team to the list.
+	 * 
+	 * @param teamId The id of team.
+	 */
 	public void addTeam(String teamId) {
 		teamList.add(teamId);
 	}
-	//remove team
+	/**
+	 * Remove the team from list.
+	 * 
+	 * @param teamId
+	 */
 	public void removeTeam(String teamId) {
 		teamList.remove(teamId);
 	}
-	//get userid
+	/**
+	 * Getter of userid.
+	 * 
+	 * @return Return the user id.
+	 */
 	public String getUserId() {
 		return this.userId;
 	}
-	//get username
+	/**
+	 * Getter of username.
+	 * 
+	 * @return Return the user name.
+	 */
 	public String getUsername() {
 		return this.username;
 	}
-	//get surname
+	/**
+	 * Getter of surname.
+	 * 
+	 * @return Return the surname.
+	 */
 	public String getSurname() {
 		return this.surname;
 	}
-	//get forename
+	/**
+	 * Getter of forename.
+	 * 
+	 * @return Return the forename.
+	 */
 	public String getForename() {
 		return this.forename;
 	}
-	//get teamlist
+	/**
+	 * Getter of the team list.
+	 * 
+	 * @return Return the teamlist.
+	 */
 	public List<String> getTeamList(){
 		return this.teamList;
 	}
-	//get invitation list
+	/**
+	 * Getter of the invitation list.
+	 * 
+	 * @return Return the invitation list.
+	 */
 	public List<String> getInvitationList(){
 		return this.invitationList;
 	}
-	
+	/**
+	 * Setter of surname.
+	 * 
+	 * @param surname The surname of user.
+	 */
 	public void setSurname(String surname) {
 		this.surname = surname;
 	}
-	
+	/**
+	 * Setter of username.
+	 * 
+	 * @param username The username of user.
+	 */
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
+	/**
+	 * Setter of forename.
+	 * 
+	 * @param forename The forename of user.
+	 */
 	public void setForename(String forename) {
 		this.forename = forename;
 	}
-	
+	/**
+	 * Setter of the userid
+	 * 
+	 * @param userId The user id.
+	 */
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
