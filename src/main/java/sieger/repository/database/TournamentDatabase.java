@@ -26,7 +26,6 @@ import sieger.model.KnockOutMapping;
 import sieger.model.KnockOutWithGroup;
 import sieger.model.League;
 import sieger.model.LeagueTable;
-import sieger.model.Notification;
 import sieger.model.Participant;
 import sieger.model.ParticipantForm;
 import sieger.model.Result;
@@ -194,7 +193,6 @@ public class TournamentDatabase implements TournamentRepository {
 		tournamentDoc.put("tournamentDetail", tournament.getTournamentDetail());
 		tournamentDoc.put("gameList", tournament.getGameList());
 		tournamentDoc.put("tournamentid", tournament.getTournamentId());
-		tournamentDoc.put("notificationList", tournament.getNotificationList());
 		tournamentDoc.put("participantList", tournament.getParticipantList());
 		tournamentDoc.put("tournamentName", tournament.getTournamentName());
 		tournamentDoc.put("maxParticipantNumber", tournament.getMaxParticipantNumber());
@@ -243,7 +241,6 @@ public class TournamentDatabase implements TournamentRepository {
 		tournament.setCurrentGames(currentgames);
 		tournament.setParticipantList((List<String>)ds.get("participantList"));
 		tournament.setGameList((List<String>)ds.get("gameList"));
-		tournament.setNotificationList((List<Notification>)ds.get("notificationList"));
 		tournament.setTournamentId(ds.getId());
 		tournament.setTournamentName((String)ds.get("tournamentName"));
 		tournament.setMaxParticipantNumber(Integer.parseInt(String.valueOf(ds.get("maxParticipantNumber"))));
@@ -297,7 +294,6 @@ public class TournamentDatabase implements TournamentRepository {
 		tournament.setCurrentGames(currentgames);
 		tournament.setParticipantList((List<String>)ds.get("participantList"));
 		tournament.setGameList((List<String>)ds.get("gameList"));
-		tournament.setNotificationList((List<Notification>)ds.get("notificationList"));
 		tournament.setTournamentId(ds.getId());
 		tournament.setTournamentName((String)ds.get("tournamentName"));
 		tournament.setMaxParticipantNumber(Integer.parseInt(String.valueOf(ds.get("maxParticipantNumber"))));

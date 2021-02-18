@@ -6,25 +6,50 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+/**
+ * The team class which extends participant class.
+ * 
+ * @author Chen Zhang
+ *
+ */
 public class Team extends Participant{
-	//team id
+	/**
+	 * The id of a team.
+	 */
 	private String teamId;
-	//admin id
+	/**
+	 * The id of the team admin.
+	 */
 	private String adminId;
-	//team name
+	/**
+	 * Name of the team.
+	 */
 	private String teamName;
-	//password of team
+	/**
+	 * Password of the team. It is used to join a team.
+	 */
 	private String teamPassword;
-	//member list
+	/**
+	 * List that contains id of members.
+	 */
 	private List<String> memberList;
-	
+	/**
+	 * List that contains the invitation. Only admin can handle invitation.
+	 */
 	private List<String> invitationList;
-	
+	/**
+	 * No-argument constructor.
+	 */
 	public Team() {
 		
 	}
-	//constructor
+	/**
+	 * Constructor of team class. The id will bew created automatically by UUID.
+	 * 
+	 * @param adminId The id of team admin.
+	 * @param name The name of team.
+	 * @param password The password of the team.
+	 */
 	@JsonCreator
 	public Team(@JsonProperty("adminId")String adminId, @JsonProperty("name")String name, @JsonProperty("password")String password) {
 		super.tournamentList = new ArrayList<>();
@@ -36,32 +61,52 @@ public class Team extends Participant{
 		this.invitationList = new ArrayList<>();
 		memberList.add(adminId);
 	}
-	//get random Id
+	/**
+	 * Private method to get team id from UUID.
+	 * 
+	 * @return Return the id as String.
+	 */
 	private String randomId() {
 		return UUID.randomUUID().toString();
 	}
-	//implement getparticipantname()
+	/**
+	 * Override the method in participant class.
+	 * 
+	 * @return Return the name of team.
+	 */
 	@Override
 	public String findParticipantName() {
 		return getTeamName();
 	}
-	//implement joinTournament()
+	/**
+	 * Override the method in participant class.
+	 * 
+	 * @return Return true if success.
+	 */
 	@Override
 	public boolean joinTournament(Tournament tournament) {
-	
-			addTournament(tournament.getTournamentId());
-			tournament.addParticipant(teamId);
-			return true;
+		addTournament(tournament.getTournamentId());
+		tournament.addParticipant(teamId);
+		return true;
 	
 	}
-	//implement quitTournament()
+	/**
+	 * Override the method in participant class.
+	 * 
+	 * @return Return true if success.
+	 */
 	@Override
 	public boolean quitTournament(Tournament tournament) {
 		removeTournament(tournament.getTournamentId());
 		tournament.removeParticipant(teamId);
 		return true;
 	}
-	//check if password is true
+	/**
+	 * To check if the given password is correct.
+	 * 
+	 * @param password The given password.
+	 * @return Return true if matches.
+	 */
 	public boolean checkPassword(String password) {
 		if(password.equals(teamPassword)) {
 			return true;
@@ -69,7 +114,12 @@ public class Team extends Participant{
 			return false;
 		}
 	}
-	//check if user is Admin
+	/**
+	 * To check if the user is the admin.
+	 * 
+	 * @param admin The given user.
+	 * @return Return true if user id admin.
+	 */
 	public boolean checkAdmin(User admin) {
 		if(admin.getUserId().equals(adminId)) {
 			return true;
@@ -77,46 +127,91 @@ public class Team extends Participant{
 			return false;
 		}
 	}
-	//kick member
+	/**
+	 * Kick the user from the team.
+	 * 
+	 * @param user The member will be removed.
+	 */
 	public void kickMember(User user) {
 		user.quitTeam(this);
 	}
-	//add member
+	/**
+	 * Add member to the member list.
+	 * 
+	 * @param userId The id of new member.
+	 */
 	public void addMember(String userId) {
 		memberList.add(userId);
 	}
-	//remove member
+	/**
+	 * Remove the member from the list.
+	 * 
+	 * @param userId The id of member.
+	 */
 	public void removeMember(String userId) {
 		memberList.remove(userId);
 	}
-	
+	/**
+	 * Add invitation to the list.
+	 * 
+	 * @param invitationId The id of invitation.
+	 */
 	public void addInvitation(String invitationId) {
 		invitationList.add(invitationId);
 	}
-	
+	/**
+	 * Remove invitation from the list.
+	 * 
+	 * @param invitationId The id of invitation to be moved.
+	 */
 	public void removeInvitation(String invitationId) {
 		invitationList.remove(invitationId);
 	}
-	//get teamid
+	/**
+	 * Getter of team id.
+	 * 
+	 * @return Return the team id.
+	 */
 	public String getTeamId() {
 		return this.teamId;
 	}
-	//get adminId
+	/**
+	 * Getter of admin id.
+	 * 
+	 * @return Return the admin id.
+	 */
 	public String getAdminId() {
 		return this.adminId;
 	}
-	//get team name
+	/**
+	 * Getter of team name.
+	 * 
+	 * @return Return the name of team.
+	 */
 	public String getTeamName() {
 		return this.teamName;
 	}
-	//get team password
+	/**
+	 * Getter password of team.
+	 * 
+	 * @return Return the password of team.
+	 */
 	public String getTeamPassword() {
 		return this.teamPassword;
 	}
-	//get memberlist
+	/**
+	 * Getter of member list.
+	 * 
+	 * @return Return the memberlist.
+	 */
 	public List<String> getMemberList(){
 		return this.memberList;
 	}
+	/**
+	 * Getter of invitation list.
+	 * 
+	 * @return Return the invitation list.
+	 */
 	public List<String> getInvitationList(){
 		return this.invitationList;
 	}

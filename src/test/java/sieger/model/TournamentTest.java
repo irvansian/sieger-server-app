@@ -29,13 +29,19 @@ class TournamentTest {
 	}
 	@Test
 	void testAllowUserToJoinIn() {
-		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", null,null,null,ParticipantForm.SINGLE);
+		Calendar c1 = Calendar.getInstance();
+		c1.set(2021, 12, 12);
+		Date date = c1.getTime();
+		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", date,null,null,ParticipantForm.SINGLE);
 		League tournament = new League(4, "name", detail);
 		assertTrue(tournament.allowUserToJoin());
 	}
 	@Test
 	void testAllowTeamToJoinIn() {
-		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", null,null,null,ParticipantForm.TEAM);
+		Calendar c1 = Calendar.getInstance();
+		c1.set(2021, 12, 12);
+		Date date = c1.getTime();
+		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", date,null,null,ParticipantForm.TEAM);
 		League tournament = new League(4, "name", detail);
 		assertTrue(tournament.allowTeamToJoin());
 	}

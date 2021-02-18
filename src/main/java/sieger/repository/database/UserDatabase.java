@@ -29,7 +29,6 @@ public class UserDatabase implements UserRepository {
 		userDoc.put("username", user.getUsername());
 		userDoc.put("surname", user.getSurname());
 		userDoc.put("forename", user.getForename());
-		userDoc.put("notificationList", user.getNotificationList());
 		userDoc.put("teamList", user.getTeamList());
 		userDoc.put("tournamentList", user.getTournamentList());
 		userDoc.put("invitationList", user.getInvitationList());

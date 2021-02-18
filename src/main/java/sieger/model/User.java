@@ -5,25 +5,50 @@ import java.util.Date;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+/**
+ * The user class which extends the participant class.
+ * 
+ * @author Chen Zhang
+ *
+ */
 public class User extends Participant{
-	//user id
+	/**
+	 * The id of user, which is created in client.
+	 */
 	private String userId;
-	//user name
+	/**
+	 * The name of user.
+	 */
 	private String username;
-	//surname
+	/**
+	 * The surname of user.
+	 */
 	private String surname;
-	//forname
+	/**
+	 * The forename of user.
+	 */
 	private String forename;
-	//notificationlist
-	private List<Notification> notificationList;
-	//list of team
+	/**
+	 * The team list.
+	 */
 	private List<String> teamList;
-	//list of invitation
+	/**
+	 * The list of inviatation.
+	 */
 	private List<String> invitationList;
+	/**
+	 * No-Argument constructor.
+	 */
 	public User() {
 	}
-	//constructor
+	/**
+	 * Contruction of a user.
+	 * 
+	 * @param username The name of user.
+	 * @param surname The surname of user.
+	 * @param forename The forename of user.
+	 * @param userId The user id passed from client side.
+	 */
 	@JsonCreator
 	public User(@JsonProperty("username")String username, @JsonProperty("surname")String surname, @JsonProperty("forename")String forename, @JsonProperty("userId")String userId) {
 		super.tournamentList = new ArrayList<>();
@@ -31,26 +56,36 @@ public class User extends Participant{
 		this.forename = forename;
 		this.surname = surname;
 		this.userId = userId;
-		this.notificationList = new ArrayList<>();
 		this.teamList = new ArrayList<>();
 		this.invitationList = new ArrayList<>();
 	}
 
-	//implement getparticipantname()
+	/**
+	 * Override the method in participant class.
+	 * 
+	 * @return Return the name of user.
+	 */
 	@Override
 	public String findParticipantName() {
 		return getUsername();
 	}
-	//implement joinTournament
+	/**
+	 * Override the method in participant class.
+	 * 
+	 * @return Return true if success.
+	 */
 	@Override
 	public boolean joinTournament(Tournament tournament) {
-		
-			addTournament(tournament.getTournamentId());
-			tournament.addParticipant(userId);
-			return true;
+		addTournament(tournament.getTournamentId());
+		tournament.addParticipant(userId);
+		return true;
 	
 	}
-	//implement quittournament
+	/**
+	 * Override the method in participant class.
+	 * 
+	 * @return Return true if success.
+	 */
 	@Override
 	public boolean quitTournament(Tournament tournament) {
 		removeTournament(tournament.getTournamentId());
@@ -58,7 +93,12 @@ public class User extends Participant{
 		return true;
 	}
 	
-	//show next Tournament(not finished)
+	/**
+	 * Get the next three tournaments
+	 * 
+	 * @param tournaments All the tournaments that user took part in.
+	 * @return Return a tournament list.
+	 */
 	public List<String> showNextTournaments(List<Tournament> tournaments){
 		Date current = new Date();
 		List<Tournament> tempTournaments = new ArrayList<>();
@@ -84,7 +124,13 @@ public class User extends Participant{
 		result.add(tempTournaments.get(2).getTournamentId());
 		return result;
 	}
-	//join team
+	/**
+	 * User join in team with the password
+	 * 
+	 * @param team The team he wants to join in.
+	 * @param password The password.
+	 * @return Return true if success.
+	 */
 	public boolean joinTeam(Team team, String password) {
 		if(team.checkPassword(password)) {
 			team.addMember(userId);
@@ -94,28 +140,22 @@ public class User extends Participant{
 			return false;
 		}
 	}
-	//quit team
+	/**
+	 * User quit the team.
+	 * 
+	 * @param team The team he wants to quit from.
+	 * @return Return true if success.
+	 */
 	public boolean quitTeam(Team team) {
 		team.removeMember(userId);
 		removeTeam(team.getTeamId());
 		return true;
 	}
-	//cancel Tournament
-	public boolean cancelTournament(Tournament tournament, List<Participant> participants) {
-		for(Participant participant: participants) {
-			participant.removeTournament(tournament.getTournamentId());
-		}
-		return true;
-	}
-	//add notification
-	public void addNotification(Notification notification) {
-		notificationList.add(notification);
-	}
-	//remove notification
-	public void removeNotification(Notification notification) {
-		notificationList.remove(notification);
-	}
-	//add invitation
+	/**
+	 * 
+	 * 
+	 * @param invitationId
+	 */
 	public void addInvitation(String invitationId) {
 		invitationList.add(invitationId);
 	}
@@ -146,10 +186,6 @@ public class User extends Participant{
 	//get forename
 	public String getForename() {
 		return this.forename;
-	}
-	//get notificationlist
-	public List<Notification> getNotificationList(){
-		return this.notificationList;
 	}
 	//get teamlist
 	public List<String> getTeamList(){
