@@ -8,14 +8,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("League")
 public class League extends Tournament{
-	enum TournamentState{
-		START,
-		FINISH
-	}
+
 	//table
-	private LeagueTable table;
-	//
-	private TournamentState currentState;
+	private LeagueTable leagueTable;
+	
 	
 	public League() {
 	}
@@ -24,8 +20,8 @@ public class League extends Tournament{
 	@JsonCreator
 	public League(@JsonProperty("participantSize")int participantSize, @JsonProperty("name")String name, @JsonProperty("tournamentDetail")TournamentDetail tournamentDetail) {
 		super(participantSize, name, tournamentDetail);
-		this.table = null;
-	    this.setCurrentState(TournamentState.START);
+		this.leagueTable = null;
+	    setType("League");
 	}
 
 	private List<Game> createAllGames() {
@@ -35,7 +31,7 @@ public class League extends Tournament{
 			for(int i = 0; i < games.size(); i++) {
 				games.get(i).setTime(calculateDate(i));
 			}
-			this.setCurrentState(TournamentState.FINISH);
+			setCurrentState(TournamentState.FINISH);
 			return games;
 		}
 		return null;
@@ -44,10 +40,7 @@ public class League extends Tournament{
 	private void createTable() {
 		setLeagueTable(new LeagueTable(getParticipantList()));
 	}
-	//get table
-	public LeagueTable getLeagueTable() {
-		return this.table;
-	}
+
 	//game to be planed
 	private List<Game> createGameList(){
 		List<Game> games = new ArrayList<>();
@@ -60,25 +53,45 @@ public class League extends Tournament{
 		}
 		return games;
 	}
-	//set table
-	public void setLeagueTable(LeagueTable table) {
-		this.table = table;
-	}
+	
 
-	public TournamentState getCurrentState() {
-		return currentState;
-	}
-
-	public void setCurrentState(TournamentState currentState) {
-		this.currentState = currentState;
-	}
 
 	@Override
 	public List<Game> createGames() {
-		if(this.currentState == TournamentState.START) {
+		if(super.getCurrentState() == TournamentState.START) {
 			return createAllGames();
 		}
 		return null;
 	}
+
+	public LeagueTable getLeagueTable() {
+		return leagueTable;
+	}
+
+	public void setLeagueTable(LeagueTable table) {
+		this.leagueTable = table;
+	}
+
+	@Override
+	public void updateGame(Game game) {
+		if(game.returnWinnerId() != null) {
+			String winner = game.returnWinnerId();
+			String loser;
+			if(game.getFirstParticipantId().equals(winner)) {
+				loser = game.getSecondParticipantId();
+			} else {
+				loser = game.getFirstParticipantId();
+			}
+			getLeagueTable().participantWin(winner);
+			getLeagueTable().participantLose(loser);
+		} else {
+			getLeagueTable().participantDraw(game.getFirstParticipantId());
+			getLeagueTable().participantDraw(game.getSecondParticipantId());
+		}
+		getLeagueTable().sort();
+		
+	}
+
+
 	
 }

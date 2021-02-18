@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
@@ -38,6 +39,9 @@ public abstract class Tournament implements Searchable {
 	private String tournamentName;
     //mac number
 	private int maxParticipantNumber;
+	private String type;
+	//
+	private TournamentState currentState;
 
 	public Tournament() {
 		
@@ -52,6 +56,8 @@ public abstract class Tournament implements Searchable {
 		this.participantList = new ArrayList<String>();
 		this.tournamentName = name;
 		this.maxParticipantNumber = participantSize;
+		this.setCurrentState(TournamentState.START);
+		
 	}
 	//get random Id
 	private String randomId() {
@@ -59,6 +65,7 @@ public abstract class Tournament implements Searchable {
 	}
 	//abstract methode
 	public abstract List<Game> createGames();
+	public abstract void updateGame(Game game);
 	//check if user participate the tournament
 	public boolean isParticipant(User user) {
 		if(tournamentDetail.getParticipantForm() == ParticipantForm.SINGLE) {
@@ -231,4 +238,15 @@ public abstract class Tournament implements Searchable {
 	public void removeNotification(Notification notification) {
 		notificationList.remove(notification);
 	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+	public TournamentState getCurrentState() {
+		return currentState;
+	}
+	public void setCurrentState(TournamentState currentState) {
+		this.currentState = currentState;
+	}
+	
 }

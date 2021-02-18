@@ -10,7 +10,7 @@ class KnockOutMappingTest {
 	void testGetKeyByValue() {
 		KnockOutMapping komapping = new KnockOutMapping(2);
 		komapping.mapGameToKOBracket(1,"game");
-		assertTrue(komapping.getKeyByValue("game") == 1);
+		assertTrue(komapping.getKeyByValue("game").equals("1"));
 	}
 
 }

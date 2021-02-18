@@ -6,6 +6,9 @@ import java.util.List;
 public class LeagueTable {
 	//list of standing
 	private List<ParticipantActualStanding> tables;
+	public LeagueTable() {
+		
+	}
 	//constructor
 	public LeagueTable(List<String >participants) {
 		this.tables = new ArrayList<>();
@@ -69,5 +72,7 @@ public class LeagueTable {
 	public List<ParticipantActualStanding> getTables(){
 		return this.tables;
 	}
-
+	public void setTables(List<ParticipantActualStanding> tables) {
+		this.tables = tables;
+	}
 }

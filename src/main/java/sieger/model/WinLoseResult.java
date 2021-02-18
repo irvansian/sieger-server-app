@@ -1,14 +1,23 @@
 package sieger.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class WinLoseResult implements Result {
 	//result of firdt participant
 	private GameOutcome firstParticipantResult;
 	//result of second participant
 	private GameOutcome secondParticipantResult;
+	private String type;
 	//constructor
-	public WinLoseResult(GameOutcome firstParticipantResult, GameOutcome secondParticipantResult) {
+	public WinLoseResult() {
+		
+	}
+	@JsonCreator
+	public WinLoseResult(@JsonProperty("firstParticipantResult")GameOutcome firstParticipantResult, @JsonProperty("secondParticipantResult")GameOutcome secondParticipantResult) {
 		this.firstParticipantResult = firstParticipantResult;
 		this.secondParticipantResult = secondParticipantResult;
+		this.setType("Winlose");
 	}
 	@Override
 	public boolean firstWins() {
@@ -34,7 +43,23 @@ public class WinLoseResult implements Result {
 		    return false;
 		}
 	}
-	
-	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public GameOutcome getFirstParticipantResult() {
+		return this.firstParticipantResult;
+	}
+	public GameOutcome getSecondParticipantResult() {
+		return this.secondParticipantResult;
+	}
+	public void setFirstParticipantResult(GameOutcome gameOutcome) {
+		this.firstParticipantResult = gameOutcome;
+	}
+	public void setSecondParticipantResult(GameOutcome gameOutcome) {
+		this.secondParticipantResult = gameOutcome;
+	}
 
 }

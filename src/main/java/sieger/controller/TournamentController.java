@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import sieger.model.Game;
 import sieger.model.Participant;
+import sieger.model.Result;
 import sieger.model.Tournament;
 import sieger.model.TournamentDetail;
 import sieger.payload.ApiResponse;
@@ -132,11 +133,11 @@ public class TournamentController {
 	public ResponseEntity<Game> updateGameById(
 			@PathVariable("tournamentName") String tournamentName, 
 			@PathVariable("id") String gameId, 
-			@RequestBody Game game,
+			@RequestBody Result result,
 			@RequestAttribute("currentUserId") String currentUserId) {
-		Game gameReady = tournamentService.updateGameById(currentUserId, 
-				tournamentName, gameId, game);
-		return ResponseEntity.ok(gameReady);
+		Game gameForRes = tournamentService.updateGameById(currentUserId, 
+				tournamentName, gameId, result);
+		return ResponseEntity.ok(gameForRes);
 	}
 	
 	@PostMapping("/{tournamentName}/games")

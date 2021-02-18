@@ -26,7 +26,7 @@ public class Game {
 		this.time = time;
 		this.firstParticipantId = firstParticipantId;
 		this.secondParticipantId = secondParticipantId;
-		this.gameId = randomId();
+		this.setGameId(randomId());
 		this.result = null;
 	}
 	//get random Id
@@ -34,7 +34,7 @@ public class Game {
 		return UUID.randomUUID().toString();
 	}
 	//get winner id
-	public String getWinnerId() {
+	public String returnWinnerId() {
 		if(result.firstWins()) {
 			return this.firstParticipantId;
 		}
@@ -42,7 +42,7 @@ public class Game {
 			return this.secondParticipantId;
 		}
 		if(result.draws()) {
-			return this.firstParticipantId + this.secondParticipantId;
+			return null;
 		}
 		return null;
 	}
@@ -50,17 +50,17 @@ public class Game {
 	public Date getTime() {
 		return this.time;
 	}
-	//get first participant id
 	public String getFirstParticipantId() {
 		return this.firstParticipantId;
 	}
-	//get second participant id
 	public String getSecondParticipantId() {
 		return this.secondParticipantId;
 	}
-	//get game id
-	public String getGameId() {
-		return this.gameId;
+	public void setFirstParticipantId(String id) {
+		this.firstParticipantId = id;
+	}
+	public void setSecondParticipantId(String id) {
+		this.secondParticipantId = id;
 	}
 	//get result
 	public Result getResult() {
@@ -73,5 +73,11 @@ public class Game {
 	//set time
 	public void setTime(Date date) {
 		this.time = date;
+	}
+	public String getGameId() {
+		return gameId;
+	}
+	public void setGameId(String gameId) {
+		this.gameId = gameId;
 	}
 }
