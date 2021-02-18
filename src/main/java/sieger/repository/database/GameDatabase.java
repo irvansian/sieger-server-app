@@ -16,7 +16,6 @@ import com.google.firebase.cloud.FirestoreClient;
 
 import sieger.model.Game;
 import sieger.model.GameOutcome;
-import sieger.model.Invitation;
 import sieger.model.Result;
 import sieger.model.ScoreResult;
 import sieger.model.WinLoseResult;
@@ -27,7 +26,7 @@ public class GameDatabase implements GameRepository {
 	
 	private String path = "games";
 
-	@SuppressWarnings({ })
+	@SuppressWarnings({"unchecked" })
 	@Override
 	public Optional<Game> retrieveGameById(String tournamentId, String gameId) {
 		Firestore db = FirestoreClient.getFirestore();

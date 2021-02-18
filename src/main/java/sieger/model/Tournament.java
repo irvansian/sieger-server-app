@@ -131,7 +131,12 @@ public abstract class Tournament implements Searchable {
 			return false;
 		}
 	}
-	//check if given id is admin
+	/**
+	 * To check if the given user is the admin of tournament.
+	 * 
+	 * @param userId Id of user to be checked.
+	 * @return true if the given user is admin, else false.
+	 */
 	public boolean isAdmin(String userId) {
 		if(userId.equals(tournamentDetail.getAdminId())) {
 			return true;

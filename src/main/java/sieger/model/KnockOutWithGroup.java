@@ -4,29 +4,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-
-
-
+/**
+ * The knock out with group class which extends the tournament clas.
+ * 
+ * @author Chen Zhang
+ *
+ */
 @JsonTypeName("KnockOutWithGroup")
 public class KnockOutWithGroup extends Tournament {
-
-	//table list
-	@JsonIgnore
+	/**
+	 * The tables of all groups. Each group has a table to record.
+	 */
 	private List<LeagueTable> tables;
-	
-	//ko map
-	@JsonIgnore
+	/**
+	 * The knock out map in ko round.
+	 */
 	private KnockOutMapping koMapping;
-	//current games
+	/**
+	 * The games in current round in list.
+	 */
 	private List<Game> currentGames;
+	/**
+	 * No-argument constructor.
+	 */
 	public KnockOutWithGroup() {
 		super();
 	}
-
+	/**
+	 * Constructor of a knock out with group class.
+	 * The size of each group is always four.
+	 * The first and the second in each group will attend the ko round.
+	 * 
+	 * @param participantSize The size of participant.
+	 * @param name The name of tournament.
+	 * @param tournamentDetail Other details of this tournament.
+	 */
 	@JsonCreator
 	public KnockOutWithGroup(@JsonProperty("participantSize")int participantSize, @JsonProperty("name")String name, @JsonProperty("tournamentDetail")TournamentDetail tournamentDetail) {
 		super(participantSize, name, tournamentDetail);
@@ -35,8 +50,11 @@ public class KnockOutWithGroup extends Tournament {
 		this.currentGames = null;
 		setType("KnockOutWithGroup");
 	}
-
-	
+	/**
+	 * Private method to create games for group phase.
+	 * 
+	 * @return The game in group phase in list.
+	 */
 	private List<Game> createGroupGames() {
 		if(readyToBeHeld()) {
 			List<Game> games = createGameList();
@@ -49,7 +67,11 @@ public class KnockOutWithGroup extends Tournament {
 		return null;
 		
 	}
-	//first round of KO
+	/**
+	 * Private method to create the games in first round in KO phase.
+	 * 
+	 * @return Return the game in first round of KO round in list.
+	 */
 	private List<Game> createFirstKO() {
 		List<String> participants = getWinnerOfGroup();
 		this.koMapping = new KnockOutMapping(participants.size() / 2);
@@ -71,7 +93,11 @@ public class KnockOutWithGroup extends Tournament {
 		isFinalRound();
 		return games;
 	}
-	//create game of next round
+	/**
+	 * Private method to create games in next round of ko phase.
+	 * 
+	 * @return Return the games of next round in list.
+	 */
 	private List<Game> nextRoundGames() {
 		int currentIndex = getGameList().size();
 		List<Game> tempgames = new ArrayList<>();
@@ -92,7 +118,11 @@ public class KnockOutWithGroup extends Tournament {
 		isFinalRound();
 		return tempgames;
 	}
-	//get winner of group phase
+	/**
+	 * Private method to get the winners of groups.
+	 * 
+	 * @return Return the id of the winners of groups in list.
+	 */
 	private List<String> getWinnerOfGroup(){
 		List<String> winners = new ArrayList<>();
 		for(LeagueTable table: tables) {
@@ -102,7 +132,12 @@ public class KnockOutWithGroup extends Tournament {
 		}
 		return winners;
 	}
-	//game to be planed
+	/**
+	 * Private method to create games in group phase without setting the time.
+	 * This method will be called in createGroupGames.
+	 * 
+	 * @return Return the game in list.
+	 */
 	private List<Game> createGameList(){
 		divideParticipants();
 		List<Game> games = new ArrayList<>();
@@ -129,7 +164,9 @@ public class KnockOutWithGroup extends Tournament {
 		}
 		return games;
 	}
-	//Divide participant into groups
+	/**
+	 * Private method to divide the participants into 4-er groups.
+	 */
 	private void divideParticipants() {
 		List<String> tempParticipants = new ArrayList<>();
 		for(String participant: getParticipantList()) {
@@ -142,29 +179,53 @@ public class KnockOutWithGroup extends Tournament {
 		}
 		addLeagueTable(new LeagueTable(tempParticipants));
 	}
-	//add table
+	/**
+	 * Add a new league table to the table list.
+	 * 
+	 * @param table The table to be added.
+	 */
 	public void addLeagueTable(LeagueTable table) {
 		this.tables.add(table);
 	}
-	//remove table
-	public void removeLeagueTable(LeagueTable tbale) {
-		this.tables.remove(tbale);
+	/**
+	 * Remove the table from the table list.
+	 * 
+	 * @param table Table to be removed.
+	 */
+	public void removeLeagueTable(LeagueTable table) {
+		this.tables.remove(table);
 	}
-	//set current games
+	/**
+	 * Setter of current games.
+	 * 
+	 * @param games New game list to be setted.
+	 */
 	public void setCurrentGames(List<Game> games) {
 		this.currentGames = games;
 	}
-	//get current games
+	/**
+	 * Getter of current games.
+	 * 
+	 * @return Return the current games.
+	 */
 	public List<Game> getCurrentGames(){
 		return this.currentGames;
 	}
-	//tournament finish
+	/**
+	 * Private method to check if it is final round.
+	 * If yes, the state of tournament will be changed to finish.
+	 */
 	private void isFinalRound() {
 		if(this.currentGames.size() == 1) {
 			setCurrentState(TournamentState.FINISH);
 		}
 	}
-
+	/**
+	 * Override the method in tournament class.
+	 * Based on different state of tournament, different method of creating new games will be called.
+	 * 
+	 * @return Return the new created game in list.
+	 */
 	@Override
 	public List<Game> createGames() {
 		if(getCurrentState() == TournamentState.START) {
@@ -176,18 +237,45 @@ public class KnockOutWithGroup extends Tournament {
 		}
 		return null;
 	}
+	/**
+	 * Getter of knock out map.
+	 * 
+	 * @return Return the knock out map.
+	 */
 	public KnockOutMapping getKoMapping() {
 		return this.koMapping;
 	}
+	/**
+	 * Setter of the knock out map.
+	 * 
+	 * @param koMapping New knock out map to be setted.
+	 */
 	public void setKoMapping(KnockOutMapping koMapping) {
 		this.koMapping = koMapping;
 	}
+	/**
+	 * Getter of tables.
+	 * 
+	 * @return Return the list of table.
+	 */
 	public List<LeagueTable> getTables(){
 		return this.tables;
 	}
+	/**
+	 * Setter of tables.
+	 * 
+	 * @param tables New tables to be setted.
+	 */
 	public void setTables(List<LeagueTable> tables) {
 		this.tables = tables;
 	}
+	/**
+	 * Override the method in tournament class.
+	 * If it is in group phase, the table will be updated based on the given game.
+	 * If it is in Ko round, the result will be added to the game in current games.
+	 * 
+	 * @param game 
+	 */
 	@Override
 	public void updateGame(Game game) {
 		if(getCurrentState() == TournamentState.GROUP) {

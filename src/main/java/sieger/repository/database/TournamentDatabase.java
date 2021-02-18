@@ -10,10 +10,8 @@ import java.util.concurrent.ExecutionException;
 
 import org.springframework.stereotype.Repository;
 
-import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.api.client.json.Json;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -21,10 +19,6 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.firebase.cloud.FirestoreClient;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-
 import sieger.model.Game;
 import sieger.model.GameOutcome;
 import sieger.model.KnockOut;
