@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import sieger.model.Invitation;
+import sieger.payload.ApiResponse;
 import sieger.service.InvitationService;
 
 @RestController
@@ -28,17 +29,18 @@ public class InvitationController {
 	}
 	
 	@PostMapping("/{id}")
-	public ResponseEntity<String> handleInvitationAcceptation(
+	public ResponseEntity<ApiResponse> handleInvitationAcceptation(
 			@RequestAttribute("currentUserId") String currentUserId, 
 			@PathVariable("id") String invitationId,
 			@RequestBody Map<String, Boolean> acceptation) {
 		boolean acceptationVal = acceptation.get("accept").booleanValue();
+		ApiResponse res = null;
 		if (acceptationVal) {
-			invitationService.acceptInvitation(currentUserId, invitationId);
+			res = invitationService.acceptInvitation(currentUserId, invitationId);
 		} else {
-			invitationService.declineInvitation(currentUserId, invitationId);
+			res = invitationService.declineInvitation(currentUserId, invitationId);
 		}
-		return ResponseEntity.ok(null);
+		return ResponseEntity.ok(res);
 	}
 	
 }
