@@ -88,39 +88,75 @@ public class ParticipantActualStanding {
 	public int getPlays() {
 		return this.plays;
 	}
-	//get win
+	/**
+	 * Getter of win.
+	 * 
+	 * @return Return the number of win.
+	 */
 	public int getWin() {
 		return this.win;
 	}
-	//get lose
+	/**
+	 * Getter of lose.
+	 * 
+	 * @return Return the number of lose.
+	 */
 	public int getLose() {
 		return this.lose;
 	}
-	//get draw
+	/**
+	 * Getter of draw.
+	 * 
+	 * @return Return the number of draw.
+	 */
 	public int getDraw() {
 		return this.draw;
 	}
-	//get point
+	/**
+	 * Getter of point.
+	 * 
+	 * @return Return the point.
+	 */
 	public int getPoints() {
 		return this.points;
 	}
-	//set plays
+	/**
+	 * Setter of number of play.
+	 * 
+	 * @param newPlays The number of number.
+	 */
 	public void setPlays(int newPlays) {
 		this.plays = newPlays;
 	}
-	//set win
+	/**
+	 * Setter of number of win.
+	 * 
+	 * @param newWin The number of win.
+	 */
 	public void setWin(int newWin) {
 		this.win = newWin;
 	}
-	//set lose
+	/**
+	 * Setter of number of lose.
+	 * 
+	 * @param newLose The number of lose.
+	 */
 	public void setLose(int newLose) {
 		this.lose = newLose;
 	}
-	//set point
+	/**
+	 * Setter of point.
+	 * 
+	 * @param newPoints The points of participant.
+	 */
 	public void setPoints(int newPoints) {
 		this.points = newPoints;
 	}
-	//set draw
+	/**
+	 * Setter of number of draw.
+	 * 
+	 * @param newDraw The number of draw.
+	 */
 	public void setDraw(int newDraw) {
 		this.draw = newDraw;
 	}
