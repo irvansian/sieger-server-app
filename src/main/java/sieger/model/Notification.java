@@ -1,9 +1,16 @@
 package sieger.model;
 
 import java.util.Date;
-
+/**
+ * The notification class.
+ * 
+ * @author Chen Zhang
+ *
+ */
 public class Notification {
-	//content
+	/**
+	 * The content of a natification.
+	 */
 	private String content;
 	//recipient id
 	private String recipientId;

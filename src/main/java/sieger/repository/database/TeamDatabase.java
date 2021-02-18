@@ -15,8 +15,6 @@ import com.google.cloud.firestore.QuerySnapshot;
 import com.google.firebase.cloud.FirestoreClient;
 
 import sieger.model.Team;
-import sieger.model.Tournament;
-import sieger.model.User;
 import sieger.repository.TeamRepository;
 
 @Repository("teamDB")

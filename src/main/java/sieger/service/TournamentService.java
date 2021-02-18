@@ -9,9 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import sieger.exception.BadRequestException;
 import sieger.exception.ForbiddenException;
 import sieger.exception.ResourceNotFoundException;
@@ -101,7 +98,8 @@ public class TournamentService {
 		User user = userRepository.retrieveUserById(currentUserId).get();
 		tournamentRepository.createTournament(tournament);
 		userRepository.updateUserById(currentUserId, user);
-		return tournament;
+		Tournament res = tournamentRepository.retrieveTournamentByName(tournament.getTournamentName()).get();
+		return res;
 	}
 	
 	public Tournament updateTournamentDetailById(String currentUserId, 
