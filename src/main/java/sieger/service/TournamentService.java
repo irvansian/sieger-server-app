@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import sieger.exception.BadRequestException;
 import sieger.exception.ForbiddenException;
 import sieger.exception.ResourceNotFoundException;
@@ -150,6 +153,7 @@ public class TournamentService {
 	public Game updateGameById(String currentUserId, 
 			String tournamentName, String gameId, Result result) {
 		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
+	
 		if (!tournament.isAdmin(currentUserId)) {
 			ApiResponse response = new ApiResponse(false, "You don't have "
 					+ "permission to update this game.");
@@ -157,6 +161,7 @@ public class TournamentService {
 		}
 		Game game = gameRepository.retrieveGameById(tournament.getTournamentId(), gameId).get();
 		game.setResult(result);
+	
 		tournament.updateGame(game);
 		tournamentRepository.updateTournament(tournament.getTournamentId(), tournament);
 		gameRepository.updateGame(tournament.getTournamentId(), gameId, game);

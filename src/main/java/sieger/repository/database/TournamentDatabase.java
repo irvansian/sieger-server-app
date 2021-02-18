@@ -10,22 +10,38 @@ import java.util.concurrent.ExecutionException;
 
 import org.springframework.stereotype.Repository;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.client.json.Json;
 import com.google.api.core.ApiFuture;
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.firebase.cloud.FirestoreClient;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
+import sieger.model.Game;
+import sieger.model.GameOutcome;
 import sieger.model.KnockOut;
+import sieger.model.KnockOutMapping;
 import sieger.model.KnockOutWithGroup;
 import sieger.model.League;
+import sieger.model.LeagueTable;
+import sieger.model.Notification;
 import sieger.model.Participant;
 import sieger.model.ParticipantForm;
+import sieger.model.Result;
+import sieger.model.ScoreResult;
 import sieger.model.Tournament;
+import sieger.model.TournamentDetail;
+import sieger.model.TournamentState;
 import sieger.model.User;
+import sieger.model.WinLoseResult;
 import sieger.model.Team;
 import sieger.repository.TournamentRepository;
 
@@ -39,19 +55,19 @@ public class TournamentDatabase implements TournamentRepository {
 		Firestore db = FirestoreClient.getFirestore();
 		ApiFuture<DocumentSnapshot> future = db.collection(path)
 				.document(tournamentId).get();
-		
 		try {
-			if (future.get().exists()) {
+			
 				if(future.get().get("type").equals("League")){
 					tournament = future.get().toObject(League.class.asSubclass(Tournament.class));
 				}
 				if(future.get().get("type").equals("KnockOut")) {
-					tournament = future.get().toObject(KnockOut.class.asSubclass(Tournament.class));
+					tournament = convertToKnockOut(future.get());
 				}
 				if(future.get().get("type").equals("KnockOutWithGroup")) {
-					tournament = future.get().toObject(KnockOutWithGroup.class.asSubclass(Tournament.class));
+					tournament = convertToKnockOutWithGroup(future.get());
 				}
-			}
+				
+			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -97,16 +113,17 @@ public class TournamentDatabase implements TournamentRepository {
 		Firestore db = FirestoreClient.getFirestore();
 		ApiFuture<QuerySnapshot> future = db.collection(path)
 				.whereEqualTo("tournamentName", tournamentName).get();
+		
 		try {
 			for (DocumentSnapshot ds : future.get().getDocuments()) {
 				if(ds.get("type").equals("League")){
 					tournament = ds.toObject(League.class.asSubclass(Tournament.class));
 				}
 				if(ds.get("type").equals("KnockOut")) {
-					tournament = ds.toObject(KnockOut.class.asSubclass(Tournament.class));
+					tournament = convertToKnockOut(ds);
 				}
 				if(ds.get("type").equals("KnockOutWithGroup")) {
-					tournament = ds.toObject(KnockOutWithGroup.class.asSubclass(Tournament.class));
+					tournament = convertToKnockOutWithGroup(ds);
 				}
 				break;
 			}
@@ -158,8 +175,9 @@ public class TournamentDatabase implements TournamentRepository {
 		Map<String, Object> tournamentDoc = new HashMap<>();
 		try {
 			boolean league = objectMapper.writeValueAsString(tournament).contains("League");
-			boolean knockout = objectMapper.writeValueAsString(tournament).contains("KnockOut");
-			boolean knockoutwithgroup= objectMapper.writeValueAsString(tournament).contains("KnockOutWithGroup");
+			
+			boolean knockoutwithgroup= objectMapper.writeValueAsString(tournament).contains("WithGroup");
+			boolean knockout = !knockoutwithgroup && !league;
 			if(league) {
 				tournamentDoc.put("type", "League");
 				tournamentDoc.put("leagueTable", ((League)tournament).getLeagueTable());
@@ -188,6 +206,112 @@ public class TournamentDatabase implements TournamentRepository {
 		tournamentDoc.put("maxParticipantNumber", tournament.getMaxParticipantNumber());
 		return tournamentDoc;
 	}
+	@SuppressWarnings("unchecked")
+	private KnockOut convertToKnockOut(DocumentSnapshot ds) {
+		KnockOut tournament = new KnockOut();
+		List<Game> currentgames = new ArrayList<>();
+		for(Map<String,Object> map: (List<Map<String,Object>>)ds.get("currentGames")) {
+			Game game = new Game();
+			HashMap<String,Object> result = (HashMap<String, Object>) map.get("result");
+			Result resultRes = null;
+			if(result != null) {
+				if(result.containsValue("Winlose")) {
+					GameOutcome first = null;
+					GameOutcome second = null;
+					if(result.get("firstParticipantResult").equals(GameOutcome.WIN.toString())) {
+						 first = GameOutcome.WIN;
+					} else if (result.get("firstParticipantResult").equals(GameOutcome.LOSE.toString())) {
+						 first = GameOutcome.LOSE;
+					} else if (result.get("firstParticipantResult").equals(GameOutcome.DRAW.toString())) {
+						 first = GameOutcome.DRAW;
+					}
+					if(result.get("secondParticipantResult").equals(GameOutcome.WIN.toString())) {
+						 second = GameOutcome.WIN;
+					} else if (result.get("secondParticipantResult").equals(GameOutcome.LOSE.toString())) {
+						 second = GameOutcome.LOSE;
+					} else if (result.get("secondParticipantResult").equals(GameOutcome.DRAW.toString())) {
+						 second = GameOutcome.DRAW;
+					}
+					resultRes = new WinLoseResult(first, second);
+				}
+				if(result.containsValue("Score")) {
+					int first = Integer.parseInt(String.valueOf(result.get("firstParticipantResult")));
+					int second = Integer.parseInt(String.valueOf(result.get("secondParticipantResult")));
+					resultRes = new ScoreResult(first,second);
+				}
+				game.setResult(resultRes);
+			}
+			game.setTime(((Timestamp)map.get("time")).toDate());
+			game.setFirstParticipantId((String)map.get("firstParticipantId"));
+			game.setSecondParticipantId((String)map.get("secondParticipantId"));
+			game.setGameId((String)map.get("gameId"));
+		}
+		tournament.setCurrentGames(currentgames);
+		tournament.setParticipantList((List<String>)ds.get("participantList"));
+		tournament.setGameList((List<String>)ds.get("gameList"));
+		tournament.setNotificationList((List<Notification>)ds.get("notificationList"));
+		tournament.setTournamentId(ds.getId());
+		tournament.setTournamentName((String)ds.get("tournamentName"));
+		tournament.setMaxParticipantNumber(Integer.parseInt(String.valueOf(ds.get("maxParticipantNumber"))));
+		tournament.setKoMapping(ds.get("koMapping", KnockOutMapping.class));
+		tournament.setCurrentState(ds.get("currentState", TournamentState.class));
+		tournament.setTournamentDetail(ds.get("tournamentDetail", TournamentDetail.class));
+		tournament.setType((String)ds.get("type"));
+		return tournament;
+	}
 	
-	
+	@SuppressWarnings("unchecked")
+	private KnockOutWithGroup convertToKnockOutWithGroup(DocumentSnapshot ds) {
+		KnockOutWithGroup tournament = new KnockOutWithGroup();
+		List<Game> currentgames = new ArrayList<>();
+		for(Map<String,Object> map: (List<Map<String,Object>>)ds.get("currentGames")) {
+			Game game = new Game();
+			HashMap<String,Object> result = (HashMap<String, Object>) map.get("result");
+			Result resultRes = null;
+			if(result != null) {
+				if(result.containsValue("Winlose")) {
+					GameOutcome first = null;
+					GameOutcome second = null;
+					if(result.get("firstParticipantResult").equals(GameOutcome.WIN.toString())) {
+						 first = GameOutcome.WIN;
+					} else if (result.get("firstParticipantResult").equals(GameOutcome.LOSE.toString())) {
+						 first = GameOutcome.LOSE;
+					} else if (result.get("firstParticipantResult").equals(GameOutcome.DRAW.toString())) {
+						 first = GameOutcome.DRAW;
+					}
+					if(result.get("secondParticipantResult").equals(GameOutcome.WIN.toString())) {
+						 second = GameOutcome.WIN;
+					} else if (result.get("secondParticipantResult").equals(GameOutcome.LOSE.toString())) {
+						 second = GameOutcome.LOSE;
+					} else if (result.get("secondParticipantResult").equals(GameOutcome.DRAW.toString())) {
+						 second = GameOutcome.DRAW;
+					}
+					resultRes = new WinLoseResult(first, second);
+				}
+				if(result.containsValue("Score")) {
+					int first = Integer.parseInt(String.valueOf(result.get("firstParticipantResult")));
+					int second = Integer.parseInt(String.valueOf(result.get("secondParticipantResult")));
+					resultRes = new ScoreResult(first,second);
+				}
+				game.setResult(resultRes);
+			}
+			game.setTime(((Timestamp)map.get("time")).toDate());
+			game.setFirstParticipantId((String)map.get("firstParticipantId"));
+			game.setSecondParticipantId((String)map.get("secondParticipantId"));
+			game.setGameId((String)map.get("gameId"));
+		}
+		tournament.setCurrentGames(currentgames);
+		tournament.setParticipantList((List<String>)ds.get("participantList"));
+		tournament.setGameList((List<String>)ds.get("gameList"));
+		tournament.setNotificationList((List<Notification>)ds.get("notificationList"));
+		tournament.setTournamentId(ds.getId());
+		tournament.setTournamentName((String)ds.get("tournamentName"));
+		tournament.setMaxParticipantNumber(Integer.parseInt(String.valueOf(ds.get("maxParticipantNumber"))));
+		tournament.setKoMapping(ds.get("koMapping", KnockOutMapping.class));
+		tournament.setCurrentState(ds.get("currentState", TournamentState.class));
+		tournament.setTournamentDetail(ds.get("tournamentDetail", TournamentDetail.class));
+		tournament.setType((String)ds.get("type"));
+		tournament.setTables((List<LeagueTable>)ds.get("tables"));
+		return tournament;
+	}
 }

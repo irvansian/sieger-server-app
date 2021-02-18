@@ -1,20 +1,15 @@
 package sieger.repository.database;
 
 
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.stereotype.Repository;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.cloud.FirestoreClient;
@@ -32,7 +27,7 @@ public class GameDatabase implements GameRepository {
 	
 	private String path = "games";
 
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings({ })
 	@Override
 	public Optional<Game> retrieveGameById(String tournamentId, String gameId) {
 		Firestore db = FirestoreClient.getFirestore();

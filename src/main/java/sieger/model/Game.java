@@ -17,17 +17,20 @@ public class Game {
 	private String firstParticipantId;
 	//second participant id
 	private String secondParticipantId;
+	
 	public Game() {
 		
 	}
 	//constructor
 	@JsonCreator
-	public Game(@JsonProperty("time")Date time, @JsonProperty("firstParticipantId")String firstParticipantId, @JsonProperty("secondParticipantId")String secondParticipantId) {
+	public Game(@JsonProperty("time")Date time, 
+			@JsonProperty("firstParticipantId")String firstParticipantId, 
+			@JsonProperty("secondParticipantId")String secondParticipantId) {
 		this.time = time;
 		this.firstParticipantId = firstParticipantId;
 		this.secondParticipantId = secondParticipantId;
 		this.setGameId(randomId());
-		this.result = null;
+		
 	}
 	//get random Id
 	private String randomId() {

@@ -109,6 +109,11 @@ public class KnockOut extends Tournament {
 	}
 	@Override
 	public void updateGame(Game game) {
-		
+		for(Game tempGame: currentGames) {
+			if(tempGame.getGameId().equals(game.getGameId())) {
+				tempGame.setResult(game.getResult());
+				break;
+			}
+		}
 	}
 }

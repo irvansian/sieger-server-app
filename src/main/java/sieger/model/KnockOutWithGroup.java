@@ -185,6 +185,9 @@ public class KnockOutWithGroup extends Tournament {
 	public List<LeagueTable> getTables(){
 		return this.tables;
 	}
+	public void setTables(List<LeagueTable> tables) {
+		this.tables = tables;
+	}
 	@Override
 	public void updateGame(Game game) {
 		if(getCurrentState() == TournamentState.GROUP) {
@@ -215,6 +218,13 @@ public class KnockOutWithGroup extends Tournament {
 				}
 			}
 			
+		} else {
+			for(Game tempGame: currentGames) {
+				if(tempGame.getGameId().equals(game.getGameId())) {
+					tempGame = game;
+					break;
+				}
+			}
 		}
 		
 	}

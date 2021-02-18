@@ -248,5 +248,22 @@ public abstract class Tournament implements Searchable {
 	public void setCurrentState(TournamentState currentState) {
 		this.currentState = currentState;
 	}
-	
+	public void setMaxParticipantNumber(int number) {
+		this.maxParticipantNumber = number;
+	}
+	public void setGameList(List<String> games) {
+		this.gameList = games;
+	}
+	public void setNotificationList(List<Notification> notifications) {
+		this.notificationList = notifications;
+	}
+	public void setTournamentId(String id) {
+		this.tournamentid = id;
+	}
+	public void setTournamentName(String name) {
+		this.tournamentName = name;
+	}
+	public void setParticipantList(List<String> participants) {
+		this.participantList = participants;
+	}
 }
