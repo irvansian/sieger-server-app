@@ -1,22 +1,46 @@
 package sieger.model;
-
+/**
+ * The participant actual standing class, which contains the score of participant and other infos.
+ * 
+ * @author Chen Zhang
+ *
+ */
 public class ParticipantActualStanding {
-	//name of participant
+	/**
+	 * The id of participant.
+	 */
 	private String participantId;
-	//number of game
+	/**
+	 * The number of games that the participant plays.
+	 */
 	private int plays;
-	//number of win
+	/**
+	 * The number of games that the participant wins.
+	 */
 	private int win;
-	//number of lose
+	/**
+	 * The number of games that the participant loses.
+	 */
 	private int lose;
-	//number of draw
+	/**
+	 * The number of games that the participant draws.
+	 */
 	private int draw;
-	//number of points
+	/**
+	 * The point that participant has.
+	 */
 	private int points;
-	//constructor
+	/**
+	 * No-argument constructor.
+	 */
 	public ParticipantActualStanding() {
 		
 	}
+	/**
+	 * Constructor of standing.
+	 * 
+	 * @param participantId The id of participant.
+	 */
 	public ParticipantActualStanding(String participantId) {
 		this.participantId = participantId;
 		this.draw = 0;
@@ -25,28 +49,42 @@ public class ParticipantActualStanding {
 		this.win = 0;
 		this.points = 0;
 	}
-	//participant win
+	/**
+	 * Change the standing when participant wins.
+	 */
 	public void winGame() {
 		setPlays(getPlays() + 1);
 		setWin(getWin() + 1);
 		setPoints(getPoints() + 2);
 	}
-	//participant lose
+	/**
+	 * Change the standing when participant loses.
+	 */
 	public void loseGame() {
 		setPlays(getPlays() + 1);
 		setLose(getLose() + 1);
 	}
-	//participant draw
+	/**
+	 * Change the standing when participant draws.
+	 */
 	public void drawGame() {
 		setPlays(getPlays() + 1);
 		setDraw(getDraw() + 1);
 		setPoints(getPoints() + 1);
 	}
-	//get name
+	/**
+	 * Getter of participant id.
+	 * 
+	 * @return Return the id of participant.
+	 */
 	public String getParticipantId() {
 		return this.participantId;
 	}
-	//get plays
+	/**
+	 * Getter of play.
+	 * 
+	 * @return Return the number of play.
+	 */
 	public int getPlays() {
 		return this.plays;
 	}
