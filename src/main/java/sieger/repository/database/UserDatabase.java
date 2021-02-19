@@ -15,12 +15,25 @@ import com.google.firebase.cloud.FirestoreClient;
 
 import sieger.model.User;
 import sieger.repository.UserRepository;
-
+/**
+ * The user database class. We use firebase as database.
+ * The class implements the user repository.
+ * 
+ * @author Irvan Sian Syah Putra
+ *
+ */
 @Repository("userDB")
 public class UserDatabase implements UserRepository {
-	
+	/**
+	 * Path to the firebase document.
+	 */
 	private String path = "users";
-
+	/**
+	 * Create a new user in firebase.
+	 * 
+	 * @param user The user object to be stored.
+	 * @return Return the user object after put it in the firebase.
+	 */
 	@Override
 	public boolean createUser(User user) {
 		Firestore db = FirestoreClient.getFirestore();
@@ -35,7 +48,12 @@ public class UserDatabase implements UserRepository {
 		db.collection(path).document(user.getUserId()).set(userDoc);
 		return true;
 	}
-
+	/**
+	 * Retrieve the user from firebase with id.
+	 * 
+	 * @param userId The id of user.
+	 * @return Return user optional after searching.
+	 */
 	@Override
 	public Optional<User> retrieveUserById(String userId) {
 		User user = null;
@@ -56,7 +74,12 @@ public class UserDatabase implements UserRepository {
 		}
 		return Optional.ofNullable(user);
 	}
-
+	/**
+	 * Retrieve the user with name.
+	 * 
+	 * @param username Name of user to be searched.
+	 * @return Return the user optional after searching.
+	 */
 	@Override
 	public Optional<User> retrieveUserByUsername(String username) {
 		User user = null;
@@ -77,14 +100,25 @@ public class UserDatabase implements UserRepository {
 		}
 		return Optional.ofNullable(user);
 	}
-
+	/**
+	 * Update the data of user in firebase.
+	 * 
+	 * @param userId The id of user to be updated.
+	 * @param user The user with data to be updated.
+	 * @return Return true after updating.
+	 */
 	@Override
 	public boolean updateUserById(String userId, User user) {
 		Firestore db = FirestoreClient.getFirestore();
 		db.collection(path).document(userId).set(user);
 		return true;
 	}
-
+	/**
+	 * Delete the user data in firebase.
+	 * 
+	 * @param userId The id of user to be deleted.
+	 * @return Return true after delete the data.
+	 */
 	@Override
 	public boolean deleteUser(String userId) {
 		Firestore db = FirestoreClient.getFirestore();

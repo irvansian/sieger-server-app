@@ -20,12 +20,26 @@ import sieger.model.Result;
 import sieger.model.ScoreResult;
 import sieger.model.WinLoseResult;
 import sieger.repository.GameRepository;
-
+/**
+ * The game database class. We use firebase as database.
+ * The class implements the game repository.
+ * 
+ * @author Irvan Sian Syah Putra
+ *
+ */
 @Repository("gameDB")
 public class GameDatabase implements GameRepository {
-	
+	/**
+	 * Path to the firebase document.
+	 */
 	private String path = "games";
-
+	/**
+	 * Retrieve the game from firebase with id.
+	 * 
+	 * @param tournamentId The id of tournament which contains this game.
+	 * @param gameId The id of game.
+	 * @return Return game optional after searching.
+	 */
 	@SuppressWarnings({"unchecked" })
 	@Override
 	public Optional<Game> retrieveGameById(String tournamentId, String gameId) {
@@ -77,7 +91,13 @@ public class GameDatabase implements GameRepository {
 		}
 		return Optional.ofNullable(game);
 	}
-
+	/**
+	 * Create a new game in firebase.
+	 * 
+	 * @param tournamentId The id of tournament which contains this game.
+	 * @param game The team object to be stored.
+	 * @return Return the game object after put it in the firebase.
+	 */
 	@Override
 	public boolean createGame(String tournamentId, Game game) {
 		Firestore db = FirestoreClient.getFirestore();
@@ -91,7 +111,14 @@ public class GameDatabase implements GameRepository {
 			.collection(path).document(game.getGameId()).set(gameDoc);
 		return true;
 	}
-
+	/**
+	 * Update the data of game in firebase.
+	 * 
+	 * @param tournamentId The id of tournament which contains this game.
+	 * @param gameId The id of game to be updated.
+	 * @param game The game with data to be updated.
+	 * @return Return true after updating.
+	 */
 	@Override
 	public boolean updateGame(String tournamentId, String gameId, Game game) {
 		Firestore db = FirestoreClient.getFirestore();
@@ -99,7 +126,13 @@ public class GameDatabase implements GameRepository {
 			.collection(path).document(gameId).set(game);
 		return true;
 	}
-
+	/**
+	 * Delete the game data in firebase.
+	 * 
+	 * @param tournamentId The id of tournament which contains this game.
+	 * @param gameId The id of game to be deleted.
+	 * @return Return true after delete the data.
+	 */
 	@Override
 	public boolean deleteGame(String tournamentId, String gameId) {
 		Firestore db = FirestoreClient.getFirestore();

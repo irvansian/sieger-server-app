@@ -25,29 +25,57 @@ import sieger.repository.GameRepository;
 import sieger.repository.TeamRepository;
 import sieger.repository.TournamentRepository;
 import sieger.repository.UserRepository;
-
+/**
+ * The Tournament servie class. 
+ * The class will be called in controller and then called repository.
+ * 
+ * @author Irvan Sian Syah Putra
+ *
+ */
 @Service
 public class TournamentService {
+	/**
+	 * The tournament repository that connect to the database.
+	 */
 	@Autowired
 	@Qualifier("tournamentDB")
 	private TournamentRepository tournamentRepository;
-	
+	/**
+	 * The user repository that connect to the database.
+	 */
 	@Autowired
 	@Qualifier("userDB")
 	private UserRepository userRepository;
-	
+	/**
+	 * The team repository that connect to the database.
+	 */
 	@Autowired
 	@Qualifier("teamDB")
 	private TeamRepository teamRepository;
-	
+	/**
+	 * The game repository that connect to the database.
+	 */
 	@Autowired
 	@Qualifier("gameDB")
 	private GameRepository gameRepository;
-	
+	/**
+	 * Get tournament by keyword.
+	 * 
+	 * @param keyword The given keyword.
+	 * @return Return the list of tournament.
+	 */
 	public List<Tournament> getTournamentsByKeyword(String keyword) {
 		return null;
 	}
-	
+	/**
+	 * Get tournament from database by id.
+	 * 
+	 * @param currentUserId The id of current user.To check if current user has the permission.
+	 * @param tournamentId The id of tournament.
+	 * @return Return the result as tournament object.
+	 * @throws ResourceNotFoundException When resource not exists in database.
+	 * @throws ForbiddenException When user has no permission.
+	 */
 	public Tournament getTournamentById(String currentUserId, 
 			String tournamentId) {
 		Tournament tournament = tournamentRepository
@@ -62,8 +90,15 @@ public class TournamentService {
 		}
 		return tournament;
 	}
-	
-	
+	/**
+	 * Get tournament from database by name.
+	 * 
+	 * @param currentUserId The id of current user.To check if current user has the permission.
+	 * @param tournamentName The name of tournament.
+	 * @return Return the result as tournament object.
+	 * @throws ResourceNotFoundException When tournament not exists in database.
+	 * @throws ForbiddenException When user has no permission.
+	 */
 	public Tournament getTournamentByName(String currentUserId, 
 			String tournamentName) {
 		Tournament tournament = tournamentRepository
@@ -78,7 +113,13 @@ public class TournamentService {
 		}
 		return tournament;
 	}
-	
+	/**
+	 * Get the participant list of tournament.
+	 * 
+	 * @param currentUserId The id of current user.To check if current user has the permission.
+	 * @param tournamentName The name of tournament.
+	 * @return Return the participant in list.
+	 */
 	public List<Participant> getTournamentParticipants(String currentUserId, String tournamentName) {
 		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
 		String tournamentId = tournament.getTournamentId();
@@ -86,7 +127,14 @@ public class TournamentService {
 				.getParticipantForm();
 		return tournamentRepository.retrieveTournamentParticipants(tournamentId, pf);
 	}
-	
+	/**
+	 * Create tournament and stored in database.
+	 * 
+	 * @param currentUserId The id of current user who wants to create new tournament.
+	 * @param tournament The tournament passed from controller.
+	 * @return Return the tournament object.
+	 * @throws BadRequestException When tournament exists with the name.
+	 */
 	public Tournament createNewTournament(String currentUserId, Tournament tournament) {
 		Optional<Tournament> tournamentOpt = 
 				tournamentRepository.retrieveTournamentByName(tournament.getTournamentName());
@@ -97,21 +145,32 @@ public class TournamentService {
 		}
 		User user = userRepository.retrieveUserById(currentUserId).get();
 		tournamentRepository.createTournament(tournament);
+		user.addTournament(tournament.getTournamentId());
 		userRepository.updateUserById(currentUserId, user);
 		Tournament res = tournamentRepository.retrieveTournamentByName(tournament.getTournamentName()).get();
 		return res;
 	}
-	
+	/**
+	 * Update tournament detail by tournament id.
+	 * 
+	 * @param currentUserId The id of current user.To check if current user has the permission.
+	 * @param tournamentName Name of tournament.
+	 * @param tournamentDetail The detail of tournament.
+	 * @return Return the tournament object.
+	 */
 	public Tournament updateTournamentDetailById(String currentUserId, 
 			String tournamentName, TournamentDetail tournamentDetail) {
 		
 		return null;
 	}
-	
-	public boolean updateTournamentById(String tournamentId, Tournament tournament) {
-		return false;
-	}
-	
+	/**
+	 * Delete the tournament by its name.
+	 * 
+	 * @param currentUserId The id of current user.To check if current user has the permission.
+	 * @param tournamentName Name of tournament.
+	 * @return Return Api reponse when no permission or successfully deleted the tournament.
+	 * @throws ForbiddenException When user has no permission.
+	 */
 	public ApiResponse deleteTournament(String currentUserId, String tournamentName) {
 		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
 		if (!tournament.isAdmin(currentUserId)) {
@@ -125,7 +184,13 @@ public class TournamentService {
 		ApiResponse res = new ApiResponse(true, "Successfully deleted the tournament");
 		return res;
 	}
-	
+	/**
+	 * Get the game of tournament
+	 * 
+	 * @param currentUserId The id of current user.To check if current user has the permission.
+	 * @param tournamentName Name of tournament.
+	 * @return Return the list of game object.
+	 */
 	public List<Game> getAllGame(String currentUserId, String tournamentName) {
 		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
 		List<Game> gameList = new ArrayList<Game>();
@@ -136,7 +201,15 @@ public class TournamentService {
 		return gameList;
 		
 	}
-	
+	/**
+	 * Get the game by game id.
+	 * 
+	 * @param currentUserId The id of current user.To check if current user has the permission.
+	 * @param tournamentName Name of tournament.
+	 * @param gameId The id of game.
+	 * @return Return the result as game object.
+	 * @throws ResourceNotFoundException When resource not exists in database.
+	 */
 	public Game getGameById(String currentUserId, 
 			String tournamentName, String gameId) {
 		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
@@ -147,7 +220,16 @@ public class TournamentService {
 		}
 		return gameOpt.get();
 	}
-	
+	/**
+	 * Update the game with its id.
+	 * 
+	 * @param currentUserId The id of current user.To check if current user has the permission.
+	 * @param tournamentName Name of tournament.
+	 * @param gameId The id of game.
+	 * @param result The result of the game.
+	 * @return Return the game object after updating.
+	 * @throws ForbiddenException When user has no permission.
+	 */
 	public Game updateGameById(String currentUserId, 
 			String tournamentName, String gameId, Result result) {
 		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
@@ -165,7 +247,14 @@ public class TournamentService {
 		gameRepository.updateGame(tournament.getTournamentId(), gameId, game);
 		return game;
 	}
-	
+	/**
+	 * Create games for the tournament.
+	 * 
+	 * @param currentUserId The id of current user.To check if current user has the permission.
+	 * @param tournamentName Name of tournament.
+	 * @return Return the new created game in list.
+	 * @throws ForbiddenException When user has no permission.
+	 */
 	public List<Game> createGames(String currentUserId, 
 			String tournamentName) {
 		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
@@ -182,7 +271,15 @@ public class TournamentService {
 				tournament.getTournamentId(), tournament);
 		return games;
 	}
-	
+	/**
+	 * Delete the game with its id.
+	 * 
+	 * @param currentUserId The id of current user.To check if current user has the permission.
+	 * @param tournamentName Name of tournament.
+	 * @param gameId The id of game.
+	 * @return Return the api response when successfully delete or no permission.
+	 * @throws ForbiddenException When user has no permission.
+	 */
 	public ApiResponse deleteGame(String currentUserId, 
 			String tournamentName, String gameId) {
 		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
@@ -197,7 +294,15 @@ public class TournamentService {
 		ApiResponse res = new ApiResponse(true, "Successfully delete the game");
 		return res;
 	}
-	
+	/**
+	 * Join the tournament.
+	 * 
+	 * @param participantId The id of participant who wants to join the tournament.
+	 * @param tournamentName The name of tournament.
+	 * @return Return Apiresponse in different situation.
+	 * @throws ResourceNotFoundException When resource not exists in database.
+	 * @throws BadRequestException When failed to join.
+	 */
 	public ApiResponse joinTournament(String participantId, String tournamentName) {
 		Tournament tournament = tournamentRepository
 				.retrieveTournamentByName(tournamentName).orElseThrow(() -> 
@@ -224,7 +329,15 @@ public class TournamentService {
 		return res;
 		
 	}
-	
+	/**
+	 * Quit the tournament.
+	 * 
+	 * @param participantId The id of participant who wants to quit the tournament.
+	 * @param tournamentName The name of tournament.
+	 * @return Return the api responce in different situation.
+	 * @throws ResourceNotFoundException When resource not exists in database.
+	 * @throws BadRequestException When failed to quit.
+	 */
 	public ApiResponse quitTournament(String participantId, String tournamentName) {
 		Tournament tournament = getTournamentByName(participantId, tournamentName);
 		
@@ -249,7 +362,13 @@ public class TournamentService {
 		ApiResponse res = new ApiResponse(true, "Successfully quit the tournament");
 		return res;
 	}
-	
+	/**
+	 * Private method to remove the tournament for every participant when it is deleted by admin.
+	 * 
+	 * @param participantList The list of participant.
+	 * @param pc The participant form of tournament.
+	 * @param tournamentId The id of tournament.
+	 */
 	private void removeTournamentIdFromParticipant(List<String> participantList, 
 			ParticipantForm pc, String tournamentId) {
 		if (pc.equals(ParticipantForm.SINGLE)) {
