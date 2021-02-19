@@ -14,7 +14,8 @@ import sieger.model.Invitation;
 import sieger.payload.ApiResponse;
 import sieger.service.InvitationService;
 /**
- * The invitation controller class, which handles the request from client.
+ * The invitation controller class, which handles the request from client with
+ * url {base-url}/invitations/
  * 
  * @author Irvan Sian Syah Putra
  *

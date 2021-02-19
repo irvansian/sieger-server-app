@@ -13,16 +13,23 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 //import sieger.filter.IdFilter;
 import sieger.filter.JwtFilter;
 
+/**
+ * The configuration for security of the server app.
+ * @author Irvan Sian Syah Putra
+ *
+ */
 @Configuration
-//@EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
+	/**
+	 * The Filter that is used to catch the JWT Token in header.
+	 */
 	@Autowired
 	private JwtFilter authFilter;
-	
-//	@Autowired
-//	private IdFilter idFilter;
 
+	/**
+	 * HTTP Security configuration.
+	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -31,13 +38,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         			SessionCreationPolicy.STATELESS);
         http.formLogin().disable();
         http.addFilterBefore(authFilter, BasicAuthenticationFilter.class);
-//        http.addFilterBefore(idFilter, BasicAuthenticationFilter.class);
     }
 	
+	/**
+	 * This configuration is used to prevent Spring Boot auto configuration.
+	 */
 	@Bean
 	public AuthenticationManager authenticationManagerBean() throws Exception {
-	    // ALTHOUGH THIS SEEMS LIKE USELESS CODE,
-	    // IT'S REQUIRED TO PREVENT SPRING BOOT AUTO-CONFIGURATION
 	    return super.authenticationManagerBean();
 	}
 }
