@@ -256,42 +256,45 @@ public class TournamentDatabase implements TournamentRepository {
 	private KnockOut convertToKnockOut(DocumentSnapshot ds) {
 		KnockOut tournament = new KnockOut();
 		List<Game> currentgames = new ArrayList<>();
-		for(Map<String,Object> map: (List<Map<String,Object>>)ds.get("currentGames")) {
-			Game game = new Game();
-			HashMap<String,Object> result = (HashMap<String, Object>) map.get("result");
-			Result resultRes = null;
-			if(result != null) {
-				if(result.containsValue("Winlose")) {
-					GameOutcome first = null;
-					GameOutcome second = null;
-					if(result.get("firstParticipantResult").equals(GameOutcome.WIN.toString())) {
-						 first = GameOutcome.WIN;
-					} else if (result.get("firstParticipantResult").equals(GameOutcome.LOSE.toString())) {
-						 first = GameOutcome.LOSE;
-					} else if (result.get("firstParticipantResult").equals(GameOutcome.DRAW.toString())) {
-						 first = GameOutcome.DRAW;
+		if (ds.get("currentGames") != null) {
+			for(Map<String,Object> map: (List<Map<String,Object>>)ds.get("currentGames")) {
+				Game game = new Game();
+				HashMap<String,Object> result = (HashMap<String, Object>) map.get("result");
+				Result resultRes = null;
+				if(result != null) {
+					if(result.containsValue("Winlose")) {
+						GameOutcome first = null;
+						GameOutcome second = null;
+						if(result.get("firstParticipantResult").equals(GameOutcome.WIN.toString())) {
+							 first = GameOutcome.WIN;
+						} else if (result.get("firstParticipantResult").equals(GameOutcome.LOSE.toString())) {
+							 first = GameOutcome.LOSE;
+						} else if (result.get("firstParticipantResult").equals(GameOutcome.DRAW.toString())) {
+							 first = GameOutcome.DRAW;
+						}
+						if(result.get("secondParticipantResult").equals(GameOutcome.WIN.toString())) {
+							 second = GameOutcome.WIN;
+						} else if (result.get("secondParticipantResult").equals(GameOutcome.LOSE.toString())) {
+							 second = GameOutcome.LOSE;
+						} else if (result.get("secondParticipantResult").equals(GameOutcome.DRAW.toString())) {
+							 second = GameOutcome.DRAW;
+						}
+						resultRes = new WinLoseResult(first, second);
 					}
-					if(result.get("secondParticipantResult").equals(GameOutcome.WIN.toString())) {
-						 second = GameOutcome.WIN;
-					} else if (result.get("secondParticipantResult").equals(GameOutcome.LOSE.toString())) {
-						 second = GameOutcome.LOSE;
-					} else if (result.get("secondParticipantResult").equals(GameOutcome.DRAW.toString())) {
-						 second = GameOutcome.DRAW;
+					if(result.containsValue("Score")) {
+						int first = Integer.parseInt(String.valueOf(result.get("firstParticipantResult")));
+						int second = Integer.parseInt(String.valueOf(result.get("secondParticipantResult")));
+						resultRes = new ScoreResult(first,second);
 					}
-					resultRes = new WinLoseResult(first, second);
+					game.setResult(resultRes);
 				}
-				if(result.containsValue("Score")) {
-					int first = Integer.parseInt(String.valueOf(result.get("firstParticipantResult")));
-					int second = Integer.parseInt(String.valueOf(result.get("secondParticipantResult")));
-					resultRes = new ScoreResult(first,second);
-				}
-				game.setResult(resultRes);
+				game.setTime(((Timestamp)map.get("time")).toDate());
+				game.setFirstParticipantId((String)map.get("firstParticipantId"));
+				game.setSecondParticipantId((String)map.get("secondParticipantId"));
+				game.setGameId((String)map.get("gameId"));
 			}
-			game.setTime(((Timestamp)map.get("time")).toDate());
-			game.setFirstParticipantId((String)map.get("firstParticipantId"));
-			game.setSecondParticipantId((String)map.get("secondParticipantId"));
-			game.setGameId((String)map.get("gameId"));
 		}
+		
 		tournament.setCurrentGames(currentgames);
 		tournament.setParticipantList((List<String>)ds.get("participantList"));
 		tournament.setGameList((List<String>)ds.get("gameList"));
@@ -314,42 +317,45 @@ public class TournamentDatabase implements TournamentRepository {
 	private KnockOutWithGroup convertToKnockOutWithGroup(DocumentSnapshot ds) {
 		KnockOutWithGroup tournament = new KnockOutWithGroup();
 		List<Game> currentgames = new ArrayList<>();
-		for(Map<String,Object> map: (List<Map<String,Object>>)ds.get("currentGames")) {
-			Game game = new Game();
-			HashMap<String,Object> result = (HashMap<String, Object>) map.get("result");
-			Result resultRes = null;
-			if(result != null) {
-				if(result.containsValue("Winlose")) {
-					GameOutcome first = null;
-					GameOutcome second = null;
-					if(result.get("firstParticipantResult").equals(GameOutcome.WIN.toString())) {
-						 first = GameOutcome.WIN;
-					} else if (result.get("firstParticipantResult").equals(GameOutcome.LOSE.toString())) {
-						 first = GameOutcome.LOSE;
-					} else if (result.get("firstParticipantResult").equals(GameOutcome.DRAW.toString())) {
-						 first = GameOutcome.DRAW;
+		if(ds.get("currentGames") != null) {
+			for(Map<String,Object> map: (List<Map<String,Object>>)ds.get("currentGames")) {
+				Game game = new Game();
+				HashMap<String,Object> result = (HashMap<String, Object>) map.get("result");
+				Result resultRes = null;
+				if(result != null) {
+					if(result.containsValue("Winlose")) {
+						GameOutcome first = null;
+						GameOutcome second = null;
+						if(result.get("firstParticipantResult").equals(GameOutcome.WIN.toString())) {
+							 first = GameOutcome.WIN;
+						} else if (result.get("firstParticipantResult").equals(GameOutcome.LOSE.toString())) {
+							 first = GameOutcome.LOSE;
+						} else if (result.get("firstParticipantResult").equals(GameOutcome.DRAW.toString())) {
+							 first = GameOutcome.DRAW;
+						}
+						if(result.get("secondParticipantResult").equals(GameOutcome.WIN.toString())) {
+							 second = GameOutcome.WIN;
+						} else if (result.get("secondParticipantResult").equals(GameOutcome.LOSE.toString())) {
+							 second = GameOutcome.LOSE;
+						} else if (result.get("secondParticipantResult").equals(GameOutcome.DRAW.toString())) {
+							 second = GameOutcome.DRAW;
+						}
+						resultRes = new WinLoseResult(first, second);
 					}
-					if(result.get("secondParticipantResult").equals(GameOutcome.WIN.toString())) {
-						 second = GameOutcome.WIN;
-					} else if (result.get("secondParticipantResult").equals(GameOutcome.LOSE.toString())) {
-						 second = GameOutcome.LOSE;
-					} else if (result.get("secondParticipantResult").equals(GameOutcome.DRAW.toString())) {
-						 second = GameOutcome.DRAW;
+					if(result.containsValue("Score")) {
+						int first = Integer.parseInt(String.valueOf(result.get("firstParticipantResult")));
+						int second = Integer.parseInt(String.valueOf(result.get("secondParticipantResult")));
+						resultRes = new ScoreResult(first,second);
 					}
-					resultRes = new WinLoseResult(first, second);
+					game.setResult(resultRes);
 				}
-				if(result.containsValue("Score")) {
-					int first = Integer.parseInt(String.valueOf(result.get("firstParticipantResult")));
-					int second = Integer.parseInt(String.valueOf(result.get("secondParticipantResult")));
-					resultRes = new ScoreResult(first,second);
-				}
-				game.setResult(resultRes);
+				game.setTime(((Timestamp)map.get("time")).toDate());
+				game.setFirstParticipantId((String)map.get("firstParticipantId"));
+				game.setSecondParticipantId((String)map.get("secondParticipantId"));
+				game.setGameId((String)map.get("gameId"));
 			}
-			game.setTime(((Timestamp)map.get("time")).toDate());
-			game.setFirstParticipantId((String)map.get("firstParticipantId"));
-			game.setSecondParticipantId((String)map.get("secondParticipantId"));
-			game.setGameId((String)map.get("gameId"));
 		}
+		
 		tournament.setCurrentGames(currentgames);
 		tournament.setParticipantList((List<String>)ds.get("participantList"));
 		tournament.setGameList((List<String>)ds.get("gameList"));
