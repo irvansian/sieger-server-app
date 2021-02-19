@@ -66,6 +66,7 @@ public class TournamentDatabase implements TournamentRepository {
 			
 				if(future.get().get("type").equals("League")){
 					tournament = future.get().toObject(League.class.asSubclass(Tournament.class));
+					tournament.setType((String)future.get().get("type"));
 				}
 				if(future.get().get("type").equals("KnockOut")) {
 					tournament = convertToKnockOut(future.get());
@@ -146,6 +147,7 @@ public class TournamentDatabase implements TournamentRepository {
 			for (DocumentSnapshot ds : future.get().getDocuments()) {
 				if(ds.get("type").equals("League")){
 					tournament = ds.toObject(League.class.asSubclass(Tournament.class));
+					tournament.setType((String)ds.get("type"));
 				}
 				if(ds.get("type").equals("KnockOut")) {
 					tournament = convertToKnockOut(ds);
