@@ -94,7 +94,7 @@ public class TournamentDatabase implements TournamentRepository {
 	 * Create a new tournament in firebase.
 	 * 
 	 * @param tournament The tournament object to be stored.
-	 * @return Return the tournament object after put it in the firebase.
+	 * @return Return true after put it in the firebase.
 	 */
 	@Override
 	public boolean createTournament(Tournament tournament) {	

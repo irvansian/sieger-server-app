@@ -32,7 +32,7 @@ public class UserDatabase implements UserRepository {
 	 * Create a new user in firebase.
 	 * 
 	 * @param user The user object to be stored.
-	 * @return Return the user object after put it in the firebase.
+	 * @return Return true after put it in the firebase.
 	 */
 	@Override
 	public boolean createUser(User user) {

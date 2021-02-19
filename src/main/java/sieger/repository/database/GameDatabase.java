@@ -96,7 +96,7 @@ public class GameDatabase implements GameRepository {
 	 * 
 	 * @param tournamentId The id of tournament which contains this game.
 	 * @param game The team object to be stored.
-	 * @return Return the game object after put it in the firebase.
+	 * @return Return true after put it in the firebase.
 	 */
 	@Override
 	public boolean createGame(String tournamentId, Game game) {
