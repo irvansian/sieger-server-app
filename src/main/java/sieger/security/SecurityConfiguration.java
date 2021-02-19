@@ -14,14 +14,10 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import sieger.filter.JwtFilter;
 
 @Configuration
-//@EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private JwtFilter authFilter;
-	
-//	@Autowired
-//	private IdFilter idFilter;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -31,7 +27,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         			SessionCreationPolicy.STATELESS);
         http.formLogin().disable();
         http.addFilterBefore(authFilter, BasicAuthenticationFilter.class);
-//        http.addFilterBefore(idFilter, BasicAuthenticationFilter.class);
     }
 	
 	@Bean
