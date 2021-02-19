@@ -16,12 +16,25 @@ import com.google.firebase.cloud.FirestoreClient;
 
 import sieger.model.Team;
 import sieger.repository.TeamRepository;
-
+/**
+ * The team database class. We use firebase as database.
+ * The class implements the team repository.
+ * 
+ * @author Irvan Sian Syah Putra
+ *
+ */
 @Repository("teamDB")
 public class TeamDatabase implements TeamRepository {
-	
+	/**
+	 * Path to the firebase document.
+	 */
 	private String path = "team";
-
+	/**
+	 * Retrieve the team from firebase with id.
+	 * 
+	 * @param teamId The id of team.
+	 * @return Return team optional after searching.
+	 */
 	@Override
 	public Optional<Team> retrieveTeamById(String teamId) {
 		Team team = null;
@@ -42,7 +55,12 @@ public class TeamDatabase implements TeamRepository {
 		}
 		return Optional.ofNullable(team);
 	}
-
+	/**
+	 * Retrieve the team with name.
+	 * 
+	 * @param teamName Name of team to be searched.
+	 * @return Return the team optional after searching.
+	 */
 	@Override
 	public Optional<Team> retrieveTeamByName(String teamName) {
 		Team team = null;
@@ -69,7 +87,12 @@ public class TeamDatabase implements TeamRepository {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	/**
+	 * Create a new team in firebase.
+	 * 
+	 * @param team The team object to be stored.
+	 * @return Return the team object after put it in the firebase.
+	 */
 	@Override
 	public boolean createTeam(Team team) {
 		Firestore db = FirestoreClient.getFirestore();
@@ -84,14 +107,25 @@ public class TeamDatabase implements TeamRepository {
 		db.collection(path).document(team.getTeamId()).set(teamDoc);
 		return true;
 	}
-
+	/**
+	 * Update the data of team in firebase.
+	 * 
+	 * @param teamId The id of team to be updated.
+	 * @param team The team with data to be updated.
+	 * @return Return true after updating.
+	 */
 	@Override
 	public boolean updateTeam(String teamId, Team team) {
 		Firestore db = FirestoreClient.getFirestore();
 		db.collection(path).document(teamId).set(team);
 		return true;
 	}
-
+	/**
+	 * Delete the team data in firebase.
+	 * 
+	 * @param teamId The id of team to be deleted.
+	 * @return Return true after delete the data.
+	 */
 	@Override
 	public boolean deleteTeam(String teamId) {
 		Firestore db = FirestoreClient.getFirestore();

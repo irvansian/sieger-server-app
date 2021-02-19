@@ -18,25 +18,48 @@ import sieger.repository.InvitationRepository;
 import sieger.repository.TeamRepository;
 import sieger.repository.TournamentRepository;
 import sieger.repository.UserRepository;
-
+/**
+ * The invitation servie class. 
+ * The class will be called in controller and then called repository.
+ * 
+ * @author Irvan Sian Syah Putra
+ *
+ */
 @Service
 public class InvitationService {
+	/**
+	 * The invitation repository that connect to the database.
+	 */
 	@Qualifier("invitationDB")
 	@Autowired
 	private InvitationRepository invitationRepository;
-	
+	/**
+	 * The user repository that connect to the database.
+	 */
 	@Autowired
 	@Qualifier("userDB")
 	private UserRepository userRepository;
-	
+	/**
+	 * The team repository that connect to the database.
+	 */
 	@Autowired
 	@Qualifier("teamDB")
 	private TeamRepository teamRepository;
-	
+	/**
+	 * The tournament repository that connect to the database.
+	 */
 	@Autowired
 	@Qualifier("tournamentDB")
 	private TournamentRepository tournamentRepository;
-	
+	/**
+	 * Get the invitation by its id.
+	 * 
+	 * @param currentUserId The id of current user.To check if current user has the permission.
+	 * @param invitationId The id of invitation.
+	 * @return Return the optional invitation or throw exception when no permission.
+	 * @throws ResourceNotFoundException When resource not exists in database.
+	 * @throws ForbiddenException When user has no permission.
+	 */
 	public Optional<Invitation> getInvitation(String currentUserId, String invitationId) {
 		Optional<Invitation> invitationOpt = invitationRepository
 				.retrieveInvitationById(invitationId);
@@ -65,7 +88,13 @@ public class InvitationService {
 	
  		return invitationOpt; 
 	}
-	
+	/**
+	 * Create new invitation and stored in database.
+	 * 
+	 * @param currentUserId The id of current user.To check if current user has the permission.
+	 * @param invitation The invitation to be stored.
+	 * @return Return the invitation after creation.
+	 */
 	public Invitation createInvitation(String currentUserId, Invitation invitation) {
 		if (invitation.getParticipantForm().equals(ParticipantForm.SINGLE)) {
 			User recipient = userRepository.retrieveUserById(invitation
@@ -81,7 +110,14 @@ public class InvitationService {
 		Invitation res = invitationRepository.createInvitation(invitation);
 		return res;
 	}
-	
+	/**
+	 * Accept the invitation. Throw forbidden exception if no permission.
+	 * 
+	 * @param currentUserId The id of current user.To check if current user has the permission.
+	 * @param invitationId The id of invitation.
+	 * @return Return the api resonse in different situation.
+	 * @throws ForbiddenException When user has no permission.
+	 */
 	public ApiResponse acceptInvitation(String currentUserId, String invitationId) {
 		Invitation invitation = getInvitation(currentUserId, invitationId).get();
 		Tournament tournament = tournamentRepository.retrieveTournamentById(invitation
@@ -112,7 +148,14 @@ public class InvitationService {
 		ApiResponse res = new ApiResponse(true, "Successfully accepted the invitation");
 		return res;
 	}
-	
+	/**
+	 * Decline the invitation and throw forbidden exception when no permission.
+	 * 
+	 * @param currentUserId The id of current user.To check if current user has the permission.
+	 * @param invitationId The id of invitation.
+	 * @return Return the api response in different situations.
+	 * @throws ForbiddenException When user has no permission.
+	 */
 	public ApiResponse declineInvitation(String currentUserId, String invitationId) {
 		Invitation invitation = getInvitation(currentUserId, invitationId).get();
 		if (invitation.getParticipantForm().equals(ParticipantForm.SINGLE)) {

@@ -37,11 +37,25 @@ import sieger.model.User;
 import sieger.model.WinLoseResult;
 import sieger.model.Team;
 import sieger.repository.TournamentRepository;
-
+/**
+ * The tournament database class. We use firebase as database.
+ * The class implements the tournament repository.
+ * 
+ * @author Irvan Sian Syah Putra, Chen Zhang
+ *
+ */
 @Repository("tournamentDB")
 public class TournamentDatabase implements TournamentRepository {
+	/**
+	 * Path to the firebase document.
+	 */
 	private String path = "tournaments";
-
+	/**
+	 * Retrieve the tournament from firebase with id.
+	 * 
+	 * @param tournamentId The id of tournament.
+	 * @return Return tournament optional after searching.
+	 */
 	@Override
 	public Optional<Tournament> retrieveTournamentById(String tournamentId) {
 		Tournament tournament = null;
@@ -76,7 +90,12 @@ public class TournamentDatabase implements TournamentRepository {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	/**
+	 * Create a new tournament in firebase.
+	 * 
+	 * @param tournament The tournament object to be stored.
+	 * @return Return the tournament object after put it in the firebase.
+	 */
 	@Override
 	public boolean createTournament(Tournament tournament) {	
 		Firestore db = FirestoreClient.getFirestore();
@@ -84,7 +103,13 @@ public class TournamentDatabase implements TournamentRepository {
 		db.collection(path).document(tournament.getTournamentId()).set(tournamentDoc);
 		return true;
 	}
-
+	/**
+	 * Update the data of tournament in firebase.
+	 * 
+	 * @param tournamentId The id of tournament to be updated.
+	 * @param tournament The tournament with data to be updated.
+	 * @return Return true after updating.
+	 */
 	@Override
 	public boolean updateTournament(String tournamentId, Tournament tournament) {
 		Firestore db = FirestoreClient.getFirestore();
@@ -92,14 +117,24 @@ public class TournamentDatabase implements TournamentRepository {
 		db.collection(path).document(tournamentId).set(tournamentDoc);
 		return true;
 	}
-
+	/**
+	 * Delete the tournament data in firebase.
+	 * 
+	 * @param tournamentId The id of touenament to be deleted.
+	 * @return Return true after delete the data.
+	 */
 	@Override
 	public boolean deleteTournament(String tournamentId) {
 		Firestore db = FirestoreClient.getFirestore();
 		db.collection(path).document(tournamentId).delete();
 		return true;
 	}
-
+	/**
+	 * Retrieve the tournament with name.
+	 * 
+	 * @param tournamentName Name of tournament to be searched.
+	 * @return Return the tournament optional after searching.
+	 */
 	@Override
 	public Optional<Tournament> retrieveTournamentByName(String tournamentName) {
 		Tournament tournament = null;
@@ -129,7 +164,15 @@ public class TournamentDatabase implements TournamentRepository {
 		}
 		return Optional.ofNullable(tournament);
 	}
-	
+	/**
+	 * Retrieve the participant list of tournament.
+	 * If participant form is single, return a list of user objects.
+	 * If participant form is team, return a list of team objects.
+	 * 
+	 * @param tournamentId The id of tournament.
+	 * @param pf The participant form of tournament.
+	 * @return Return required participant list.
+	 */
 	@Override
 	public List<Participant> retrieveTournamentParticipants(String tournamentId, ParticipantForm pf) {
 		Firestore db = FirestoreClient.getFirestore();
@@ -161,7 +204,12 @@ public class TournamentDatabase implements TournamentRepository {
 		return participants;
 		
 	}
-	
+	/**
+	 * Private method to convert a tournament object to a firebase document.
+	 * 
+	 * @param tournament The tournament need to be stored in firebase.
+	 * @return Return a document to set in firebase.
+	 */
 	private Map<String, Object> convertTournamentToMap(Tournament tournament) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		
@@ -198,6 +246,12 @@ public class TournamentDatabase implements TournamentRepository {
 		tournamentDoc.put("maxParticipantNumber", tournament.getMaxParticipantNumber());
 		return tournamentDoc;
 	}
+	/**
+	 * Private method to convert a document to knock out tournament object.
+	 * 
+	 * @param ds The document snapshot of data in firebase.
+	 * @return Return the knock out tournament object.
+	 */
 	@SuppressWarnings("unchecked")
 	private KnockOut convertToKnockOut(DocumentSnapshot ds) {
 		KnockOut tournament = new KnockOut();
@@ -250,7 +304,12 @@ public class TournamentDatabase implements TournamentRepository {
 		tournament.setType((String)ds.get("type"));
 		return tournament;
 	}
-	
+	/**
+	 * Private method to convert a document to knock out with group tournament object.
+	 * 
+	 * @param ds The document snapshot of data in firebase.
+	 * @return Return the knock out with group tournament object.
+	 */
 	@SuppressWarnings("unchecked")
 	private KnockOutWithGroup convertToKnockOutWithGroup(DocumentSnapshot ds) {
 		KnockOutWithGroup tournament = new KnockOutWithGroup();
