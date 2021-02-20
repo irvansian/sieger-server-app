@@ -185,7 +185,15 @@ POST|/invitations/{id}|Accept or decline invitation|[JSON accept](#acceptinvitat
   "activity" : "join"
 }
 ```
-
+<a name="createinvitation"></a>Create new invitation
+```javascript
+{
+    "senderId":"senderId",
+    "recipientId" : "recipientId",
+    "tournamentId" :"tournamentId",
+    "participantForm":"SINGLE" //Or "TEAM"
+}
+```
 <a name="acceptinvitation"></a>Accept invitation
 ```javascript
 {
