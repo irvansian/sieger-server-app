@@ -175,6 +175,7 @@ POST|/invitations/{id}|Accept or decline invitation|[JSON accept](#acceptinvitat
 ```javascript
 {
   "activity" : "join"
+  "password": "password"
 }
 ```
 
