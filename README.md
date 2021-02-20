@@ -1,5 +1,5 @@
 # SIEGER SERVER APP
-This is the server app for the android app of Android Team 3 PSE Kit.
+This is the server app for the android app of Android Team 3 PSE Kit. <br>
 Collaborators :<br>
 * Irvan Sian Syah Putra 
 * Chen Zhang
@@ -10,7 +10,7 @@ This server app doesn't handle authentication (registration and login), authenti
 And you always have to put "Authorization" in your header and put "Bearer <JWT-token-from-firebase>". <br>
 Example ``Authorization : Bearer aslidhmfi23hiuodnf.123jsaidokdas9.sdni3je8dhs``
   
-**LOCALLY**
+**LOCALLY** <br>
 If you want run this app locally, you must have a Firebase project. Then you have to get the service account key, and put it inside this project.
 This project runs on port 8080. To register a user, you have to manually do it in Firebase Auth console or implement it in your mobile app.
 
@@ -27,7 +27,7 @@ with the following body, and get the idToken, it expires after one hour.
 ```
 **DISCLAIMER : Having an account registered in Firebase Auth doesn't mean that there is User data in database, you still have to [create a new user](#iwantcreate).**
 
-**REMOTE**
+**REMOTE** <br>
 If you want to use the endpoint from our API, you can hit our url at ``https://sieger-teamthree.herokuapp.com/``, but before you use the endpoints, you
 have to register from our mobile app. In case you are not registered yet, and want to use our API, you can use these two dummy user accounts that have been created
 in our Firebase Auth console.
