@@ -150,7 +150,7 @@ POST|/invitations/{id}|Accept or decline invitation|[JSON accept](#acceptinvitat
 <a name="handleparticipationquit"></a>Quit a tournament
 ```javascript
 {
-  "participation" : true
+  "participation" : false
 }
 ```
 
@@ -183,7 +183,7 @@ POST|/invitations/{id}|Accept or decline invitation|[JSON accept](#acceptinvitat
 <a name="quitteam"></a>Quit a team
 ```javascript
 {
-  "activity" : "join"
+  "activity" : "quit"
 }
 ```
 <a name="createinvitation"></a>Create new invitation
