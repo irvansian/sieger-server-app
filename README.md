@@ -122,7 +122,20 @@ POST|/invitations/{id}|Accept or decline invitation|[JSON accept](#acceptinvitat
 <a name="createnewtournament"></a>Create new tournament
 ```javascript
 {
-  
+    "type":"League",//can be KnockOut or KnockOutWithGroup
+    
+    "participantSize":4,
+    "name":"name",
+    "tournamentDetail":{
+        "organisatorId":"PsWZZmzvggdETlTbxJdNUTnpG3t1",
+        "tournamentTypes":"OPEN", //or"PRIVATE"
+        "typeOfGame":"typeOfGame",
+        "location":"location",
+        "registrationDeadline":"2020-09-15",
+        "startTime":"2021-09-15",
+        "endTime":"2021-09-15",
+        "form":"SINGLE" //or"TEAM"
+    }
 }
 ```
 
@@ -142,8 +155,10 @@ POST|/invitations/{id}|Accept or decline invitation|[JSON accept](#acceptinvitat
 
 <a name="updateresultgame"></a>Update result of a game
 ```javascript
-{
-
+{   
+    "type":"Winlose", //if is winlose result
+    "firstParticipantResult":"WIN",
+    "secondParticipantResult":"LOSE" 
 }
 ```
 
