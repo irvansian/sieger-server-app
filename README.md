@@ -106,7 +106,7 @@ POST|/invitations/{id}|Accept or decline invitation|[JSON accept](#acceptinvitat
   "username" : "myusername",
   "surname" : "mysurname",
   "forename" : "myforename",
-  "userId" : "myuserid"
+  "userId" : "asdinj8dawujd9ijdhh" //this should be generated automatically by firebase auth
 }
 ```
 
