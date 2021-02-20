@@ -1,6 +1,7 @@
 # SIEGER SERVER APP
+This is the server app for the android app of Android Team 3 PSE Kit.
 Collaborators :<br>
-* Irvan Sian Syah Putra
+* Irvan Sian Syah Putra 
 * Chen Zhang
 
 ## SETUP / HOW TO USE THE APP
