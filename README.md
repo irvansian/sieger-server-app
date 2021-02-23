@@ -78,7 +78,6 @@ GET|/tournaments/{tournamentName}/games/{id}|Get a game of a tournament by its i
 POST|/tournaments|Create a new tournament|[JSON](#createnewtournament)
 POST|/tournaments/{tournamentName}|Join or quit a tournament|[JSON join](#handleparticipationjoin), [JSON quit](#handleparticipationquit)
 POST|/tournaments/{tournamentName}/games|Ask server to create games automatically|
-~~PUT~~|~~/tournaments/{tournamentName}~~|Update tournament detail (not implemented, overkill, client too slow)|
 PUT|/tournaments/{tournamentName}|Update result of a game|[JSON](#updateresultgame)
 DELETE|/tournaments/{tournamentName}|Delete a tournament|
 DELETE|/tournaments/{tournamentName}/games/{id}|Delete a game|
