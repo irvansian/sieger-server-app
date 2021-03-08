@@ -3,6 +3,7 @@ package sieger.model;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * The tournament detail class.
@@ -34,14 +35,17 @@ public class TournamentDetail {
     /**
      * The deadline date of registration.
      */
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+2")
     private Date registrationDeadline;
     /**
      * The time when tournament starts.
      */
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+2")
     private Date startTime;
     /**
      * The time when tournament ends.
      */
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+2")
     private Date endTime;
     /**
      * No-Argument construtor.

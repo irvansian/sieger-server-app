@@ -77,7 +77,6 @@ public class GameDatabase implements GameRepository {
 				}
 				game.setResult(resultRes);
 			}
-			
 			game.setTime(((Timestamp)future.get().get("time")).toDate());
 			game.setFirstParticipantId((String)future.get().get("firstParticipantId"));
 			game.setSecondParticipantId((String)future.get().get("secondParticipantId"));
