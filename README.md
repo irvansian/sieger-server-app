@@ -60,7 +60,7 @@ with the following body, and get the idToken, it expires after one hour.
 Method | URL | Description | Request Body
 -------|-----|-------------|-------------
 GET|/users/{username}|Get a user by username|
-GET|/users?key={id}|Get a user by its id|
+GET|/users?id={user_id}|Get a user by its id|
 GET|/users/{username}/tournaments|Get a user's tournaments|
 GET|/users/{username}/teams|Get a user's teams|
 GET|/users/{username}/invitations|Get a user's invitations|
@@ -71,7 +71,7 @@ PUT|/users/{username}|Update user detail|[JSON](#updateuserdetail)
 Method | URL | Description | Request Body
 -------|-----|-------------|-------------
 GET|/tournaments/{tournamentName}|Get a tournament by its name|
-GET|/tournaments?key={id}|Get a tournament by its id|
+GET|/tournaments?id={tournament_id}|Get a tournament by its id|
 GET|/tournaments/{tournamentName}/participants|Get list of participants of a tournament|
 GET|/tournaments/{tournamentName}/games|Get list of games of a tournament|
 GET|/tournaments/{tournamentName}/games/{id}|Get a game of a tournament by its id|
@@ -86,7 +86,7 @@ DELETE|/tournaments/{tournamentName}/games/{id}|Delete a game|
 Method | URL | Description | Request Body
 -------|-----|-------------|-------------
 GET|/teams/{teamName}|Get team by name|
-GET|/teams?key={id}|Get team by id|
+GET|/teams?id={team_id}|Get team by id|
 GET|/teams/{teamName}/members|Get team members|
 GET|/teams/{teamName}/tournaments|Get team tournaments|
 GET|/teams/{teamName}/invitations|Get team invitations|
