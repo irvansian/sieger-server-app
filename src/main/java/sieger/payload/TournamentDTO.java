@@ -8,7 +8,7 @@ import sieger.model.TournamentDetail;
 import sieger.model.TournamentState;
 
 public class TournamentDTO {
-	private String tournamentId;
+	private String tournamentid;
 	private TournamentDetail tournamentDetail;
 	private List<String> gameList;
 	private List<String> participantList;
@@ -20,10 +20,10 @@ public class TournamentDTO {
 	private Map<String, Object> specifiedAttributes = new HashMap<String, Object>();
 	
 	public String getTournamentId() {
-		return tournamentId;
+		return tournamentid;
 	}
 	public void setTournamentId(String tournamentId) {
-		this.tournamentId = tournamentId;
+		this.tournamentid = tournamentId;
 	}
 	public TournamentDetail getTournamentDetail() {
 		return tournamentDetail;
