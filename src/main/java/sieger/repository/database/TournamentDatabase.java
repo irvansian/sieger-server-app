@@ -368,7 +368,7 @@ public class TournamentDatabase implements TournamentRepository {
 		tournament.setCurrentState(ds.get("currentState", TournamentState.class));
 		tournament.setTournamentDetail(ds.get("tournamentDetail", TournamentDetail.class));
 		tournament.setType((String)ds.get("type"));
-		tournament.setTables((List<LeagueTable>)ds.get("tables"));
+		tournament.setTables((Map<Integer, LeagueTable>)ds.get("tables"));
 		return tournament;
 	}
 }

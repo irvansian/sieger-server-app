@@ -102,11 +102,13 @@ public class User extends Participant{
 	public List<String> showNextTournaments(List<Tournament> tournaments){
 		Date current = new Date();
 		List<Tournament> tempTournaments = new ArrayList<>();
+	
 		for(Tournament tournament: tournaments) {
 			if(tournament.getTournamentDetail().getEndTime().after(current)) {
 				tempTournaments.add(tournament);
 			}
 		}
+		
 		Tournament tempTournament;
 		//bubble sort
 		for (int i = tempTournaments.size()- 1; i > 0; --i) {
@@ -119,9 +121,18 @@ public class User extends Participant{
             }
         }
 		List<String> result = new ArrayList<>();
-		result.add(tempTournaments.get(0).getTournamentId());
-		result.add(tempTournaments.get(1).getTournamentId());
-		result.add(tempTournaments.get(2).getTournamentId());
+		if (tempTournaments.size() == 1) {
+			result.add(tempTournaments.get(0).getTournamentId());
+		}
+		if (tempTournaments.size() == 2) {
+			result.add(tempTournaments.get(0).getTournamentId());
+			result.add(tempTournaments.get(1).getTournamentId());
+		}
+		if (tempTournaments.size() >= 3) {
+			result.add(tempTournaments.get(0).getTournamentId());
+			result.add(tempTournaments.get(1).getTournamentId());
+			result.add(tempTournaments.get(2).getTournamentId());
+		}
 		return result;
 	}
 	/**
