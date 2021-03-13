@@ -12,11 +12,13 @@ import sieger.model.Tournament;
 import sieger.payload.TournamentDTO;
 
 public class TournamentConverter {
-	private static ModelMapper modelMapper;
+	private static ModelMapper modelMapper = new ModelMapper();
 	
 	public static TournamentDTO convertToTournamentDTO(Tournament tournament) {
 		TournamentDTO tourneyDTO = modelMapper.map(tournament, TournamentDTO.class);
+		tourneyDTO.setOpen(tournament.isOpen());
 		if (tournament instanceof KnockOutWithGroup) {
+			tourneyDTO.setType("KnockOutWithGroup");
 			tourneyDTO.getSpecifiedAttributes().put("groupTable", 
 					((KnockOutWithGroup) tournament).getTables());
 			tourneyDTO.getSpecifiedAttributes().put("currentGames", 
@@ -24,11 +26,13 @@ public class TournamentConverter {
 			tourneyDTO.getSpecifiedAttributes().put("koMapping", 
 					((KnockOutWithGroup) tournament).getKoMapping());
 		} else if (tournament instanceof KnockOut) {
+			tourneyDTO.setType("KnockOut");
 			tourneyDTO.getSpecifiedAttributes().put("currentGames", 
 					((KnockOut) tournament).getCurrentGames());
 			tourneyDTO.getSpecifiedAttributes().put("koMapping", 
 					((KnockOut) tournament).getKoMapping());
 		} else if (tournament instanceof League){
+			tourneyDTO.setType("League");
 			tourneyDTO.getSpecifiedAttributes().put("leagueTable", ((League) tournament).getLeagueTable());
 		}
 		return tourneyDTO;	

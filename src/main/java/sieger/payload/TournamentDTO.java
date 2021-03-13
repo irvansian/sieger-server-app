@@ -1,5 +1,6 @@
 package sieger.payload;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,8 @@ public class TournamentDTO {
 	private int maxParticipantNumber;
 	private String type;
 	private TournamentState currentState;
-	private Map<String, Object> specifiedAttributes;
+	private boolean open;
+	private Map<String, Object> specifiedAttributes = new HashMap<String, Object>();
 	
 	public String getTournamentId() {
 		return tournamentId;
@@ -70,6 +72,13 @@ public class TournamentDTO {
 	}
 	public void setSpecifiedAttributes(Map<String, Object> specifiedAttributes) {
 		this.specifiedAttributes = specifiedAttributes;
+	}
+	
+	public boolean isOpen() {
+		return open;
+	}
+	public void setOpen(boolean open) {
+		this.open = open;
 	}
 	
 	

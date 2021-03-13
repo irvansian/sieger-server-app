@@ -1,7 +1,7 @@
 package sieger.controller;
 
 import sieger.service.TournamentService;
-
+import sieger.util.TournamentConverter;
 
 import java.util.List;
 import java.util.Map;
@@ -25,6 +25,7 @@ import sieger.model.Result;
 import sieger.model.Tournament;
 import sieger.model.TournamentDetail;
 import sieger.payload.ApiResponse;
+import sieger.payload.TournamentDTO;
 /**
  * The tournament controller class, which handles the request from client.
  * 
@@ -59,12 +60,13 @@ public class TournamentController {
 	 * @return Return 200Ok response with tournament details.
 	 */
 	@GetMapping
-	public ResponseEntity<Tournament> getTournamentById(
+	public ResponseEntity<TournamentDTO> getTournamentById(
 			@RequestParam(name = "id") String tournamentId,
 			@RequestAttribute("currentUserId") String currentUserId) {
 		Tournament tournament = tournamentService
 				.getTournamentById(currentUserId, tournamentId);
-		return ResponseEntity.ok(tournament);
+		TournamentDTO tourneyDTO = TournamentConverter.convertToTournamentDTO(tournament);
+		return ResponseEntity.ok(tourneyDTO);
 	}
 	/**
 	 * Get request from client.To get tournament by its name.
