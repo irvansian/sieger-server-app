@@ -40,3 +40,4 @@ mvnw
 mvnw.cmd
 /bin/
 src/bin
+src/test
