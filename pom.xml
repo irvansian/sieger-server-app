@@ -56,7 +56,12 @@
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-compiler-plugin</artifactId>
 			<version>3.6.2</version>
-		</dependency>  	
+		</dependency>  
+		<dependency>
+		    <groupId>org.modelmapper</groupId>
+		    <artifactId>modelmapper</artifactId>
+		    <version>${version}</version>
+		</dependency>	
 	</dependencies>
 
 	<build>
