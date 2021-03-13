@@ -33,7 +33,6 @@ build/
 ### VS Code ###
 .vscode/
 
-serviceAccountKey.json
 .metadata
 .mvn/
 mvnw
