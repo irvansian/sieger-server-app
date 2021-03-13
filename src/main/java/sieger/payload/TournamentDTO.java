@@ -1,9 +1,8 @@
 package sieger.payload;
 
 import java.util.List;
+import java.util.Map;
 
-import sieger.model.KnockOutMapping;
-import sieger.model.LeagueTable;
 import sieger.model.TournamentDetail;
 import sieger.model.TournamentState;
 
@@ -16,9 +15,8 @@ public class TournamentDTO {
 	private int maxParticipantNumber;
 	private String type;
 	private TournamentState currentState;
-	private LeagueTable table;
-	private List<LeagueTable> groupTables;
-	private KnockOutMapping koMapping;
+	private Map<String, Object> specifiedAttributes;
+	
 	public String getTournamentId() {
 		return tournamentId;
 	}
@@ -67,23 +65,11 @@ public class TournamentDTO {
 	public void setCurrentState(TournamentState currentState) {
 		this.currentState = currentState;
 	}
-	public LeagueTable getTable() {
-		return table;
+	public Map<String, Object> getSpecifiedAttributes() {
+		return specifiedAttributes;
 	}
-	public void setTable(LeagueTable table) {
-		this.table = table;
-	}
-	public List<LeagueTable> getGroupTables() {
-		return groupTables;
-	}
-	public void setGroupTables(List<LeagueTable> groupTables) {
-		this.groupTables = groupTables;
-	}
-	public KnockOutMapping getKoMapping() {
-		return koMapping;
-	}
-	public void setKoMapping(KnockOutMapping koMapping) {
-		this.koMapping = koMapping;
+	public void setSpecifiedAttributes(Map<String, Object> specifiedAttributes) {
+		this.specifiedAttributes = specifiedAttributes;
 	}
 	
 	

@@ -33,7 +33,7 @@ public abstract class Tournament implements Searchable {
 	/**
 	 * The id of tournament.
 	 */
-	private String tournamentid;
+	private String tournamentId;
 	/**
 	 * Other detail of tournament.
 	 */
@@ -80,7 +80,7 @@ public abstract class Tournament implements Searchable {
 	public Tournament(@JsonProperty("participantSize")int participantSize, @JsonProperty("name")String name, @JsonProperty("tournamentDetail")TournamentDetail tournamentDetail) {
 		this.tournamentDetail = tournamentDetail;
 		this.gameList = new ArrayList<>();
-		this.tournamentid = randomId();
+		this.tournamentId = randomId();
 		this.participantList = new ArrayList<String>();
 		this.tournamentName = name;
 		this.maxParticipantNumber = participantSize;
@@ -312,7 +312,7 @@ public abstract class Tournament implements Searchable {
 	 * @return Return the id of tournament.
 	 */
 	public String getTournamentId() {
-		return this.tournamentid;
+		return this.tournamentId;
 	}
 	/**
 	 * Getter of tournament name.
@@ -432,7 +432,7 @@ public abstract class Tournament implements Searchable {
 	 * @param id The id of tournament.
 	 */
 	public void setTournamentId(String id) {
-		this.tournamentid = id;
+		this.tournamentId = id;
 	}
 	/**
 	 * Setter of tournament name.
