@@ -91,7 +91,7 @@ public class TeamDatabase implements TeamRepository {
 	 * Create a new team in firebase.
 	 * 
 	 * @param team The team object to be stored.
-	 * @return Return the team object after put it in the firebase.
+	 * @return Return true after put it in the firebase.
 	 */
 	@Override
 	public boolean createTeam(Team team) {

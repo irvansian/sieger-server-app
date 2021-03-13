@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * The class of game.
@@ -19,6 +20,7 @@ public class Game {
 	/**
 	 * The time of the game.
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+2")
 	private Date time;
 	/**
 	 * The resul of the game.

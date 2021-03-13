@@ -22,26 +22,47 @@ import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.model.User;
 import sieger.service.UserService;
-
+/**
+ * The user controller class, which handles the request from client.
+ * 
+ * @author Irvan Sian Syah Putra
+ *
+ */
 @RestController
 @RequestMapping("users")
 public class UserController {
-	
+	/**
+	 * The user service, which connects controller and repository.
+	 */
 	private UserService userService;
-	
+	/**
+	 * Constructor of user controller.
+	 * 
+	 * @param userService The user service.
+	 */
 	@Autowired
 	public UserController(UserService userService) {
 		this.userService = userService;
 	}
-	
+	/**
+	 * Post request from client.To store a new user in database.
+	 * 
+	 * @param user The json object which contains the user.
+	 * @return Return 200OK response with user.
+	 */
 	@PostMapping
 	public ResponseEntity<User> createNewUser(@RequestBody User user) {
-		
 		User resUser = userService.createNewUser(user);
 		System.out.println("id " + user.getUserId());
 		return ResponseEntity.ok(resUser);
 	}
-	
+	/**
+	 * Get request from client.To get user from database with username.
+	 * 
+	 * @param username The name of user.
+	 * @param currentUserId The id of current user.To check if current user has the permission.
+	 * @return Return the 200OK response with user.
+	 */
 	@GetMapping("/{username}")
 	public ResponseEntity<User> getUserByUsername(
 			@PathVariable("username") String username,
@@ -50,7 +71,13 @@ public class UserController {
 
 		return ResponseEntity.ok(user);
 	}
-	
+	/**
+	 * Get request from client.To get user from database with id.
+	 * 
+	 * @param userToGetId The id of user.
+	 * @param currentUserId The id of current user.To check if current user has the permission.
+	 * @return Return the 200OK response with user.
+	 */
 	@GetMapping
 	public ResponseEntity<User> getUserById(
 			@RequestParam(name = "id") String userToGetId,
@@ -58,7 +85,13 @@ public class UserController {
 		User user = userService.getUserById(currentUserId, userToGetId);
 		return ResponseEntity.ok(user);
 	}
-	
+	/**
+	 * Get request from client.To get tournament list from database with username.
+	 * 
+	 * @param username The name of user.
+	 * @param currentUserId The id of current user.To check if current user has the permission.
+	 * @return Return the 200OK response with tournament list.
+	 */
 	@GetMapping("/{username}/tournaments")
 	public ResponseEntity<List<Tournament>> getUserTournaments(
 			@PathVariable("username") String username,
@@ -67,7 +100,13 @@ public class UserController {
 				.getUserTournaments(currentUserId, username);
 		return ResponseEntity.ok(tournaments);
 	}
-	
+	/**
+	 * Get request from client.To get teams list from database with username.
+	 * 
+	 * @param username The name of user.
+	 * @param currentUserId The id of current user.To check if current user has the permission.
+	 * @return Return the 200OK response with team list.
+	 */
 	@GetMapping("/{username}/teams")
 	public ResponseEntity<List<Team>> getUserTeams(
 			@PathVariable("username") String username,
@@ -75,7 +114,13 @@ public class UserController {
 		List<Team> teams = userService.getUserTeams(currentUserId, username);
 		return ResponseEntity.ok(teams);
 	}
-	
+	/**
+	 * Get request from client.To get invitation list from database with username.
+	 * 
+	 * @param username The name of user.
+	 * @param currentUserId The id of current user.To check if current user has the permission.
+	 * @return Return the 200OK response with invitation list.
+	 */
 	@GetMapping("/{username}/invitations")
 	public ResponseEntity<List<Invitation>> getUserInvitations(
 			@PathVariable("username") String username,
@@ -84,7 +129,14 @@ public class UserController {
 				.getUserInvitations(currentUserId, username);
 		return ResponseEntity.ok(invitations);
 	}
-	
+	/**
+	 * Put request from client.To update the user data.
+	 * 
+	 * @param currentUserId The id of current user.To check if current user has the permission.
+	 * @param oldUsername Old username.
+	 * @param userDetail New user data.
+	 * @return Return 200Ok response.
+	 */
 	@PutMapping("/{username}")
 	public ResponseEntity<User> updateUserDetail(
 			@RequestAttribute("currentUserId") String currentUserId,
