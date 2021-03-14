@@ -21,7 +21,9 @@ import sieger.model.Invitation;
 import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.model.User;
+import sieger.payload.TournamentDTO;
 import sieger.service.UserService;
+import sieger.util.TournamentConverter;
 /**
  * The user controller class, which handles the request from client.
  * 
@@ -93,12 +95,14 @@ public class UserController {
 	 * @return Return the 200OK response with tournament list.
 	 */
 	@GetMapping("/{username}/tournaments")
-	public ResponseEntity<List<Tournament>> getUserTournaments(
+	public ResponseEntity<List<TournamentDTO>> getUserTournaments(
 			@PathVariable("username") String username,
 			@RequestAttribute("currentUserId") String currentUserId) {
 		List<Tournament> tournaments = userService
 				.getUserTournaments(currentUserId, username);
-		return ResponseEntity.ok(tournaments);
+		List<TournamentDTO> tournamentsDTO = TournamentConverter
+				.convertToTournamentDTOList(tournaments);
+		return ResponseEntity.ok(tournamentsDTO);
 	}
 	/**
 	 * Get request from client.To get teams list from database with username.

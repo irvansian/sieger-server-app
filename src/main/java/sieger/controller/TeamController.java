@@ -20,8 +20,10 @@ import sieger.model.Invitation;
 import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.payload.ApiResponse;
+import sieger.payload.TournamentDTO;
 import sieger.payload.UserProfile;
 import sieger.service.TeamService;
+import sieger.util.TournamentConverter;
 /**
  * The team controller class, which handles the request from client.
  * 
@@ -121,12 +123,13 @@ public class TeamController {
 	 * @return Return the 200OK response with tournament lsit.
 	 */
 	@GetMapping("/{teamName}/tournaments")
-	public ResponseEntity<List<Tournament>> getTeamTournaments(
+	public ResponseEntity<List<TournamentDTO>> getTeamTournaments(
 			@PathVariable("teamName") String teamName,
 			@RequestAttribute("currentUserId") String currentUserId) {
 		List<Tournament> tournaments = teamService.getTeamTournaments(currentUserId, 
 				teamName);
-		return ResponseEntity.ok(tournaments);
+		List<TournamentDTO> tournamentsDTO = TournamentConverter.convertToTournamentDTOList(tournaments);
+		return ResponseEntity.ok(tournamentsDTO);
 	}
 	/**
 	 * Get request from client.To get invitation list of team with team name.

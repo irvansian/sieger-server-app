@@ -76,12 +76,14 @@ public class TournamentController {
 	 * @return Return 200OK response with tournament detail.
 	 */
 	@GetMapping("/{tournamentName}")
-	public ResponseEntity<Tournament> getTournamentByName(
+	public ResponseEntity<TournamentDTO> getTournamentByName(
 			@PathVariable("tournamentName") String tournamentName,
 			@RequestAttribute("currentUserId") String currentUserId) {
 		Tournament tournament = 
 				tournamentService.getTournamentByName(currentUserId, tournamentName);
-		return ResponseEntity.ok(tournament);
+		TournamentDTO tournamentDTO = TournamentConverter
+				.convertToTournamentDTO(tournament);
+		return ResponseEntity.ok(tournamentDTO);
 	}
 	/**
 	 * Get request from client.To get the participant list of a tournament.
@@ -106,13 +108,14 @@ public class TournamentController {
 	 * @return Return the 200OK response with tournament details.
 	 */
 	@PostMapping
-	public ResponseEntity<Tournament> createNewTournament(
+	public ResponseEntity<TournamentDTO> createNewTournament(
 			@RequestBody Tournament tournament,
 			@RequestAttribute("currentUserId") String currentUserId) {
 		Tournament tournamentReady = tournamentService.createNewTournament(currentUserId, 
 				tournament);
+		TournamentDTO tourneyDTO = TournamentConverter.convertToTournamentDTO(tournamentReady);
 
-		return ResponseEntity.ok(tournamentReady);
+		return ResponseEntity.ok(tourneyDTO);
 	}
 	/**
 	 * Put request from client.Update the tournamentdetail by id.
@@ -123,13 +126,15 @@ public class TournamentController {
 	 * @return Return 200OK response with new tournament detail.
 	 */
 	@PutMapping("/{tournamentName}")
-	public ResponseEntity<Tournament> updateTournamentDetailById(
+	public ResponseEntity<TournamentDTO> updateTournamentDetailById(
 			@PathVariable("tournamentName") String tournamentName, 
 			@RequestBody TournamentDetail tournamentDetail,
 			@RequestAttribute("currentUserId") String currentUserId) {
 		Tournament tournament = tournamentService.updateTournamentDetailById(currentUserId, 
 				tournamentName, tournamentDetail);
-		return ResponseEntity.ok(tournament);
+		TournamentDTO tournamentDTO = TournamentConverter
+				.convertToTournamentDTO(tournament);
+		return ResponseEntity.ok(tournamentDTO);
 	}
 	/**
 	 * Delete request from client.Delete the tournament with name.
