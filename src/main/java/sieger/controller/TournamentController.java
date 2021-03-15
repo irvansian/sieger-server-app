@@ -126,11 +126,11 @@ public class TournamentController {
 	 * @return Return 200OK response with new tournament detail.
 	 */
 	@PutMapping("/{tournamentName}")
-	public ResponseEntity<TournamentDTO> updateTournamentDetailById(
+	public ResponseEntity<TournamentDTO> updateTournamentDetail(
 			@PathVariable("tournamentName") String tournamentName, 
 			@RequestBody TournamentDetail tournamentDetail,
 			@RequestAttribute("currentUserId") String currentUserId) {
-		Tournament tournament = tournamentService.updateTournamentDetailById(currentUserId, 
+		Tournament tournament = tournamentService.updateTournamentDetail(currentUserId, 
 				tournamentName, tournamentDetail);
 		TournamentDTO tournamentDTO = TournamentConverter
 				.convertToTournamentDTO(tournament);
