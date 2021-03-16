@@ -16,6 +16,7 @@ import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.model.User;
 import sieger.payload.ApiResponse;
+import sieger.payload.InvitationDTO;
 import sieger.repository.InvitationRepository;
 import sieger.repository.TeamRepository;
 import sieger.repository.TournamentRepository;
@@ -53,6 +54,9 @@ public class UserService {
 	@Autowired
 	@Qualifier("invitationDB")
 	private InvitationRepository invitationRepository;
+	
+	@Autowired
+	private InvitationService invitationService;
 	/**
 	 * Get user from database by username
 	 * 
@@ -132,14 +136,14 @@ public class UserService {
 	 * @param username The username.
 	 * @return Return the invitation objects in list.
 	 */
-	public List<Invitation> getUserInvitations(String currentUserId, String username) {
+	public List<InvitationDTO> getUserInvitations(String currentUserId, String username) {
 		User user = getUserByUsername(currentUserId, username);
 		List<Invitation> invitations = new ArrayList<Invitation>();
 		for (String id : user.getInvitationList()) {
 			invitations.add(invitationRepository
 					.retrieveInvitationById(id).get());
 		}
-		return invitations;
+		return invitationService.convertToInvitationDTOList(invitations);
 	}
 	/**
 	 * Create new user. 

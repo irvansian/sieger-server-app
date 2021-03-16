@@ -99,7 +99,7 @@ public class InvitationService {
 	 * @param invitation The invitation to be stored.
 	 * @return Return the invitation after creation.
 	 */
-	public Invitation createInvitation(String currentUserId, Invitation invitation) {
+	public InvitationDTO createInvitation(String currentUserId, Invitation invitation) {
 		if (invitation.getParticipantForm().equals(ParticipantForm.SINGLE)) {
 			User recipient = userRepository.retrieveUserById(invitation
 					.getRecipientId()).get();
@@ -112,7 +112,7 @@ public class InvitationService {
 			teamRepository.updateTeam(recipient.getTeamId(), recipient);
 		}
 		Invitation res = invitationRepository.createInvitation(invitation);
-		return res;
+		return convertToInvitationDTO(res);
 	}
 	/**
 	 * Accept the invitation. Throw forbidden exception if no permission.

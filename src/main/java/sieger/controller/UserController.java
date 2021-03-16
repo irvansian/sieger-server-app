@@ -3,6 +3,7 @@ package sieger.controller;
 import java.util.List;
 
 
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import sieger.model.Invitation;
 import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.model.User;
+import sieger.payload.InvitationDTO;
 import sieger.payload.TournamentDTO;
 import sieger.service.UserService;
 import sieger.util.TournamentConverter;
@@ -126,10 +127,10 @@ public class UserController {
 	 * @return Return the 200OK response with invitation list.
 	 */
 	@GetMapping("/{username}/invitations")
-	public ResponseEntity<List<Invitation>> getUserInvitations(
+	public ResponseEntity<List<InvitationDTO>> getUserInvitations(
 			@PathVariable("username") String username,
 			@RequestAttribute("currentUserId") String currentUserId) {
-		List<Invitation> invitations = userService
+		List<InvitationDTO> invitations = userService
 				.getUserInvitations(currentUserId, username);
 		return ResponseEntity.ok(invitations);
 	}

@@ -16,6 +16,7 @@ import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.model.User;
 import sieger.payload.ApiResponse;
+import sieger.payload.InvitationDTO;
 import sieger.payload.UserProfile;
 import sieger.repository.InvitationRepository;
 import sieger.repository.TeamRepository;
@@ -54,6 +55,9 @@ public class TeamService {
 	@Autowired
 	@Qualifier("invitationDB")
 	private InvitationRepository invitationRepository;
+	
+	@Autowired
+	private InvitationService invitationService;
 	/**
 	 * Get team by name.
 	 * 
@@ -181,14 +185,14 @@ public class TeamService {
 	 * @param teamName The name of team.
 	 * @return Return the invitation objects in list.
 	 */
-	public List<Invitation> getTeamInvitations(String currentUserId, String teamName) {
+	public List<InvitationDTO> getTeamInvitations(String currentUserId, String teamName) {
 		Team team = getTeamByName(currentUserId, teamName);
 		List<Invitation> invitations = new ArrayList<Invitation>();
 		for (String id : team.getInvitationList()) {
 			invitations.add(invitationRepository
 					.retrieveInvitationById(id).get());
 		}
-		return invitations;
+		return invitationService.convertToInvitationDTOList(invitations);
 	}
 	/**
 	 * Kick a member from the team.

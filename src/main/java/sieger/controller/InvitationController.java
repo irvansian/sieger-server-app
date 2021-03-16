@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import sieger.model.Invitation;
 import sieger.payload.ApiResponse;
+import sieger.payload.InvitationDTO;
 import sieger.service.InvitationService;
 /**
  * The invitation controller class, which handles the request from client with
@@ -36,10 +37,10 @@ public class InvitationController {
 	 * @return Return the 200OK response with invitation details.
 	 */
 	@PostMapping
-	public ResponseEntity<Invitation> createInvitation(
+	public ResponseEntity<InvitationDTO> createInvitation(
 			@RequestAttribute("currentUserId") String currentUserId, 
 			@RequestBody Invitation invitation) {
-		Invitation invitationReady = invitationService.createInvitation(currentUserId, invitation);
+		InvitationDTO invitationReady = invitationService.createInvitation(currentUserId, invitation);
 		return ResponseEntity.ok(invitationReady);
 	}
 	/**
