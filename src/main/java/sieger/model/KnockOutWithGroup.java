@@ -179,6 +179,7 @@ public class KnockOutWithGroup extends Tournament {
 				mapLeagueTable(tableIndex, new LeagueTable(tempParticipants));
 				tableIndex++;
 				tempParticipants.clear();
+				tempParticipants.add(participant);
 			}
 		}
 		mapLeagueTable(tableIndex, new LeagueTable(tempParticipants));

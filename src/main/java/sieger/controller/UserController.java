@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import sieger.model.Invitation;
 import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.model.User;
+import sieger.payload.ApiResponse;
 import sieger.service.UserService;
 /**
  * The user controller class, which handles the request from client.
@@ -53,7 +55,6 @@ public class UserController {
 	@PostMapping
 	public ResponseEntity<User> createNewUser(@RequestBody User user) {
 		User resUser = userService.createNewUser(user);
-		System.out.println("id " + user.getUserId());
 		return ResponseEntity.ok(resUser);
 	}
 	/**
@@ -149,6 +150,5 @@ public class UserController {
 				surname, forename);
 		return ResponseEntity.ok(user);
 	}
-	
 	
 }

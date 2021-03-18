@@ -74,4 +74,22 @@ public class ApiResponse implements Serializable {
 		this.message = message;
 		this.status = httpStatus;
 	}
+	
+	/**
+	 * Get the success of response.
+	 * 
+	 * @return Return the success.
+	 */
+	public boolean getSuccess() {
+		return this.success;
+	}
+	
+	/**
+	 * Get the message of response.
+	 * 
+	 * @return Return the message of response.
+	 */
+	public String getMessage() {
+		return this.message;
+	}
 }

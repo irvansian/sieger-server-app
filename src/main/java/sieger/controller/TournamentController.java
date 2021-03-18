@@ -48,9 +48,6 @@ public class TournamentController {
 		this.tournamentService = tournamentService;
 	}
 	
-	public List<Tournament> getTournamentsByKeyword(String keyword) {
-		return null;
-	}
 	/**
 	 * Get request from client.To get the tournament from database with id.
 	 * 
@@ -161,7 +158,7 @@ public class TournamentController {
 		ApiResponse res = null;
 		if (participationVal == true) {
 			 res = tournamentService.joinTournament(currentUserId, tournamentName);
-		} else if (participationVal == false) {
+		} else {
 			res = tournamentService.quitTournament(currentUserId, tournamentName);
 		}
 		return ResponseEntity.ok(res);

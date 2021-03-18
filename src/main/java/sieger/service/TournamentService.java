@@ -160,8 +160,19 @@ public class TournamentService {
 	 */
 	public Tournament updateTournamentDetailById(String currentUserId, 
 			String tournamentName, TournamentDetail tournamentDetail) {
+		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
 		
-		return null;
+		if (!tournament.isAdmin(currentUserId)) {
+			ApiResponse response = new ApiResponse(false, "You don't have "
+					+ "permission to update this game.");
+			throw new ForbiddenException(response);
+		}
+	
+		tournament.setTournamentDetail(tournamentDetail);
+		tournamentRepository.updateTournament(tournament.getTournamentId(), tournament);
+		Tournament res = tournamentRepository.retrieveTournamentByName(tournament.getTournamentName()).get();
+
+		return res;
 	}
 	/**
 	 * Delete the tournament by its name.

@@ -113,18 +113,6 @@ public class UserDatabase implements UserRepository {
 		db.collection(path).document(userId).set(user);
 		return true;
 	}
-	/**
-	 * Delete the user data in firebase.
-	 * 
-	 * @param userId The id of user to be deleted.
-	 * @return Return true after delete the data.
-	 */
-	@Override
-	public boolean deleteUser(String userId) {
-		Firestore db = FirestoreClient.getFirestore();
-		db.collection(path).document(userId).delete();
-		return true;
-	}
 
 	
 

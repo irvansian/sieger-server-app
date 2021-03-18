@@ -18,7 +18,7 @@ class ScoreResultTest {
 		assertTrue(result.secondWins());
 	}
 	@Test
-	void testDrawWins() {
+	void testDraws() {
 		ScoreResult result = new ScoreResult(10,10);
 		assertTrue(result.draws());
 	}
