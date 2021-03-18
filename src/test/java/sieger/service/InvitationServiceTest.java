@@ -1,6 +1,6 @@
 package sieger.service;
 
-import static org.junit.Assert.assertEquals;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Assertions;
@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.ResponseEntity;
-
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -24,7 +22,6 @@ import sieger.model.Team;
 import sieger.model.TournamentDetail;
 import sieger.model.TournamentTypes;
 import sieger.model.User;
-import sieger.payload.ApiResponse;
 import sieger.repository.InvitationRepository;
 import sieger.repository.TeamRepository;
 import sieger.repository.TournamentRepository;
