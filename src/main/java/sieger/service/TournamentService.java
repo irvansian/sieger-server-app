@@ -158,21 +158,16 @@ public class TournamentService {
 	 * @param tournamentDetail The detail of tournament.
 	 * @return Return the tournament object.
 	 */
-	public Tournament updateTournamentDetailById(String currentUserId, 
+	public Tournament updateTournamentDetail(String currentUserId, 
 			String tournamentName, TournamentDetail tournamentDetail) {
 		Tournament tournament = getTournamentByName(currentUserId, tournamentName);
-		
 		if (!tournament.isAdmin(currentUserId)) {
-			ApiResponse response = new ApiResponse(false, "You don't have "
-					+ "permission to update this game.");
+			ApiResponse response = new ApiResponse(false, "You don't have permission "
+					+ "to update the tournament");
 			throw new ForbiddenException(response);
 		}
-	
-		tournament.setTournamentDetail(tournamentDetail);
 		tournamentRepository.updateTournament(tournament.getTournamentId(), tournament);
-		Tournament res = tournamentRepository.retrieveTournamentByName(tournament.getTournamentName()).get();
-
-		return res;
+		return tournament;
 	}
 	/**
 	 * Delete the tournament by its name.

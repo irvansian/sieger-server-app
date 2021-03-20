@@ -3,11 +3,11 @@ package sieger.controller;
 import java.util.List;
 
 
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,12 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import sieger.model.Invitation;
 import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.model.User;
-import sieger.payload.ApiResponse;
+import sieger.payload.InvitationDTO;
+import sieger.payload.TournamentDTO;
 import sieger.service.UserService;
+import sieger.util.TournamentConverter;
 /**
  * The user controller class, which handles the request from client.
  * 
@@ -55,6 +56,7 @@ public class UserController {
 	@PostMapping
 	public ResponseEntity<User> createNewUser(@RequestBody User user) {
 		User resUser = userService.createNewUser(user);
+		System.out.println("id " + user.getUserId());
 		return ResponseEntity.ok(resUser);
 	}
 	/**
@@ -94,12 +96,14 @@ public class UserController {
 	 * @return Return the 200OK response with tournament list.
 	 */
 	@GetMapping("/{username}/tournaments")
-	public ResponseEntity<List<Tournament>> getUserTournaments(
+	public ResponseEntity<List<TournamentDTO>> getUserTournaments(
 			@PathVariable("username") String username,
 			@RequestAttribute("currentUserId") String currentUserId) {
 		List<Tournament> tournaments = userService
 				.getUserTournaments(currentUserId, username);
-		return ResponseEntity.ok(tournaments);
+		List<TournamentDTO> tournamentsDTO = TournamentConverter
+				.convertToTournamentDTOList(tournaments);
+		return ResponseEntity.ok(tournamentsDTO);
 	}
 	/**
 	 * Get request from client.To get teams list from database with username.
@@ -123,10 +127,10 @@ public class UserController {
 	 * @return Return the 200OK response with invitation list.
 	 */
 	@GetMapping("/{username}/invitations")
-	public ResponseEntity<List<Invitation>> getUserInvitations(
+	public ResponseEntity<List<InvitationDTO>> getUserInvitations(
 			@PathVariable("username") String username,
 			@RequestAttribute("currentUserId") String currentUserId) {
-		List<Invitation> invitations = userService
+		List<InvitationDTO> invitations = userService
 				.getUserInvitations(currentUserId, username);
 		return ResponseEntity.ok(invitations);
 	}
@@ -150,5 +154,6 @@ public class UserController {
 				surname, forename);
 		return ResponseEntity.ok(user);
 	}
+	
 	
 }
