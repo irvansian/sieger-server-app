@@ -3,6 +3,7 @@ package sieger.controller;
 import java.util.List;
 
 
+
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import sieger.model.Invitation;
 import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.payload.ApiResponse;
+import sieger.payload.InvitationDTO;
+import sieger.payload.TournamentDTO;
 import sieger.payload.UserProfile;
 import sieger.service.TeamService;
+import sieger.util.TournamentConverter;
 /**
  * The team controller class, which handles the request from client.
  * 
@@ -121,12 +124,13 @@ public class TeamController {
 	 * @return Return the 200OK response with tournament lsit.
 	 */
 	@GetMapping("/{teamName}/tournaments")
-	public ResponseEntity<List<Tournament>> getTeamTournaments(
+	public ResponseEntity<List<TournamentDTO>> getTeamTournaments(
 			@PathVariable("teamName") String teamName,
 			@RequestAttribute("currentUserId") String currentUserId) {
 		List<Tournament> tournaments = teamService.getTeamTournaments(currentUserId, 
 				teamName);
-		return ResponseEntity.ok(tournaments);
+		List<TournamentDTO> tournamentsDTO = TournamentConverter.convertToTournamentDTOList(tournaments);
+		return ResponseEntity.ok(tournamentsDTO);
 	}
 	/**
 	 * Get request from client.To get invitation list of team with team name.
@@ -136,10 +140,10 @@ public class TeamController {
 	 * @return Return the 200OK response with invitation lsit.
 	 */
 	@GetMapping("/{teamName}/invitations")
-	public ResponseEntity<List<Invitation>> getTeamInvitations(
+	public ResponseEntity<List<InvitationDTO>> getTeamInvitations(
 			@PathVariable("teamName") String teamName,
 			@RequestAttribute("currentUserId") String currentUserId) {
-		List<Invitation> invitations = teamService.getTeamInvitations(currentUserId, 
+		List<InvitationDTO> invitations = teamService.getTeamInvitations(currentUserId, 
 				teamName);
 		return ResponseEntity.ok(invitations);
 	}

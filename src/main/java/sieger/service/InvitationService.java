@@ -1,7 +1,10 @@
 package sieger.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -14,6 +17,7 @@ import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.model.User;
 import sieger.payload.ApiResponse;
+import sieger.payload.InvitationDTO;
 import sieger.repository.InvitationRepository;
 import sieger.repository.TeamRepository;
 import sieger.repository.TournamentRepository;
@@ -95,7 +99,7 @@ public class InvitationService {
 	 * @param invitation The invitation to be stored.
 	 * @return Return the invitation after creation.
 	 */
-	public Invitation createInvitation(String currentUserId, Invitation invitation) {
+	public InvitationDTO createInvitation(String currentUserId, Invitation invitation) {
 		if (invitation.getParticipantForm().equals(ParticipantForm.SINGLE)) {
 			User recipient = userRepository.retrieveUserById(invitation
 					.getRecipientId()).get();
@@ -108,7 +112,7 @@ public class InvitationService {
 			teamRepository.updateTeam(recipient.getTeamId(), recipient);
 		}
 		Invitation res = invitationRepository.createInvitation(invitation);
-		return res;
+		return convertToInvitationDTO(res);
 	}
 	/**
 	 * Accept the invitation. Throw forbidden exception if no permission.
@@ -160,6 +164,27 @@ public class InvitationService {
 		invitationRepository.deleteInvitation(invitation.getInvitationId());
 		ApiResponse res = new ApiResponse(true, "Successfully declined the invitation");
 		return res;
+	}
+	
+	public InvitationDTO convertToInvitationDTO(Invitation invitation) {
+		ModelMapper mapper = new ModelMapper();
+		InvitationDTO invDTO = mapper.map(invitation, InvitationDTO.class);
+		String username = userRepository.retrieveUserById(invitation.getSenderId())
+				.get().getUsername();
+		String tournamentName = tournamentRepository
+				.retrieveTournamentById(invitation.getTournamentId())
+				.get().getTournamentName();
+		invDTO.setSenderUsername(username);
+		invDTO.setTournamentName(tournamentName);
+		return invDTO;
+	}
+	
+	public List<InvitationDTO> convertToInvitationDTOList(List<Invitation> invList) {
+		List<InvitationDTO> invDTOList = new ArrayList<InvitationDTO>();
+		for (Invitation inv : invList) {
+			invDTOList.add(convertToInvitationDTO(inv));
+		}
+		return invDTOList;
 	}
 	
 	

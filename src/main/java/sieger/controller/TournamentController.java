@@ -1,7 +1,7 @@
 package sieger.controller;
 
 import sieger.service.TournamentService;
-
+import sieger.util.TournamentConverter;
 
 import java.util.List;
 import java.util.Map;
@@ -25,6 +25,7 @@ import sieger.model.Result;
 import sieger.model.Tournament;
 import sieger.model.TournamentDetail;
 import sieger.payload.ApiResponse;
+import sieger.payload.TournamentDTO;
 /**
  * The tournament controller class, which handles the request from client.
  * 
@@ -56,12 +57,13 @@ public class TournamentController {
 	 * @return Return 200Ok response with tournament details.
 	 */
 	@GetMapping
-	public ResponseEntity<Tournament> getTournamentById(
+	public ResponseEntity<TournamentDTO> getTournamentById(
 			@RequestParam(name = "id") String tournamentId,
 			@RequestAttribute("currentUserId") String currentUserId) {
 		Tournament tournament = tournamentService
 				.getTournamentById(currentUserId, tournamentId);
-		return ResponseEntity.ok(tournament);
+		TournamentDTO tourneyDTO = TournamentConverter.convertToTournamentDTO(tournament);
+		return ResponseEntity.ok(tourneyDTO);
 	}
 	/**
 	 * Get request from client.To get tournament by its name.
@@ -71,12 +73,14 @@ public class TournamentController {
 	 * @return Return 200OK response with tournament detail.
 	 */
 	@GetMapping("/{tournamentName}")
-	public ResponseEntity<Tournament> getTournamentByName(
+	public ResponseEntity<TournamentDTO> getTournamentByName(
 			@PathVariable("tournamentName") String tournamentName,
 			@RequestAttribute("currentUserId") String currentUserId) {
 		Tournament tournament = 
 				tournamentService.getTournamentByName(currentUserId, tournamentName);
-		return ResponseEntity.ok(tournament);
+		TournamentDTO tournamentDTO = TournamentConverter
+				.convertToTournamentDTO(tournament);
+		return ResponseEntity.ok(tournamentDTO);
 	}
 	/**
 	 * Get request from client.To get the participant list of a tournament.
@@ -101,13 +105,14 @@ public class TournamentController {
 	 * @return Return the 200OK response with tournament details.
 	 */
 	@PostMapping
-	public ResponseEntity<Tournament> createNewTournament(
+	public ResponseEntity<TournamentDTO> createNewTournament(
 			@RequestBody Tournament tournament,
 			@RequestAttribute("currentUserId") String currentUserId) {
 		Tournament tournamentReady = tournamentService.createNewTournament(currentUserId, 
 				tournament);
+		TournamentDTO tourneyDTO = TournamentConverter.convertToTournamentDTO(tournamentReady);
 
-		return ResponseEntity.ok(tournamentReady);
+		return ResponseEntity.ok(tourneyDTO);
 	}
 	/**
 	 * Put request from client.Update the tournamentdetail by id.
@@ -118,13 +123,15 @@ public class TournamentController {
 	 * @return Return 200OK response with new tournament detail.
 	 */
 	@PutMapping("/{tournamentName}")
-	public ResponseEntity<Tournament> updateTournamentDetailById(
+	public ResponseEntity<TournamentDTO> updateTournamentDetail(
 			@PathVariable("tournamentName") String tournamentName, 
 			@RequestBody TournamentDetail tournamentDetail,
 			@RequestAttribute("currentUserId") String currentUserId) {
-		Tournament tournament = tournamentService.updateTournamentDetailById(currentUserId, 
+		Tournament tournament = tournamentService.updateTournamentDetail(currentUserId, 
 				tournamentName, tournamentDetail);
-		return ResponseEntity.ok(tournament);
+		TournamentDTO tournamentDTO = TournamentConverter
+				.convertToTournamentDTO(tournament);
+		return ResponseEntity.ok(tournamentDTO);
 	}
 	/**
 	 * Delete request from client.Delete the tournament with name.
