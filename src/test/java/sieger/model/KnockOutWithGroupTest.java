@@ -50,6 +50,58 @@ class KnockOutWithGroupTest {
 		games.get(7).setResult(new ScoreResult(10,11));
 		games.get(9).setResult(new ScoreResult(10,11));
 		tournament.createGames();
+		assertTrue(tournament.getCurrentState().toString().equals("KOROUND"));
+	}
+	
+	@Test
+	void test_updateGame_Group_secondWins() {
+		List<Game> games = tournament.createGames();
+		ScoreResult result = new ScoreResult(10,11);
+		games.get(7).setResult(result);
+		tournament.updateGame(games.get(7));
+		assertEquals(games.get(7).getResult(), result);
+	}
+	@Test
+	void test_updateGame_Group_firstWins() {
+		List<Game> games = tournament.createGames();
+		ScoreResult result = new ScoreResult(12,11);
+		games.get(0).setResult(result);
+		tournament.updateGame(games.get(0));
+		assertEquals(games.get(0).getResult(), result);
+	}
+	@Test
+	void test_updateGame_Group_draws() {
+		List<Game> games = tournament.createGames();
+		ScoreResult result = new ScoreResult(11,11);
+		games.get(7).setResult(result);
+		tournament.updateGame(games.get(7));
+		assertEquals(games.get(7).getResult(), result);
+	}
+	
+	@Test
+	void test_updateGame_KORound() {
+		List<Game> games = tournament.createGames();
+		games.get(0).setResult(new ScoreResult(10,11));
+		games.get(5).setResult(new ScoreResult(10,11));
+		games.get(7).setResult(new ScoreResult(10,11));
+		games.get(9).setResult(new ScoreResult(10,11));
+		List<Game> Kogames = tournament.createGames();
+		ScoreResult result = new ScoreResult(10,11);
+		Kogames.get(1).setResult(result);
+		tournament.updateGame(Kogames.get(1));
+		assertEquals(Kogames.get(1).getResult(), result);
+	}
+	@Test
+	void test_createGame_NextKo() {
+		List<Game> games = tournament.createGames();
+		games.get(0).setResult(new ScoreResult(10,11));
+		games.get(5).setResult(new ScoreResult(10,11));
+		games.get(7).setResult(new ScoreResult(10,11));
+		games.get(9).setResult(new ScoreResult(10,11));
+		List<Game> Kogames = tournament.createGames();
+		Kogames.get(0).setResult(new ScoreResult(10,11));
+		Kogames.get(1).setResult(new ScoreResult(10,11));
+		tournament.createGames();
 		assertTrue(tournament.getCurrentState().toString().equals("FINISH"));
 	}
 }

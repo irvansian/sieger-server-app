@@ -33,7 +33,7 @@ public class InvitationService {
 	@Qualifier("invitationDB")
 	@Autowired
 	private InvitationRepository invitationRepository;
-	/**
+	/**teamService
 	 * The user repository that connect to the database.
 	 */
 	@Autowired

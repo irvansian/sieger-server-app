@@ -9,7 +9,7 @@ class ScoreResultTest {
 	@Test
 	void testFirstWins() {
 		ScoreResult result = new ScoreResult(10,1);
-		assertTrue(result.firstWins());
+		assertTrue(result.firstWins() && result.getType().equals("Score"));
 		
 	}
 	@Test

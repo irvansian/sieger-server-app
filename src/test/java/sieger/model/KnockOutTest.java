@@ -75,5 +75,13 @@ class KnockOutTest {
 		tournament.createGames();
 		assertTrue(tournament.getCurrentGames().get(0).getFirstParticipantId().equals("b") && tournament.getCurrentGames().get(0).getSecondParticipantId().equals("d"));
 	}
+	@Test
+	void test_updateGame() {
+		List<Game> games = tournament.createGames();
+		ScoreResult result = new ScoreResult(10,11);
+		games.get(1).setResult(result);
+		tournament.updateGame(games.get(1));
+		assertEquals(games.get(1).getResult(), result);
+	}
 	
 }

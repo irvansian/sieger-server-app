@@ -36,8 +36,8 @@ public class ScoreResult implements Result{
 	 */
 	@JsonCreator
 	public ScoreResult(@JsonProperty("firstParticipantResult")int firstParticipantResult, @JsonProperty("secondParticipantResult")int secondParticipantResult) {
-		this.firstParticipantResult = firstParticipantResult;
-		this.secondParticipantResult = secondParticipantResult;
+		this.setFirstParticipantResult(firstParticipantResult);
+		this.setSecondParticipantResult(secondParticipantResult);
 		this.setType("Score");
 	}
 	/**

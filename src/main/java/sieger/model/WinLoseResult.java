@@ -35,8 +35,8 @@ public class WinLoseResult implements Result {
 	 */
 	@JsonCreator
 	public WinLoseResult(@JsonProperty("firstParticipantResult")GameOutcome firstParticipantResult, @JsonProperty("secondParticipantResult")GameOutcome secondParticipantResult) {
-		this.firstParticipantResult = firstParticipantResult;
-		this.secondParticipantResult = secondParticipantResult;
+		this.setFirstParticipantResult(firstParticipantResult);
+		this.setSecondParticipantResult(secondParticipantResult); 
 		this.setType("Winlose");
 	}
 	/**
