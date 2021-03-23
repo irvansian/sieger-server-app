@@ -20,6 +20,8 @@ import sieger.model.Invitation;
 import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.payload.ApiResponse;
+import sieger.payload.InvitationDTO;
+import sieger.payload.TournamentDTO;
 import sieger.payload.UserProfile;
 import sieger.service.TeamService;
 
@@ -88,16 +90,16 @@ class TeamControllerTest {
 	void test_getTeamTournaments() {
 		List<Tournament> tournaments = new ArrayList<Tournament>();
 		when(teamService.getTeamTournaments("userID", "name")).thenReturn(tournaments);
-        ResponseEntity<List<Tournament>> response = teamController.getTeamTournaments("name", "userID");
+        ResponseEntity<List<TournamentDTO>> response = teamController.getTeamTournaments("name", "userID");
         assertEquals(response.getStatusCodeValue(), 200);
         assertEquals(response.getBody(), tournaments);
 	}
 	
 	@Test
 	public void test_getUserInvitations() {
-		List<Invitation> invitations = new ArrayList<Invitation>();
+		List<InvitationDTO> invitations = new ArrayList<InvitationDTO>();
 		when(teamService.getTeamInvitations("userID", "name")).thenReturn(invitations);
-        ResponseEntity<List<Invitation>> response = teamController.getTeamInvitations("name", "userID");
+        ResponseEntity<List<InvitationDTO>> response = teamController.getTeamInvitations("name", "userID");
         assertEquals(response.getStatusCodeValue(), 200);
         assertEquals(response.getBody(), invitations);
 	}

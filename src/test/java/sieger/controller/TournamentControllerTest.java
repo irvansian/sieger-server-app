@@ -26,7 +26,9 @@ import sieger.model.Tournament;
 import sieger.model.TournamentDetail;
 import sieger.model.TournamentTypes;
 import sieger.payload.ApiResponse;
+import sieger.payload.TournamentDTO;
 import sieger.service.TournamentService;
+import sieger.util.TournamentConverter;
 
 
 class TournamentControllerTest {
@@ -48,20 +50,22 @@ class TournamentControllerTest {
 	void test_getTournamentById() {
 		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", null,null,null,ParticipantForm.SINGLE);
 		League tournament = new League(4, "name", detail);
+		TournamentDTO tourneyDTO = TournamentConverter.convertToTournamentDTO(tournament);
 		when(tournamentService.getTournamentById("userId", tournament.getTournamentId())).thenReturn(tournament);
-		ResponseEntity<Tournament> response = tournamentController.getTournamentById(tournament.getTournamentId(), "userId");
+		ResponseEntity<TournamentDTO> response = tournamentController.getTournamentById(tournament.getTournamentId(), "userId");
 		assertEquals(response.getStatusCodeValue(), 200);
-        assertEquals(response.getBody(), tournament);
+        assertEquals(response.getBody().getTournamentId(), tourneyDTO.getTournamentId());
 	}
 
 	@Test
 	void test_getTournamentByName() {
 		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", null,null,null,ParticipantForm.SINGLE);
 		League tournament = new League(4, "name", detail);
+		TournamentDTO tourneyDTO = TournamentConverter.convertToTournamentDTO(tournament);
 		when(tournamentService.getTournamentByName("userId", "name")).thenReturn(tournament);
-		ResponseEntity<Tournament> response = tournamentController.getTournamentByName("name", "userId");
+		ResponseEntity<TournamentDTO> response = tournamentController.getTournamentByName("name", "userId");
 		assertEquals(response.getStatusCodeValue(), 200);
-        assertEquals(response.getBody(), tournament);
+        assertEquals(response.getBody().getTournamentId(), tourneyDTO.getTournamentId());
 	}
 	
 	@Test
@@ -86,20 +90,24 @@ class TournamentControllerTest {
 	void test_createNewTournament() {
 		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", null,null,null,ParticipantForm.SINGLE);
 		League tournament = new League(4, "name", detail);
+		TournamentDTO tourneyDTO = TournamentConverter.convertToTournamentDTO(tournament);
+
 		when(tournamentService.createNewTournament("userId", tournament)).thenReturn(tournament);
-		ResponseEntity<Tournament> response = tournamentController.createNewTournament(tournament, "userId");
+		ResponseEntity<TournamentDTO> response = tournamentController.createNewTournament(tournament, "userId");
 		assertEquals(response.getStatusCodeValue(), 200);
-        assertEquals(response.getBody(), tournament);
+        assertEquals(response.getBody().getTournamentId(), tourneyDTO.getTournamentId());
 	}
 	
 	@Test
 	void test_updateTournamentByDetail() {
 		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", null,null,null,ParticipantForm.SINGLE);
 		League tournament = new League(4, "name", detail);
-		when(tournamentService.updateTournamentDetailById("userId", "name", detail)).thenReturn(tournament);
-		ResponseEntity<Tournament> response = tournamentController.updateTournamentDetailById("name", detail, "userId");
+		TournamentDTO tourneyDTO = TournamentConverter.convertToTournamentDTO(tournament);
+
+		when(tournamentService.updateTournamentDetail("userId", "name", detail)).thenReturn(tournament);
+		ResponseEntity<TournamentDTO> response = tournamentController.updateTournamentDetail("name", detail, "userId");
 		assertEquals(response.getStatusCodeValue(), 200);
-        assertEquals(response.getBody(), tournament);
+        assertEquals(response.getBody().getTournamentId(), tourneyDTO.getTournamentId());
 	}
 	
 	@Test

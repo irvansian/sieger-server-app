@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.modelmapper.ModelMapper;
+
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import sieger.exception.BadRequestException;
 import sieger.exception.ForbiddenException;
 import sieger.exception.ResourceNotFoundException;
 import sieger.model.Invitation;
+import sieger.model.KnockOutWithGroup;
 import sieger.model.League;
 import sieger.model.ParticipantForm;
 import sieger.model.Team;
@@ -26,6 +29,7 @@ import sieger.model.Tournament;
 import sieger.model.TournamentDetail;
 import sieger.model.TournamentTypes;
 import sieger.model.User;
+import sieger.payload.InvitationDTO;
 import sieger.repository.InvitationRepository;
 import sieger.repository.TeamRepository;
 import sieger.repository.TournamentRepository;
@@ -48,6 +52,8 @@ class UserServiceTest {
     @Mock
     private InvitationRepository invitationRepository;
     
+    @Mock
+    private InvitationService invitationService;
  
 	@BeforeEach
     public void setUp() {
@@ -106,7 +112,7 @@ class UserServiceTest {
 	void test_getUserTournaments() {
 		User user = new User("username","surname", "forename", "userID");
 		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", null,null,null,ParticipantForm.SINGLE);
-		League tournament = new League(4, "name", detail);
+		KnockOutWithGroup tournament = new KnockOutWithGroup(4, "name", detail);
 		user.addTournament(tournament.getTournamentId());
 		
 		List<Tournament> tournaments = new ArrayList<Tournament>();
@@ -136,13 +142,18 @@ class UserServiceTest {
 		User user = new User("username","surname", "forename", "userID");
 		Invitation invitation = new Invitation("senderId", "recipientId", "tournamentId", ParticipantForm.SINGLE);
 		user.addInvitation(invitation.getInvitationId());
-		
-		List<Invitation> invitations = new ArrayList<Invitation>();
+		List<Invitation> invitations = new ArrayList<>();
 		invitations.add(invitation);
+		ModelMapper mapper = new ModelMapper();
+		InvitationDTO invDTO = mapper.map(invitation, InvitationDTO.class);
+
+		List<InvitationDTO> invitationDTOs = new ArrayList<InvitationDTO>();
+		invitationDTOs.add(invDTO);
 		
 		when(userRepository.retrieveUserByUsername("username")).thenReturn(Optional.ofNullable(user));
-		when(invitationRepository.retrieveInvitationById(invitation.getInvitationId())).thenReturn(Optional.ofNullable(invitation));
-		assertEquals(invitations, userService.getUserInvitations("userID", "username"));
+		when(invitationRepository.retrieveInvitationById(invitation.getInvitationId())).thenReturn(Optional.ofNullable(invitation));	
+		when(invitationService.convertToInvitationDTOList(invitations)).thenReturn(invitationDTOs);
+		assertEquals(invitationDTOs.get(0).getInvitationId(), userService.getUserInvitations("userID", "username").get(0).getInvitationId());
 	}
 	
 	@Test

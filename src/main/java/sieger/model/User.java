@@ -158,9 +158,14 @@ public class User extends Participant{
 	 * @return Return true if success.
 	 */
 	public boolean quitTeam(Team team) {
-		team.removeMember(userId);
-		removeTeam(team.getTeamId());
-		return true;
+		if(this.getTeamList().contains(team.getTeamId())) {
+			team.removeMember(userId);
+			removeTeam(team.getTeamId());
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 	/**
 	 * Add the invitation to the list.

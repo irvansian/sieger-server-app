@@ -166,7 +166,7 @@ public class InvitationService {
 		return res;
 	}
 	
-	public InvitationDTO convertToInvitationDTO(Invitation invitation) {
+	private InvitationDTO convertToInvitationDTO(Invitation invitation) {
 		ModelMapper mapper = new ModelMapper();
 		InvitationDTO invDTO = mapper.map(invitation, InvitationDTO.class);
 		String username = userRepository.retrieveUserById(invitation.getSenderId())

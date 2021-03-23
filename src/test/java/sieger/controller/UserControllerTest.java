@@ -17,7 +17,10 @@ import sieger.model.Invitation;
 import sieger.model.Team;
 import sieger.model.Tournament;
 import sieger.model.User;
+import sieger.payload.InvitationDTO;
+import sieger.payload.TournamentDTO;
 import sieger.service.UserService;
+import sieger.util.TournamentConverter;
 
 class UserControllerTest {
 	
@@ -75,9 +78,9 @@ class UserControllerTest {
 	@Test
 	public void test_getUserInvitations() {
 		
-		List<Invitation> invitations = new ArrayList<Invitation>();
+		List<InvitationDTO> invitations = new ArrayList<InvitationDTO>();
 		when(userService.getUserInvitations("userID", "username")).thenReturn(invitations);
-        ResponseEntity<List<Invitation>> response = userController.getUserInvitations("username", "userID");
+        ResponseEntity<List<InvitationDTO>> response = userController.getUserInvitations("username", "userID");
         assertEquals(response.getStatusCodeValue(), 200);
         assertEquals(response.getBody(), invitations);
 	}
@@ -86,10 +89,12 @@ class UserControllerTest {
 	public void test_getUserTournaments() {
 		
 		List<Tournament> tournaments = new ArrayList<Tournament>();
+		List<TournamentDTO> tournamentsDTO = TournamentConverter
+				.convertToTournamentDTOList(tournaments);
 		when(userService.getUserTournaments("userID", "username")).thenReturn(tournaments);
-        ResponseEntity<List<Tournament>> response = userController.getUserTournaments("username", "userID");
+        ResponseEntity<List<TournamentDTO>> response = userController.getUserTournaments("username", "userID");
         assertEquals(response.getStatusCodeValue(), 200);
-        assertEquals(response.getBody(), tournaments);
+        assertEquals(response.getBody(), tournamentsDTO);
 	}
 	
 	@Test

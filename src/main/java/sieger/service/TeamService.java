@@ -267,12 +267,8 @@ public class TeamService {
 				.orElseThrow(() -> new ResourceNotFoundException(
 						"User", "id", currentUserId));
 		
-		boolean success = user.quitTeam(team);
+		user.quitTeam(team);
 		
-		if (!success) {
-			ApiResponse response = new ApiResponse(false, "Failed to quit the team.");
-			throw new BadRequestException(response);
-		}
 		userRepository.updateUserById(currentUserId, user);
 		teamRepository.updateTeam(team.getTeamId(), team);
 		ApiResponse res = new ApiResponse(true, "Successfully quit the team");

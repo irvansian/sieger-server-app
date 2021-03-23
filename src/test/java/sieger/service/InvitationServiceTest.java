@@ -9,8 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.modelmapper.ModelMapper;
+
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import sieger.exception.ForbiddenException;
@@ -22,6 +26,7 @@ import sieger.model.Team;
 import sieger.model.TournamentDetail;
 import sieger.model.TournamentTypes;
 import sieger.model.User;
+import sieger.payload.InvitationDTO;
 import sieger.repository.InvitationRepository;
 import sieger.repository.TeamRepository;
 import sieger.repository.TournamentRepository;
@@ -125,23 +130,39 @@ class InvitationServiceTest {
 	@Test
 	void test_createInvitation_Single() {
 		User user = new User("username","surname", "forename", "userID");
+		User sender = new User("sendername","surname", "forename", "senderId");
 		Invitation invitation = new Invitation("senderId", "userID", "tournamentId", ParticipantForm.SINGLE);
-		
+		ModelMapper mapper = new ModelMapper();
+		InvitationDTO invDTO = mapper.map(invitation, InvitationDTO.class);
+		invDTO.setSenderUsername("sendername");
+		invDTO.setTournamentName("name");
+		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", null,null,null,ParticipantForm.SINGLE);
+		League tournament = new League(4, "name", detail);
 		when(userRepository.retrieveUserById("userID")).thenReturn(Optional.ofNullable(user));
 		when(userRepository.updateUserById("userID", user)).thenReturn(true);
+		when(userRepository.retrieveUserById("senderId")).thenReturn(Optional.ofNullable(sender));
 		when(invitationRepository.createInvitation(invitation)).thenReturn(invitation);
-		assertEquals(invitation, invitationService.createInvitation("userID", invitation));
+		when(tournamentRepository.retrieveTournamentById("tournamentId")).thenReturn(Optional.ofNullable(tournament));
+		assertEquals(invDTO.getInvitationId(), invitationService.createInvitation("userID", invitation).getInvitationId());
 	}
 	
 	@Test
 	void test_createInvitation_Team() {
 		Team team = new Team("adminID", "name", "password");
+		User sender = new User("sendername","surname", "forename", "senderId");
 		Invitation invitation = new Invitation("senderId", team.getTeamId(), "tournamentId", ParticipantForm.TEAM);
-		
+		ModelMapper mapper = new ModelMapper();
+		InvitationDTO invDTO = mapper.map(invitation, InvitationDTO.class);
+		invDTO.setSenderUsername("sendername");
+		invDTO.setTournamentName("name");
+		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", null,null,null,ParticipantForm.SINGLE);
+		League tournament = new League(4, "name", detail);
+		when(userRepository.retrieveUserById("senderId")).thenReturn(Optional.ofNullable(sender));
+		when(tournamentRepository.retrieveTournamentById("tournamentId")).thenReturn(Optional.ofNullable(tournament));
 		when(teamRepository.retrieveTeamById(team.getTeamId())).thenReturn(Optional.ofNullable(team));
 		when(teamRepository.updateTeam(team.getTeamId(), team)).thenReturn(true);
 		when(invitationRepository.createInvitation(invitation)).thenReturn(invitation);
-		assertEquals(invitation, invitationService.createInvitation("userID", invitation));
+		assertEquals(invDTO.getInvitationId(), invitationService.createInvitation("userID", invitation).getInvitationId());
 	}
 	
 	@Test
@@ -213,5 +234,24 @@ class InvitationServiceTest {
 		
 		assertEquals(invitationService.declineInvitation("userID", invitation.getInvitationId()).getMessage(), "Successfully declined the invitation");
 		assertEquals(invitationService.declineInvitation("userID", invitation.getInvitationId()).getSuccess(), true);
+	}
+	
+	@Test
+	void test_convertToInvitationDTOList() {
+		User sender = new User("sendername","surname", "forename", "senderId");
+		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", null,null,null,ParticipantForm.SINGLE);
+		League tournament = new League(4, "name", detail);
+		Invitation invitation = new Invitation("senderId", "recipientId", "tournamentId", ParticipantForm.SINGLE);
+		List<Invitation> invitations = new ArrayList<>();
+		invitations.add(invitation);
+		ModelMapper mapper = new ModelMapper();
+		InvitationDTO invDTO = mapper.map(invitation, InvitationDTO.class);
+		List<InvitationDTO> invitationDTOs = new ArrayList<InvitationDTO>();
+		invitationDTOs.add(invDTO);
+		
+		when(userRepository.retrieveUserById("senderId")).thenReturn(Optional.ofNullable(sender));
+		when(tournamentRepository.retrieveTournamentById("tournamentId")).thenReturn(Optional.ofNullable(tournament));
+		assertEquals(invitationService.convertToInvitationDTOList(invitations).get(0).getInvitationId(), invitationDTOs.get(0).getInvitationId());
+
 	}
 }

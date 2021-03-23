@@ -130,7 +130,7 @@ public class GameDatabase implements GameRepository {
 	 * 
 	 * @param tournamentId The id of tournament which contains this game.
 	 * @param gameId The id of game to be deleted.
-	 * @return Return true after delete the data.
+	 * @return Return false after delete the data.
 	 */
 	@Override
 	public boolean deleteGame(String tournamentId, String gameId) {

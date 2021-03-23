@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 
 import static org.mockito.Mockito.when;
@@ -17,6 +18,7 @@ import java.util.Map;
 import sieger.model.Invitation;
 import sieger.model.ParticipantForm;
 import sieger.payload.ApiResponse;
+import sieger.payload.InvitationDTO;
 import sieger.service.InvitationService;
 
 
@@ -39,10 +41,13 @@ class InvitationControllerTest {
 	@Test
 	void test_createInvitation() {
 		Invitation invitation = new Invitation("senderId", "recipientId", "tournamentId", ParticipantForm.SINGLE);
-		when(invitationService.createInvitation("userId", invitation)).thenReturn(invitation);
-		ResponseEntity<Invitation> response = invitationController.createInvitation("userId", invitation);
+		ModelMapper mapper = new ModelMapper();
+		InvitationDTO invDTO = mapper.map(invitation, InvitationDTO.class);
+
+		when(invitationService.createInvitation("userId", invitation)).thenReturn(invDTO);
+		ResponseEntity<InvitationDTO> response = invitationController.createInvitation("userId", invitation);
 		assertEquals(response.getStatusCodeValue(), 200);
-        assertEquals(response.getBody(), invitation);
+        assertEquals(response.getBody(), invDTO);
 	}
 	
 	@Test
