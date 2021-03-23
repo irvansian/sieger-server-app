@@ -1,5 +1,7 @@
 package sieger.payload;
 
+import sieger.model.ParticipantForm;
+
 public class InvitationDTO {
 	private String invitationId;
 	private String senderId;
@@ -7,6 +9,14 @@ public class InvitationDTO {
 	private String recipientId;
 	private String senderUsername;
 	private String tournamentName;
+	private ParticipantForm participantForm;
+	
+	public ParticipantForm getParticipantForm() {
+		return participantForm;
+	}
+	public void setParticipantForm(ParticipantForm participantForm) {
+		this.participantForm = participantForm;
+	}
 	public String getInvitationId() {
 		return invitationId;
 	}
