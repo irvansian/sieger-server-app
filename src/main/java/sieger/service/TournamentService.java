@@ -344,8 +344,15 @@ public class TournamentService {
 	 * @throws BadRequestException When failed to quit.
 	 */
 	public ApiResponse quitTournament(String participantId, String tournamentName) {
-		Tournament tournament = getTournamentByName(participantId, tournamentName);
-		
+		Tournament tournament = tournamentRepository
+				.retrieveTournamentByName(tournamentName)
+				.orElseThrow(() -> 
+				new ResourceNotFoundException("Tournament", "name", tournamentName));
+		if (!tournament.getParticipantList().contains(participantId)) {
+			ApiResponse response = new ApiResponse(false, "You don't have permission "
+					+ "to view the tournament");
+			throw new ForbiddenException(response);
+		}
 		if(tournament.getTournamentDetail().getParticipantForm() == ParticipantForm.SINGLE) {
 			User user = userRepository.retrieveUserById(participantId)
 					.orElseThrow(() -> 
@@ -353,16 +360,14 @@ public class TournamentService {
 			user.quitTournament(tournament);
 			userRepository.updateUserById(participantId, user);
 
-		} else if(tournament.getTournamentDetail().getParticipantForm() == ParticipantForm.TEAM) {
+		} else{
 			Team team = teamRepository.retrieveTeamById(participantId)
 					.orElseThrow(() -> 
 					new ResourceNotFoundException("Team", "id", participantId));
+			
 			team.quitTournament(tournament);
 			teamRepository.updateTeam(participantId, team);
-		} else {
-			ApiResponse res = new ApiResponse(false, "Failed to quit tournament");
-			throw new BadRequestException(res);
-		}
+		} 
 		tournamentRepository.updateTournament(tournament.getTournamentId(), tournament);
 		ApiResponse res = new ApiResponse(true, "Successfully quit the tournament");
 		return res;
