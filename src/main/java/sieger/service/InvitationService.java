@@ -37,7 +37,7 @@ public class InvitationService {
 	@Qualifier("invitationDB")
 	@Autowired
 	private InvitationRepository invitationRepository;
-	/**
+	/**teamService
 	 * The user repository that connect to the database.
 	 */
 	@Autowired
@@ -128,21 +128,11 @@ public class InvitationService {
 				.getTournamentId()).get();
 		if (invitation.getParticipantForm().equals(ParticipantForm.SINGLE)) {
 			User user = userRepository.retrieveUserById(invitation.getRecipientId()).get();
-			if (!currentUserId.equals(user.getUserId())) {
-				ApiResponse res = new ApiResponse(false, "You have no permission to "
-						+ "accept the invitation");
-				throw new ForbiddenException(res);
-			}
 			user.joinTournament(tournament);
 			user.removeInvitation(invitation.getInvitationId());
 			userRepository.updateUserById(user.getUserId(), user);
 		} else {
 			Team team = teamRepository.retrieveTeamById(invitation.getRecipientId()).get();
-			if (!team.getAdminId().equals(currentUserId)) {
-				ApiResponse res = new ApiResponse(false, "You have no permission to "
-						+ "accept the invitation");
-				throw new ForbiddenException(res);
-			}
 			team.joinTournament(tournament);
 			team.removeInvitation(invitation.getInvitationId());
 			teamRepository.updateTeam(team.getTeamId(), team);
@@ -164,20 +154,10 @@ public class InvitationService {
 		Invitation invitation = getInvitation(currentUserId, invitationId).get();
 		if (invitation.getParticipantForm().equals(ParticipantForm.SINGLE)) {
 			User user = userRepository.retrieveUserById(invitation.getRecipientId()).get();
-			if (!currentUserId.equals(user.getUserId())) {
-				ApiResponse res = new ApiResponse(false, "You have no permission to "
-						+ "decline the invitation");
-				throw new ForbiddenException(res);
-			}
 			user.removeInvitation(invitation.getInvitationId());
 			userRepository.updateUserById(user.getUserId(), user);
 		} else {
 			Team team = teamRepository.retrieveTeamById(invitation.getRecipientId()).get();
-			if (!team.getAdminId().equals(currentUserId)) {
-				ApiResponse res = new ApiResponse(false, "You have no permission to "
-						+ "decline the invitation");
-				throw new ForbiddenException(res);
-			}
 			team.removeInvitation(invitation.getInvitationId());
 			teamRepository.updateTeam(team.getTeamId(), team);
 		}
@@ -186,7 +166,7 @@ public class InvitationService {
 		return res;
 	}
 	
-	public InvitationDTO convertToInvitationDTO(Invitation invitation) {
+	private InvitationDTO convertToInvitationDTO(Invitation invitation) {
 		ModelMapper mapper = new ModelMapper();
 		InvitationDTO invDTO = mapper.map(invitation, InvitationDTO.class);
 		String username = userRepository.retrieveUserById(invitation.getSenderId())

@@ -1,7 +1,9 @@
 package sieger.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -18,7 +20,7 @@ public class KnockOutWithGroup extends Tournament {
 	/**
 	 * The tables of all groups. Each group has a table to record.
 	 */
-	private List<LeagueTable> tables;
+	private Map<Integer, LeagueTable> tables;
 	/**
 	 * The knock out map in ko round.
 	 */
@@ -45,7 +47,7 @@ public class KnockOutWithGroup extends Tournament {
 	@JsonCreator
 	public KnockOutWithGroup(@JsonProperty("participantSize")int participantSize, @JsonProperty("name")String name, @JsonProperty("tournamentDetail")TournamentDetail tournamentDetail) {
 		super(participantSize, name, tournamentDetail);
-		this.tables = new ArrayList<>();
+		this.tables = new HashMap<>();
 		this.koMapping = null;
 		this.currentGames = null;
 		setType("KnockOutWithGroup");
@@ -125,7 +127,7 @@ public class KnockOutWithGroup extends Tournament {
 	 */
 	private List<String> getWinnerOfGroup(){
 		List<String> winners = new ArrayList<>();
-		for(LeagueTable table: tables) {
+		for(LeagueTable table: tables.values()) {
 			table.sort();
 			winners.add(table.getTables().get(0).getParticipantId());
 			winners.add(table.getTables().get(1).getParticipantId());
@@ -141,7 +143,7 @@ public class KnockOutWithGroup extends Tournament {
 	private List<Game> createGameList(){
 		divideParticipants();
 		List<Game> games = new ArrayList<>();
-		for(LeagueTable table: tables) {
+		for(LeagueTable table: tables.values()) {
 			List<ParticipantActualStanding> participants = table.getTables();
 			Game game1 = new Game(null, participants.get(0).getParticipantId(), participants.get(1).getParticipantId());
 			Game game2 = new Game(null, participants.get(0).getParticipantId(), participants.get(2).getParticipantId());
@@ -169,31 +171,27 @@ public class KnockOutWithGroup extends Tournament {
 	 */
 	private void divideParticipants() {
 		List<String> tempParticipants = new ArrayList<>();
+		int tableIndex = 1;
 		for(String participant: getParticipantList()) {
 			if(tempParticipants.size() < 4) {
 				tempParticipants.add(participant);
 			} else {
-				addLeagueTable(new LeagueTable(tempParticipants));
+				mapLeagueTable(tableIndex, new LeagueTable(tempParticipants));
+				tableIndex++;
 				tempParticipants.clear();
+				tempParticipants.add(participant);
 			}
 		}
-		addLeagueTable(new LeagueTable(tempParticipants));
+		mapLeagueTable(tableIndex, new LeagueTable(tempParticipants));
 	}
 	/**
-	 * Add a new league table to the table list.
+	 * map a new league table to the table list.
 	 * 
+	 * @param index Index of new table.
 	 * @param table The table to be added.
 	 */
-	public void addLeagueTable(LeagueTable table) {
-		this.tables.add(table);
-	}
-	/**
-	 * Remove the table from the table list.
-	 * 
-	 * @param table Table to be removed.
-	 */
-	public void removeLeagueTable(LeagueTable table) {
-		this.tables.remove(table);
+	public void mapLeagueTable(int index, LeagueTable table) {
+		this.tables.put(index, table);
 	}
 	/**
 	 * Setter of current games.
@@ -258,7 +256,7 @@ public class KnockOutWithGroup extends Tournament {
 	 * 
 	 * @return Return the list of table.
 	 */
-	public List<LeagueTable> getTables(){
+	public Map<Integer, LeagueTable> getTables(){
 		return this.tables;
 	}
 	/**
@@ -266,7 +264,7 @@ public class KnockOutWithGroup extends Tournament {
 	 * 
 	 * @param tables New tables to be setted.
 	 */
-	public void setTables(List<LeagueTable> tables) {
+	public void setTables(Map<Integer, LeagueTable> tables) {
 		this.tables = tables;
 	}
 	/**
@@ -287,7 +285,7 @@ public class KnockOutWithGroup extends Tournament {
 				} else {
 					loser = game.getFirstParticipantId();
 				}
-				for(LeagueTable table: tables) {
+				for(LeagueTable table: tables.values()) {
 					if(table.getParticipantStandingById(winner) != null) {
 						table.participantWin(winner);
 						table.participantLose(loser);
@@ -296,7 +294,7 @@ public class KnockOutWithGroup extends Tournament {
 					}
 				}
 			} else {
-				for(LeagueTable table: tables) {
+				for(LeagueTable table: tables.values()) {
 					if(table.getParticipantStandingById(game.getFirstParticipantId()) != null) {
 						table.participantDraw(game.getFirstParticipantId());
 						table.participantDraw(game.getSecondParticipantId());

@@ -147,8 +147,7 @@ public class TournamentService {
 		tournamentRepository.createTournament(tournament);
 		user.addTournament(tournament.getTournamentId());
 		userRepository.updateUserById(currentUserId, user);
-		Tournament res = tournamentRepository.retrieveTournamentByName(tournament.getTournamentName()).get();
-		return res;
+		return tournament;
 	}
 	/**
 	 * Update tournament detail by tournament id.

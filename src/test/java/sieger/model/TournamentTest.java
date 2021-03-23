@@ -37,6 +37,24 @@ class TournamentTest {
 		assertTrue(tournament.allowUserToJoin());
 	}
 	@Test
+	void testAllowUserToJoinIn_FalseType() {
+		Calendar c1 = Calendar.getInstance();
+		c1.set(2021, 12, 12);
+		Date date = c1.getTime();
+		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", date,null,null,ParticipantForm.TEAM);
+		League tournament = new League(4, "name", detail);
+		assertFalse(tournament.allowUserToJoin());
+	}
+	@Test
+	void testAllowUserToJoinIn_cantRegister() {
+		Calendar c1 = Calendar.getInstance();
+		c1.set(2020, 12, 12);
+		Date date = c1.getTime();
+		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", date,null,null,ParticipantForm.TEAM);
+		League tournament = new League(4, "name", detail);
+		assertFalse(tournament.allowUserToJoin());
+	}
+	@Test
 	void testAllowTeamToJoinIn() {
 		Calendar c1 = Calendar.getInstance();
 		c1.set(2021, 12, 12);
@@ -44,6 +62,24 @@ class TournamentTest {
 		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", date,null,null,ParticipantForm.TEAM);
 		League tournament = new League(4, "name", detail);
 		assertTrue(tournament.allowTeamToJoin());
+	}
+	@Test
+	void testAllowTeamToJoinIn_FalseType() {
+		Calendar c1 = Calendar.getInstance();
+		c1.set(2021, 12, 12);
+		Date date = c1.getTime();
+		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", date,null,null,ParticipantForm.SINGLE);
+		League tournament = new League(4, "name", detail);
+		assertFalse(tournament.allowTeamToJoin());
+	}
+	@Test
+	void testAllowTeamToJoinIn_cantRegister() {
+		Calendar c1 = Calendar.getInstance();
+		c1.set(2020, 12, 12);
+		Date date = c1.getTime();
+		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", date,null,null,ParticipantForm.TEAM);
+		League tournament = new League(4, "name", detail);
+		assertFalse(tournament.allowTeamToJoin());
 	}
 	@Test
 	void testReadyToBeHeld() {
@@ -58,17 +94,32 @@ class TournamentTest {
 		userB.joinTournament(tournament);
 		assertTrue(tournament.readyToBeHeld());
 	}
+	
 	@Test
 	void testIsOpen() {
 		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", null,null,null,ParticipantForm.SINGLE);
-		League tournament = new League(4, "name", detail);
+		League tournament = new League(4, "name", null);
+		tournament.setTournamentDetail(detail);
 		assertTrue(tournament.isOpen());
+	}
+	@Test
+	void testIsOpen_False() {
+		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.PRIVATE, "typeOfGame", "location", null,null,null,ParticipantForm.SINGLE);
+		League tournament = new League(4, "name", null);
+		tournament.setTournamentDetail(detail);
+		assertFalse(tournament.isOpen());
 	}
 	@Test
 	void testIsAdmin() {
 		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", null,null,null,ParticipantForm.SINGLE);
 		League tournament = new League(4, "name", detail);
 		assertTrue(tournament.isAdmin("organisator"));
+	}
+	@Test
+	void testIsAdmin_false() {
+		TournamentDetail detail = new TournamentDetail("false", TournamentTypes.OPEN, "typeOfGame", "location", null,null,null,ParticipantForm.SINGLE);
+		League tournament = new League(4, "name", detail);
+		assertFalse(tournament.isAdmin("organisator"));
 	}
 	@Test
 	void testCalculateDate_SameDay() {

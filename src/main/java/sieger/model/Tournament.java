@@ -78,12 +78,12 @@ public abstract class Tournament implements Searchable {
 	 */
 	@JsonCreator
 	public Tournament(@JsonProperty("participantSize")int participantSize, @JsonProperty("name")String name, @JsonProperty("tournamentDetail")TournamentDetail tournamentDetail) {
-		this.tournamentDetail = tournamentDetail;
+		this.setTournamentDetail(tournamentDetail);
 		this.gameList = new ArrayList<>();
 		this.tournamentid = randomId();
 		this.participantList = new ArrayList<String>();
-		this.tournamentName = name;
-		this.maxParticipantNumber = participantSize;
+		this.setTournamentName(name);
+		this.setMaxParticipantNumber(participantSize);
 		this.setCurrentState(TournamentState.START);
 		
 	}

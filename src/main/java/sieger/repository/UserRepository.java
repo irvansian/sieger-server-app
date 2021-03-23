@@ -38,11 +38,4 @@ public interface UserRepository {
 	 * @return Return true after updating.
 	 */
 	boolean updateUserById(String userId, User user);
-	/**
-	 * Delete the user data in firebase.
-	 * 
-	 * @param userId The id of user to be deleted.
-	 * @return Return true after delete the data.
-	 */
-	boolean deleteUser(String userId);
 }

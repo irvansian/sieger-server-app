@@ -163,20 +163,7 @@ public class UserService {
 		userRepository.createUser(user);
 		return user;
 	}
-	/**
-	 * Delete user by username.
-	 * 
-	 * @param currentUserId The id of current user.To check if current user has the permission.
-	 * @param username The username.
-	 * @return Return the api response if successfully deleted.
-	 */
-	public ApiResponse deleteUser(String currentUserId, String username) {
-		User user = getUserByUsername(currentUserId, username);
-		userRepository.deleteUser(user.getUserId());
-		ApiResponse res = new ApiResponse(true, "User <" + username + "> "
-				+ "is successfully deleted");
-		return res;
-	}
+
 	/**
 	 * Update user detail.
 	 * 
