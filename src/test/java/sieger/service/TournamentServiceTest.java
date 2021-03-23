@@ -255,4 +255,8 @@ class TournamentServiceTest {
 			tournamentService.getGameById("organisator", "name", "gameId");
 		});
 	}
+	@Test
+	void test_updateGame_success() {
+		
+	}
 }
