@@ -1,4 +1,5 @@
 package sieger.controller;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,9 +69,12 @@ public class InvitationController {
 	}
 	
 	@GetMapping("/recipients/{username}")
-	public ResponseEntity<String> getOtherUserIdByNameInvitation(
+	public ResponseEntity<Map<String, String>> getOtherUserIdByNameInvitation(
 			@PathVariable("username") String recipientUsername) {
 		String userId = invitationService.getRecipientId(recipientUsername);
-		return ResponseEntity.ok(userId);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("userId", userId);
+		
+		return ResponseEntity.ok(map);
 	}
 }
