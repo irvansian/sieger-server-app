@@ -165,13 +165,17 @@ public class InvitationService {
 		ApiResponse res = new ApiResponse(true, "Successfully declined the invitation");
 		return res;
 	}
+
 	public String getRecipientId(String recipientUsername) {
 		Optional<User> userOpt = userRepository.retrieveUserByUsername(recipientUsername);
 		if (userOpt.isEmpty()) {
 			throw new ResourceNotFoundException("User", "username", recipientUsername);
 		}
 		return userOpt.get().getUserId();
+		
+		
 	}
+	
 	private InvitationDTO convertToInvitationDTO(Invitation invitation) {
 		ModelMapper mapper = new ModelMapper();
 		InvitationDTO invDTO = mapper.map(invitation, InvitationDTO.class);

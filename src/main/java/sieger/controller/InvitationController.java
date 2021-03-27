@@ -68,13 +68,14 @@ public class InvitationController {
 		return ResponseEntity.ok(res);
 	}
 	
+	
 	@GetMapping("/recipients/{username}")
 	public ResponseEntity<Map<String, String>> getOtherUserIdByNameInvitation(
 			@PathVariable("username") String recipientUsername) {
 		String userId = invitationService.getRecipientId(recipientUsername);
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("userId", userId);
-
+		
 		return ResponseEntity.ok(map);
 	}
 }
