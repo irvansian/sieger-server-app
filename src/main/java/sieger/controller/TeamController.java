@@ -183,7 +183,7 @@ public class TeamController {
 		if (payload.get("activity").equals("join")) {
 			String password = payload.get("password");
 			res = teamService.joinTeam(currentUserId, teamName, password);
-		} else if (payload.get("activity").equals("quit")) {
+		} else {
 			res = teamService.quitTeam(currentUserId, teamName);
 		}
 		

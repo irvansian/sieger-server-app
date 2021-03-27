@@ -58,14 +58,14 @@ public class GameDatabase implements GameRepository {
 						 first = GameOutcome.WIN;
 					} else if (result.get("firstParticipantResult").equals(GameOutcome.LOSE.toString())) {
 						 first = GameOutcome.LOSE;
-					} else if (result.get("firstParticipantResult").equals(GameOutcome.DRAW.toString())) {
+					} else {
 						 first = GameOutcome.DRAW;
 					}
 					if(result.get("secondParticipantResult").equals(GameOutcome.WIN.toString())) {
 						 second = GameOutcome.WIN;
 					} else if (result.get("secondParticipantResult").equals(GameOutcome.LOSE.toString())) {
 						 second = GameOutcome.LOSE;
-					} else if (result.get("secondParticipantResult").equals(GameOutcome.DRAW.toString())) {
+					} else{
 						 second = GameOutcome.DRAW;
 					}
 					resultRes = new WinLoseResult(first, second);

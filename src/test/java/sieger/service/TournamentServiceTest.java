@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -58,12 +59,12 @@ class TournamentServiceTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
-	@Test
+	@Test 
 	void test_getTournamentByName_NotFound() {
 		when(tournamentRepository.retrieveTournamentByName("name")).thenReturn(Optional.ofNullable(null));
-		Assertions.assertThrows(ResourceNotFoundException.class, () ->{
-			tournamentService.getTournamentByName("userID", "name");
-		});
+		Executable exception = () -> tournamentService.getTournamentByName("userID", "name");
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
+		
 	}
 	@Test
 	void test_getTournamentByName_Nopermission() {
@@ -72,10 +73,8 @@ class TournamentServiceTest {
 		User user = new User("username","surname", "forename", "userId");
 		when(tournamentRepository.retrieveTournamentByName("name")).thenReturn(Optional.ofNullable(tournament));
 		when(userRepository.retrieveUserById("userId")).thenReturn(Optional.ofNullable(user));
-
-		Assertions.assertThrows(ForbiddenException.class, () ->{
-			tournamentService.getTournamentByName("userId", "name");
-		});
+		Executable exception =() -> tournamentService.getTournamentByName("userId", "name");
+		Assertions.assertThrows(ForbiddenException.class, exception);
 	}
 	@Test
 	void test_getTournamentByName_success() {
@@ -90,9 +89,8 @@ class TournamentServiceTest {
 	@Test
 	void test_getTournamentById_TeamNotFound() {
 		when(tournamentRepository.retrieveTournamentById("tournamentId")).thenReturn(Optional.ofNullable(null));
-		Assertions.assertThrows(ResourceNotFoundException.class, () ->{
-			tournamentService.getTournamentById("userID", "tournamentId");
-		});
+		Executable exception =() ->tournamentService.getTournamentById("userID", "tournamentId");
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
 	}
 	@Test
 	void test_getTournamentById_Nopermission() {
@@ -101,17 +99,25 @@ class TournamentServiceTest {
 		User user = new User("username","surname", "forename", "userId");
 		when(tournamentRepository.retrieveTournamentById(tournament.getTournamentId())).thenReturn(Optional.ofNullable(tournament));
 		when(userRepository.retrieveUserById("userId")).thenReturn(Optional.ofNullable(user));
-
-		Assertions.assertThrows(ForbiddenException.class, () ->{
-			tournamentService.getTournamentById("userId", tournament.getTournamentId());
-		});
+		Executable exception =() ->tournamentService.getTournamentById("userId", tournament.getTournamentId());
+		Assertions.assertThrows(ForbiddenException.class, exception);
+		
 	}
 	@Test
-	void test_getTournamentById_success() {
+	void test_getTournamentById_success_participant() {
 		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", null,null,null,ParticipantForm.SINGLE);
 		KnockOutWithGroup tournament = new KnockOutWithGroup(4, "name", detail);
 		User user = new User("username","surname", "forename", "userId");
 		tournament.addParticipant("userId");
+		when(tournamentRepository.retrieveTournamentById(tournament.getTournamentId())).thenReturn(Optional.ofNullable(tournament));
+		when(userRepository.retrieveUserById("userId")).thenReturn(Optional.ofNullable(user));
+		assertEquals(tournament, tournamentService.getTournamentById("userId", tournament.getTournamentId()));
+	}
+	@Test
+	void test_getTournamentById_success_organisator() {
+		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", null,null,null,ParticipantForm.SINGLE);
+		KnockOutWithGroup tournament = new KnockOutWithGroup(4, "name", detail);
+		User user = new User("username","surname", "forename", "organisator");
 		when(tournamentRepository.retrieveTournamentById(tournament.getTournamentId())).thenReturn(Optional.ofNullable(tournament));
 		when(userRepository.retrieveUserById("userId")).thenReturn(Optional.ofNullable(user));
 		assertEquals(tournament, tournamentService.getTournamentById("userId", tournament.getTournamentId()));
@@ -145,9 +151,8 @@ class TournamentServiceTest {
 		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", null,null,null,ParticipantForm.SINGLE);
 		KnockOutWithGroup tournament = new KnockOutWithGroup(4, "name", detail);
 		when(tournamentRepository.retrieveTournamentByName("name")).thenReturn(Optional.ofNullable(tournament));
-		Assertions.assertThrows(BadRequestException.class, () ->{
-			tournamentService.createNewTournament("userId", tournament);
-		});
+		Executable exception =() ->tournamentService.createNewTournament("userId", tournament);
+		Assertions.assertThrows(BadRequestException.class, exception);
 	}
 	@Test
 	void test_updateTournament_success() {
@@ -169,9 +174,9 @@ class TournamentServiceTest {
 		when(userRepository.retrieveUserById("userId")).thenReturn(Optional.ofNullable(user));
 		when(tournamentRepository.retrieveTournamentByName("name")).thenReturn(Optional.ofNullable(tournament));
 		when(tournamentRepository.updateTournament(tournament.getTournamentId(), tournament)).thenReturn(true);
-		Assertions.assertThrows(ForbiddenException.class, () ->{
-			tournamentService.updateTournamentDetail("userId", "name", detail);
-		});
+		Executable exception =() ->tournamentService.updateTournamentDetail("userId", "name", detail);
+		Assertions.assertThrows(ForbiddenException.class, exception);
+		
 	}
 	@Test
 	void test_deleteTournament_success_single() {
@@ -218,9 +223,9 @@ class TournamentServiceTest {
 		when(userRepository.retrieveUserById("userId")).thenReturn(Optional.ofNullable(user));
 		when(tournamentRepository.retrieveTournamentByName("name")).thenReturn(Optional.ofNullable(tournament));
 		when(tournamentRepository.updateTournament(tournament.getTournamentId(), tournament)).thenReturn(true);
-		Assertions.assertThrows(ForbiddenException.class, () ->{
-			tournamentService.deleteTournament("userId", "name");
-		});
+		Executable exception =() ->tournamentService.deleteTournament("userId", "name");
+		Assertions.assertThrows(ForbiddenException.class, exception);
+		
 	}
 	
 	@Test
@@ -256,9 +261,10 @@ class TournamentServiceTest {
 		when(userRepository.retrieveUserById("organisator")).thenReturn(Optional.ofNullable(user));
 		when(tournamentRepository.retrieveTournamentByName("name")).thenReturn(Optional.ofNullable(tournament));
 		when(gameRepository.retrieveGameById(tournament.getTournamentId(), "gameId")).thenReturn(Optional.ofNullable(null));
-		Assertions.assertThrows(ResourceNotFoundException.class, () ->{
-			tournamentService.getGameById("organisator", "name", "gameId");
-		});
+		Executable exception =() ->tournamentService.getGameById("organisator", "name", "gameId");
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
+		
+	
 	}
 	@Test
 	void test_updateGame_success() {
@@ -285,9 +291,9 @@ class TournamentServiceTest {
 		tournament.addParticipant(user.getUserId());
 		when(userRepository.retrieveUserById("userId")).thenReturn(Optional.ofNullable(user));
 		when(tournamentRepository.retrieveTournamentByName("name")).thenReturn(Optional.ofNullable(tournament));
-		Assertions.assertThrows(ForbiddenException.class, () ->{
-			tournamentService.updateGameById("userId", "name", "", null);
-		});
+		Executable exception =() ->tournamentService.updateGameById("userId", "name", "", null);
+		Assertions.assertThrows(ForbiddenException.class, exception);
+	
 	}
 	@Test
 	void test_createGame_success() {
@@ -313,9 +319,8 @@ class TournamentServiceTest {
 		tournament.addParticipant(user.getUserId());
 		when(userRepository.retrieveUserById("userId")).thenReturn(Optional.ofNullable(user));
 		when(tournamentRepository.retrieveTournamentByName("name")).thenReturn(Optional.ofNullable(tournament));
-		Assertions.assertThrows(ForbiddenException.class, () ->{
-			tournamentService.createGames("userId", "name");
-		});
+		Executable exception =() ->tournamentService.createGames("userId", "name");
+		Assertions.assertThrows(ForbiddenException.class, exception);
 	}
 	@Test
 	void test_deleteGame_success() {
@@ -340,9 +345,9 @@ class TournamentServiceTest {
 		tournament.addParticipant(user.getUserId());
 		when(userRepository.retrieveUserById("userId")).thenReturn(Optional.ofNullable(user));
 		when(tournamentRepository.retrieveTournamentByName("name")).thenReturn(Optional.ofNullable(tournament));
-		Assertions.assertThrows(ForbiddenException.class, () ->{
-			tournamentService.deleteGame("userId", "name", "gameId");
-		});
+		Executable exception =() ->tournamentService.deleteGame("userId", "name", "gameId");
+		Assertions.assertThrows(ForbiddenException.class, exception);
+		
 	}
 	
 	@Test
@@ -382,9 +387,10 @@ class TournamentServiceTest {
 	@Test
 	void test_joinTournament_tournamentNotFound() {
 		when(tournamentRepository.retrieveTournamentByName("name")).thenReturn(Optional.ofNullable(null));
-		Assertions.assertThrows(ResourceNotFoundException.class, () ->{
-			tournamentService.joinTournament("participantId", "name");
-		});
+		Executable exception =() ->tournamentService.joinTournament("participantId", "name");
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
+		
+		
 	}
 	@Test
 	void test_joinTournament_UserNotFound() {
@@ -395,9 +401,9 @@ class TournamentServiceTest {
 		KnockOutWithGroup tournament = new KnockOutWithGroup(4, "name", detail);
 		when(tournamentRepository.retrieveTournamentByName("name")).thenReturn(Optional.ofNullable(tournament));
 		when(userRepository.retrieveUserById("userId")).thenReturn(Optional.ofNullable(null));
-		Assertions.assertThrows(ResourceNotFoundException.class, () ->{
-			tournamentService.joinTournament("userId", "name");
-		});
+		Executable exception =() ->tournamentService.joinTournament("userId", "name");
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
+		
 	}
 	@Test
 	void test_joinTournament_TeamNotFound() {
@@ -408,9 +414,9 @@ class TournamentServiceTest {
 		KnockOutWithGroup tournament = new KnockOutWithGroup(4, "name", detail);
 		when(tournamentRepository.retrieveTournamentByName("name")).thenReturn(Optional.ofNullable(tournament));
 		when(teamRepository.retrieveTeamById("teamId")).thenReturn(Optional.ofNullable(null));
-		Assertions.assertThrows(ResourceNotFoundException.class, () ->{
-			tournamentService.joinTournament("teamId", "name");
-		});
+		Executable exception =() ->tournamentService.joinTournament("teamId", "name");
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
+		
 	}
 	@Test
 	void test_joinTournament_badrequest() {
@@ -420,9 +426,9 @@ class TournamentServiceTest {
 		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", deadline,null,null,ParticipantForm.TEAM);
 		KnockOutWithGroup tournament = new KnockOutWithGroup(4, "name", detail);
 		when(tournamentRepository.retrieveTournamentByName("name")).thenReturn(Optional.ofNullable(tournament));
-		Assertions.assertThrows(BadRequestException.class, () ->{
-			tournamentService.joinTournament("teamId", "name");
-		});
+		Executable exception =() ->tournamentService.joinTournament("teamId", "name");
+		Assertions.assertThrows(BadRequestException.class, exception);
+		
 	}
 	@Test
 	void test_quitTournament_Single_success() {
@@ -455,9 +461,9 @@ class TournamentServiceTest {
 	@Test
 	void test_quitTournament_TournamentNotFound() {
 		when(tournamentRepository.retrieveTournamentByName("name")).thenReturn(Optional.ofNullable(null));
-		Assertions.assertThrows(ResourceNotFoundException.class, () ->{
-			tournamentService.quitTournament("participantId", "name");
-		});
+		Executable exception =() ->tournamentService.quitTournament("participantId", "name");
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
+		
 	}
 	@Test
 	void test_quitTournament_Nopermission() {
@@ -465,9 +471,9 @@ class TournamentServiceTest {
 		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", null,null,null,ParticipantForm.TEAM);
 		KnockOutWithGroup tournament = new KnockOutWithGroup(4, "name", detail);
 		when(tournamentRepository.retrieveTournamentByName("name")).thenReturn(Optional.ofNullable(tournament));
-		Assertions.assertThrows(ForbiddenException.class, () ->{
-			tournamentService.quitTournament(team.getTeamId(), "name");
-		});
+		Executable exception =() ->tournamentService.quitTournament(team.getTeamId(), "name");
+		Assertions.assertThrows(ForbiddenException.class, exception);
+		
 	}
 	@Test
 	void test_quitTournament_UserNotFound() {
@@ -477,9 +483,9 @@ class TournamentServiceTest {
 		tournament.addParticipant("userId");
 		when(tournamentRepository.retrieveTournamentByName("name")).thenReturn(Optional.ofNullable(tournament));
 		when(userRepository.retrieveUserById("userId")).thenReturn(Optional.ofNullable(null));
-		Assertions.assertThrows(ResourceNotFoundException.class, () ->{
-			tournamentService.quitTournament("userId", "name");
-		});
+		Executable exception =() ->tournamentService.quitTournament("userId", "name");
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
+		
 	}
 	@Test
 	void test_quitTournament_TeamNotFound() {
@@ -489,8 +495,8 @@ class TournamentServiceTest {
 		tournament.addParticipant("teamId");
 		when(tournamentRepository.retrieveTournamentByName("name")).thenReturn(Optional.ofNullable(tournament));
 		when(teamRepository.retrieveTeamById("teamId")).thenReturn(Optional.ofNullable(null));
-		Assertions.assertThrows(ResourceNotFoundException.class, () ->{
-			tournamentService.quitTournament("teamId", "name");
-		});
+		Executable exception =() ->tournamentService.quitTournament("teamId", "name");
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
+		
 	}
 }

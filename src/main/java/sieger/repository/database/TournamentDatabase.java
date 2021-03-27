@@ -67,11 +67,9 @@ public class TournamentDatabase implements TournamentRepository {
 				if(future.get().get("type").equals("League")){
 					tournament = future.get().toObject(League.class.asSubclass(Tournament.class));
 					tournament.setType((String)future.get().get("type"));
-				}
-				if(future.get().get("type").equals("KnockOut")) {
+				} else if(future.get().get("type").equals("KnockOut")) {
 					tournament = convertToKnockOut(future.get());
-				}
-				if(future.get().get("type").equals("KnockOutWithGroup")) {
+				} else {
 					tournament = convertToKnockOutWithGroup(future.get());
 				}
 				
@@ -86,11 +84,7 @@ public class TournamentDatabase implements TournamentRepository {
 		return Optional.ofNullable(tournament);
 	}
 
-	@Override
-	public List<Tournament> retrieveMultipleTournamentsByKeyword(String keyword) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 	/**
 	 * Create a new tournament in firebase.
 	 * 
@@ -115,7 +109,7 @@ public class TournamentDatabase implements TournamentRepository {
 	public boolean updateTournament(String tournamentId, Tournament tournament) {
 		Firestore db = FirestoreClient.getFirestore();
 		Map<String, Object> tournamentDoc = convertTournamentToMap(tournament);
-		db.collection(path).document(tournamentId).set(tournamentDoc);
+		db.collection(path).document(tournamentId).update(tournamentDoc);
 		return true;
 	}
 	/**
@@ -148,11 +142,9 @@ public class TournamentDatabase implements TournamentRepository {
 				if(ds.get("type").equals("League")){
 					tournament = ds.toObject(League.class.asSubclass(Tournament.class));
 					tournament.setType((String)ds.get("type"));
-				}
-				if(ds.get("type").equals("KnockOut")) {
+				} else if(ds.get("type").equals("KnockOut")) {
 					tournament = convertToKnockOut(ds);
-				}
-				if(ds.get("type").equals("KnockOutWithGroup")) {
+				} else if(ds.get("type").equals("KnockOutWithGroup")) {
 					tournament = convertToKnockOutWithGroup(ds);
 				}
 				break;
@@ -182,7 +174,7 @@ public class TournamentDatabase implements TournamentRepository {
 		if (pf.equals(ParticipantForm.SINGLE)) {
 			childPath = "users";
 		} else {
-			childPath = "teams";
+			childPath = "team";
 		}
 		
 		Query query = db.collection(childPath)
@@ -226,13 +218,13 @@ public class TournamentDatabase implements TournamentRepository {
 				tournamentDoc.put("leagueTable", ((League)tournament).getLeagueTable());
 			} else if(knockout) {
 				tournamentDoc.put("type", "KnockOut");
-				tournamentDoc.put("koMapping", ((KnockOut)tournament).getKoMapping());
+				tournamentDoc.put("koMapping", (KnockOutMapping)((KnockOut)tournament).getKoMapping());
 				tournamentDoc.put("currentGames", ((KnockOut)tournament).getCurrentGames());
 				
-			} else if(knockoutwithgroup) {
+			} else {
 				tournamentDoc.put("type", "KnockOutWithGroup");
 				tournamentDoc.put("tables", ((KnockOutWithGroup)tournament).getTables());
-				tournamentDoc.put("koMapping", ((KnockOutWithGroup)tournament).getKoMapping());
+				tournamentDoc.put("koMapping", (KnockOutMapping)((KnockOutWithGroup)tournament).getKoMapping());
 				tournamentDoc.put("currentGames", ((KnockOutWithGroup)tournament).getCurrentGames());
 			}
 		} catch (JsonProcessingException e) {
@@ -265,28 +257,11 @@ public class TournamentDatabase implements TournamentRepository {
 				Result resultRes = null;
 				if(result != null) {
 					if(result.containsValue("Winlose")) {
-						GameOutcome first = null;
-						GameOutcome second = null;
-						if(result.get("firstParticipantResult").equals(GameOutcome.WIN.toString())) {
-							 first = GameOutcome.WIN;
-						} else if (result.get("firstParticipantResult").equals(GameOutcome.LOSE.toString())) {
-							 first = GameOutcome.LOSE;
-						} else if (result.get("firstParticipantResult").equals(GameOutcome.DRAW.toString())) {
-							 first = GameOutcome.DRAW;
-						}
-						if(result.get("secondParticipantResult").equals(GameOutcome.WIN.toString())) {
-							 second = GameOutcome.WIN;
-						} else if (result.get("secondParticipantResult").equals(GameOutcome.LOSE.toString())) {
-							 second = GameOutcome.LOSE;
-						} else if (result.get("secondParticipantResult").equals(GameOutcome.DRAW.toString())) {
-							 second = GameOutcome.DRAW;
-						}
-						resultRes = new WinLoseResult(first, second);
+						resultRes = concertToWinLoseResult(result);
 					}
 					if(result.containsValue("Score")) {
-						int first = Integer.parseInt(String.valueOf(result.get("firstParticipantResult")));
-						int second = Integer.parseInt(String.valueOf(result.get("secondParticipantResult")));
-						resultRes = new ScoreResult(first,second);
+						resultRes = convertToScoreResult(result);
+
 					}
 					game.setResult(resultRes);
 				}
@@ -326,28 +301,10 @@ public class TournamentDatabase implements TournamentRepository {
 				Result resultRes = null;
 				if(result != null) {
 					if(result.containsValue("Winlose")) {
-						GameOutcome first = null;
-						GameOutcome second = null;
-						if(result.get("firstParticipantResult").equals(GameOutcome.WIN.toString())) {
-							 first = GameOutcome.WIN;
-						} else if (result.get("firstParticipantResult").equals(GameOutcome.LOSE.toString())) {
-							 first = GameOutcome.LOSE;
-						} else if (result.get("firstParticipantResult").equals(GameOutcome.DRAW.toString())) {
-							 first = GameOutcome.DRAW;
-						}
-						if(result.get("secondParticipantResult").equals(GameOutcome.WIN.toString())) {
-							 second = GameOutcome.WIN;
-						} else if (result.get("secondParticipantResult").equals(GameOutcome.LOSE.toString())) {
-							 second = GameOutcome.LOSE;
-						} else if (result.get("secondParticipantResult").equals(GameOutcome.DRAW.toString())) {
-							 second = GameOutcome.DRAW;
-						}
-						resultRes = new WinLoseResult(first, second);
+						resultRes = concertToWinLoseResult(result);
 					}
 					if(result.containsValue("Score")) {
-						int first = Integer.parseInt(String.valueOf(result.get("firstParticipantResult")));
-						int second = Integer.parseInt(String.valueOf(result.get("secondParticipantResult")));
-						resultRes = new ScoreResult(first,second);
+						resultRes = convertToScoreResult(result);
 					}
 					game.setResult(resultRes);
 				}
@@ -368,7 +325,31 @@ public class TournamentDatabase implements TournamentRepository {
 		tournament.setCurrentState(ds.get("currentState", TournamentState.class));
 		tournament.setTournamentDetail(ds.get("tournamentDetail", TournamentDetail.class));
 		tournament.setType((String)ds.get("type"));
-		tournament.setTables((Map<Integer, LeagueTable>)ds.get("tables"));
+		tournament.setTables((Map<String, LeagueTable>)ds.get("tables"));
 		return tournament;
+	}
+	private WinLoseResult concertToWinLoseResult(HashMap<String,Object> result) {
+		GameOutcome first = null;
+		GameOutcome second = null;
+		if(result.get("firstParticipantResult").equals(GameOutcome.WIN.toString())) {
+			 first = GameOutcome.WIN;
+		} else if (result.get("firstParticipantResult").equals(GameOutcome.LOSE.toString())) {
+			 first = GameOutcome.LOSE;
+		} else if (result.get("firstParticipantResult").equals(GameOutcome.DRAW.toString())) {
+			 first = GameOutcome.DRAW;
+		}
+		if(result.get("secondParticipantResult").equals(GameOutcome.WIN.toString())) {
+			 second = GameOutcome.WIN;
+		} else if (result.get("secondParticipantResult").equals(GameOutcome.LOSE.toString())) {
+			 second = GameOutcome.LOSE;
+		} else if (result.get("secondParticipantResult").equals(GameOutcome.DRAW.toString())) {
+			 second = GameOutcome.DRAW;
+		}
+		return new WinLoseResult(first, second);
+	}
+	private ScoreResult convertToScoreResult(HashMap<String,Object> result) {
+		int first = Integer.parseInt(String.valueOf(result.get("firstParticipantResult")));
+		int second = Integer.parseInt(String.valueOf(result.get("secondParticipantResult")));
+		return new ScoreResult(first,second);
 	}
 }

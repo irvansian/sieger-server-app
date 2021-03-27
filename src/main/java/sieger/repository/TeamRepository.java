@@ -25,7 +25,6 @@ public interface TeamRepository {
 	 * @return Return the team optional after searching.
 	 */
 	Optional<Team> retrieveTeamByName(String teamName);
-	List<Team> retrieveMultipleTeamByIds(String[] ids);
 	/**
 	 * Create a new team in firebase.
 	 * 

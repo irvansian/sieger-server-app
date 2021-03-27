@@ -52,8 +52,8 @@ public class Game {
 			@JsonProperty("firstParticipantId")String firstParticipantId, 
 			@JsonProperty("secondParticipantId")String secondParticipantId) {
 		this.time = time;
-		this.firstParticipantId = firstParticipantId;
-		this.secondParticipantId = secondParticipantId;
+		this.setSecondParticipantId(secondParticipantId);
+		this.setFirstParticipantId(firstParticipantId);
 		this.setGameId(randomId());
 		
 	}
@@ -73,14 +73,11 @@ public class Game {
 	public String returnWinnerId() {
 		if(result.firstWins()) {
 			return this.firstParticipantId;
-		}
-		if(result.secondWins()) {
+		} else if(result.secondWins()) {
 			return this.secondParticipantId;
-		}
-		if(result.draws()) {
+		} else {
 			return null;
 		}
-		return null;
 	}
 	/**
 	 * Getter of time.

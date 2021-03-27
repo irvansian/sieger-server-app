@@ -55,7 +55,7 @@ public class User extends Participant{
 		this.username = username;
 		this.forename = forename;
 		this.surname = surname;
-		this.userId = userId;
+		this.setUserId(userId);
 		this.teamList = new ArrayList<>();
 		this.invitationList = new ArrayList<>();
 	}

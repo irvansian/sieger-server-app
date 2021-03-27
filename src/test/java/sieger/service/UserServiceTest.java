@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -70,18 +71,18 @@ class UserServiceTest {
 	@Test
 	void test_getUserByName_UserNotFound() {
 		when(userRepository.retrieveUserByUsername("username")).thenReturn(Optional.ofNullable(null));
-		Assertions.assertThrows(ResourceNotFoundException.class, () ->{
-			userService.getUserByUsername("userID", "username");
-		});
+		Executable exception =() ->userService.getUserByUsername("userID", "username");
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
+		
 	}
 	
 	@Test
 	void test_getUserByName_NoPermission() {
 		User user = new User("username","surname", "forename", "userID");
 		when(userRepository.retrieveUserByUsername("username")).thenReturn(Optional.ofNullable(user));
-		Assertions.assertThrows(ForbiddenException.class, () ->{
-			userService.getUserByUsername("noPermission", "username");
-		});
+		Executable exception =() ->userService.getUserByUsername("noPermission", "username");
+		Assertions.assertThrows(ForbiddenException.class, exception);
+		
 	}
 	
 	@Test
@@ -94,18 +95,18 @@ class UserServiceTest {
 	@Test
 	void test_getUserById_UserNotFound() {
 		when(userRepository.retrieveUserById("userID")).thenReturn(Optional.ofNullable(null));
-		Assertions.assertThrows(ResourceNotFoundException.class, () ->{
-			userService.getUserById("userID", "userID");
-		});
+		Executable exception =() ->userService.getUserById("userID", "userID");
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
+		
 	}
 	
 	@Test
 	void test_getUserById_NoPermission() {
 		User user = new User("username","surname", "forename", "userID");
 		when(userRepository.retrieveUserById("userID")).thenReturn(Optional.ofNullable(user));
-		Assertions.assertThrows(ForbiddenException.class, () ->{
-			userService.getUserById("noPermission", "userID");
-		});
+		Executable exception =() ->userService.getUserById("noPermission", "userID");
+		Assertions.assertThrows(ForbiddenException.class, exception);
+		
 	}
 	
 	@Test
@@ -167,9 +168,9 @@ class UserServiceTest {
 	void test_createNewUser_alreadyExist() {
 		User user = new User("username","surname", "forename", "userID");
 		when(userRepository.retrieveUserByUsername("username")).thenReturn(Optional.ofNullable(user));
-		Assertions.assertThrows(BadRequestException.class, () ->{
-			userService.createNewUser(user);
-		});
+		Executable exception =() ->userService.createNewUser(user);
+		Assertions.assertThrows(BadRequestException.class, exception);
+		
 	}
 	
 	@Test
@@ -192,8 +193,9 @@ class UserServiceTest {
 		
 		when(userRepository.retrieveUserByUsername("oldUsername")).thenReturn(Optional.ofNullable(user));
 		when(userRepository.retrieveUserByUsername("newUsername")).thenReturn(Optional.ofNullable(userUpdated));
-		Assertions.assertThrows(BadRequestException.class, () ->{
-			userService.updateUserDetail("userID", "oldUsername", "newUsername", "surname", "forename");
-		});
+		Executable exception =() ->userService.updateUserDetail("userID", "oldUsername", "newUsername", "surname", "forename");
+		Assertions.assertThrows(BadRequestException.class, exception);
+		
 	}
+
 }

@@ -25,7 +25,7 @@ public class LeagueTable {
 	 * @param participants The list of participant id.
 	 */
 	public LeagueTable(List<String >participants) {
-		this.tables = new ArrayList<>();
+		this.setTables(new ArrayList<>());
 		for(String participant: participants) {
 			ParticipantActualStanding newStanding = new ParticipantActualStanding(participant);
 			addParticipantActualStanding(newStanding);
@@ -83,9 +83,8 @@ public class LeagueTable {
 	 */
 	public void participantWin(String participant) {
 		ParticipantActualStanding standing = getParticipantStandingById(participant);
-		if (standing != null) {
-			standing.winGame();
-		}
+		standing.winGame();
+		
 	}
 	/**
 	 * Change the info in standing when participant loses.
@@ -94,9 +93,8 @@ public class LeagueTable {
 	 */
 	public void participantLose(String participant) {
 		ParticipantActualStanding standing = getParticipantStandingById(participant);
-		if (standing != null) {
-			standing.loseGame();
-		}
+        standing.loseGame();
+		
 	}
 	/**
 	 * Change the info in standing when participant draws.
@@ -105,9 +103,8 @@ public class LeagueTable {
 	 */
 	public void participantDraw(String participant) {
 		ParticipantActualStanding standing = getParticipantStandingById(participant);
-		if (standing != null) {
-			standing.drawGame();
-		}
+		standing.drawGame();
+		
 	}
 	/**
 	 * Getter of the list of standing.

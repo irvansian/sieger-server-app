@@ -181,7 +181,7 @@ public class UserService {
 			String surname, String forename) {
 		User user = getUserByUsername(currentUserId, oldUsername);
 		if (userRepository.retrieveUserByUsername(newUsername)
-				.isPresent() && !oldUsername.equals(newUsername)) {
+				.isPresent()) {
 			ApiResponse response = new ApiResponse(false, "User with the username < " 
 					+ user.getUsername() + "> already exist.");
 			throw new BadRequestException(response);

@@ -70,13 +70,13 @@ public class TournamentDetail {
     		@JsonProperty("typeOfGame")String typeOfGame, @JsonProperty("location")String location, @JsonProperty("registrationDeadline")Date registrationDeadline, 
     		@JsonProperty("startTime")Date startTime, @JsonProperty("endTime")Date endTime, @JsonProperty("form")ParticipantForm form){
         this.adminId = organisatorId;   
+        this.setLocation(location);
+        this.setTypeOfGame(typeOfGame);
+        this.setParticipantForm(form);
         this.tournamentTypes = tournamentTypes;
-        this.typeOfGame = typeOfGame;
-        this.location = location;
         this.registrationDeadline = registrationDeadline;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.participantForm = form;
     }
     /**
      * Getter of participant form.
