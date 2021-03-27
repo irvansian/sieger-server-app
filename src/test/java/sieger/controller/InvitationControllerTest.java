@@ -75,8 +75,8 @@ class InvitationControllerTest {
 	@Test
 	void test_getOtherUserIdByNameInvitation() {
 		when(invitationService.getRecipientId("recipientUsername")).thenReturn("userId");
-		ResponseEntity<String> response = invitationController.getOtherUserIdByNameInvitation("recipientUsername");
-		assertEquals(response.getBody(), "userId");
+		ResponseEntity<Map<String, String>> response = invitationController.getOtherUserIdByNameInvitation("recipientUsername");
+		assertEquals(response.getBody().get("userId"), "userId");
 		assertEquals(response.getStatusCodeValue(), 200);
 	}
 }
