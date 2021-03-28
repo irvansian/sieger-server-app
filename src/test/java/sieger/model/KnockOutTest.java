@@ -1,6 +1,8 @@
 package sieger.model;
 
+import static org.junit.Assert.assertTrue;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 

@@ -172,8 +172,14 @@ public class InvitationService {
 			throw new ResourceNotFoundException("User", "username", recipientUsername);
 		}
 		return userOpt.get().getUserId();
-		
-		
+	}
+	
+	public String getRecipientTeamId(String teamName) {
+		Optional<Team> teamOpt = teamRepository.retrieveTeamByName(teamName);
+		if (teamOpt.isEmpty()) {
+			throw new ResourceNotFoundException("Team", "teamName", teamName);
+		}
+		return teamOpt.get().getTeamId();
 	}
 	
 	private InvitationDTO convertToInvitationDTO(Invitation invitation) {
