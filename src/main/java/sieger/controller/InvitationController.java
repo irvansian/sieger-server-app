@@ -83,7 +83,7 @@ public class InvitationController {
 			@PathVariable("teamName") String recipientTeamName) {
 		String userId = invitationService.getRecipientTeamId(recipientTeamName);
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("userId", userId);
+		map.put("teamId", userId);
 		
 		return ResponseEntity.ok(map);
 	}
