@@ -10,6 +10,7 @@ class TeamTest {
 	void testFindParticipantName() {
 		Team team = new Team("admin", "name", "password");
 		assertTrue(team.findParticipantName().equals("name"));
+		assertEquals(team.getTeamPassword(), "password");
 	}
 	@Test
 	void testCheckPassword_true() {
@@ -40,7 +41,8 @@ class TeamTest {
 		user.addTeam(team.getTeamId());
 		team.addMember(user.getUserId());
 		team.kickMember(user);
-		assertTrue(!team.getMemberList().contains(user.getUserId()) && !user.getTeamList().contains(team.getTeamId()));
+		assertFalse(team.getMemberList().contains(user.getUserId()));
+		assertFalse(user.getTeamList().contains(team.getTeamId()));
 	}
 	@Test
 	void testJoinTournament() {

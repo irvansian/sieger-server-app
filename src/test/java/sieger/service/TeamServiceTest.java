@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -62,17 +63,17 @@ class TeamServiceTest {
 	@Test
 	void test_getTeamByName_TeamNotFound() {
 		when(teamRepository.retrieveTeamByName("name")).thenReturn(Optional.ofNullable(null));
-		Assertions.assertThrows(ResourceNotFoundException.class, () ->{
-			teamService.getTeamByName("userID", "name");
-		});
+		Executable exception =() ->teamService.getTeamByName("userID", "name");
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
+		
 	}
 	@Test
 	void test_getTeamByName_Nopermission() {
 		Team team = new Team("admin", "name", "password");
 		when(teamRepository.retrieveTeamByName("name")).thenReturn(Optional.ofNullable(team));
-		Assertions.assertThrows(ForbiddenException.class, () ->{
-			teamService.getTeamByName("nopression", "name");
-		});
+		Executable exception =() ->teamService.getTeamByName("nopression", "name");
+		Assertions.assertThrows(ForbiddenException.class, exception);
+	
 	}
 	@Test
 	void test_getTeamByName_success() {
@@ -84,17 +85,17 @@ class TeamServiceTest {
 	@Test
 	void test_getTeamById_TeamNotFound() {
 		when(teamRepository.retrieveTeamById("teamId")).thenReturn(Optional.ofNullable(null));
-		Assertions.assertThrows(ResourceNotFoundException.class, () ->{
-			teamService.getTeamById("userID", "teamId");
-		});
+		Executable exception =() ->teamService.getTeamById("userID", "teamId");
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
+		
 	}
 	@Test
 	void test_getTeamById_Nopermission() {
 		Team team = new Team("admin", "name", "password");
 		when(teamRepository.retrieveTeamById(team.getTeamId())).thenReturn(Optional.ofNullable(team));
-		Assertions.assertThrows(ForbiddenException.class, () ->{
-			teamService.getTeamById("nopression", team.getTeamId());
-		});
+		Executable exception =() ->teamService.getTeamById("nopression", team.getTeamId());
+		Assertions.assertThrows(ForbiddenException.class, exception);
+		
 	}
 	@Test
 	void test_getTeamById_success() {
@@ -107,9 +108,9 @@ class TeamServiceTest {
 	void test_NewTeam_alreadyExist() {
 		Team team = new Team("admin", "name", "password");
 		when(teamRepository.retrieveTeamByName("name")).thenReturn(Optional.ofNullable(team));
-		Assertions.assertThrows(BadRequestException.class, () ->{
-			teamService.createNewTeam(team);
-		});
+		Executable exception =() ->teamService.createNewTeam(team);
+		Assertions.assertThrows(BadRequestException.class, exception);
+		
 	}
 	@Test
 	void test_NewTeam_success() {
@@ -125,9 +126,9 @@ class TeamServiceTest {
 		Team team = new Team("admin", "name", "password");
 		team.addMember("userId");
 		when(teamRepository.retrieveTeamByName("name")).thenReturn(Optional.ofNullable(team));
-		Assertions.assertThrows(ForbiddenException.class, () ->{
-			teamService.deleteTeam("userId", "name");
-		});
+		Executable exception =() ->teamService.deleteTeam("userId", "name");
+		Assertions.assertThrows(ForbiddenException.class, exception);
+		
 	}
 	@Test
 	void test_deleteTeam_success() {
@@ -196,9 +197,9 @@ class TeamServiceTest {
 		Team team = new Team("admin", "name", "password");
 		when(teamRepository.retrieveTeamByName("name")).thenReturn(Optional.ofNullable(team));
 		when(userRepository.retrieveUserById("userID")).thenReturn(Optional.ofNullable(null));
-		Assertions.assertThrows(ResourceNotFoundException.class, () ->{
-			teamService.kickTeamMembers("admin", "userID", "name");
-		});
+		Executable exception =() ->teamService.kickTeamMembers("admin", "userID", "name");
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
+		
 	}
 	@Test
 	void test_kickMembers_Nopermission() {
@@ -207,9 +208,9 @@ class TeamServiceTest {
 		User user = new User("username","surname", "forename", "userID");
 		when(teamRepository.retrieveTeamByName("name")).thenReturn(Optional.ofNullable(team));
 		when(userRepository.retrieveUserById("userID")).thenReturn(Optional.ofNullable(user));
-		Assertions.assertThrows(ForbiddenException.class, () ->{
-			teamService.kickTeamMembers("normalUser", "userID", "name");
-		});
+		Executable exception =() ->teamService.kickTeamMembers("normalUser", "userID", "name");
+		Assertions.assertThrows(ForbiddenException.class, exception);
+		
 	}
 	@Test
 	void test_kickMembers_success() {
@@ -227,18 +228,19 @@ class TeamServiceTest {
 	@Test
 	void test_joinTeam_UserNotFound() {
 		when(userRepository.retrieveUserById("userID")).thenReturn(Optional.ofNullable(null));
-		Assertions.assertThrows(ResourceNotFoundException.class, () ->{
-			teamService.joinTeam("userID", "name", "password");
-		});
+		Executable exception =() ->teamService.joinTeam("userID", "name", "password");
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
+		
+		
 	}
 	@Test
 	void test_joinTeam_TeamNotFound() {
 		User user = new User("username","surname", "forename", "userID");
 		when(userRepository.retrieveUserById("userID")).thenReturn(Optional.ofNullable(user));
 		when(teamRepository.retrieveTeamByName("name")).thenReturn(Optional.ofNullable(null));
-		Assertions.assertThrows(ResourceNotFoundException.class, () ->{
-			teamService.joinTeam("userID", "name", "password");
-		});
+		Executable exception =() ->teamService.joinTeam("userID", "name", "password");
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
+		
 	}
 	@Test
 	void test_joinTeam_FalsePassword() {
@@ -246,9 +248,9 @@ class TeamServiceTest {
 		Team team = new Team("admin", "name", "password");
 		when(userRepository.retrieveUserById("userID")).thenReturn(Optional.ofNullable(user));
 		when(teamRepository.retrieveTeamByName("name")).thenReturn(Optional.ofNullable(team));
-		Assertions.assertThrows(BadRequestException.class, () ->{
-			teamService.joinTeam("userID", "name", "falsepassword");
-		});
+		Executable exception =() ->teamService.joinTeam("userID", "name", "falsepassword");
+		Assertions.assertThrows(BadRequestException.class, exception);
+		
 	}
 	@Test
 	void test_joinTeam_success() {
@@ -271,9 +273,9 @@ class TeamServiceTest {
 		team.addMember("userID");
 		when(userRepository.retrieveUserById("userID")).thenReturn(Optional.ofNullable(null));
 		when(teamRepository.retrieveTeamByName("name")).thenReturn(Optional.ofNullable(team));
-		Assertions.assertThrows(ResourceNotFoundException.class, () ->{
-			teamService.quitTeam("userID", "name");
-		});
+		Executable exception =() ->teamService.quitTeam("userID", "name");
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
+		
 	}
 	@Test
 	void test_quitTeam_success() {

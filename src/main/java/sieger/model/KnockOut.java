@@ -39,7 +39,7 @@ public class KnockOut extends Tournament {
 	@JsonCreator
 	public KnockOut(@JsonProperty("participantSize")int participantSize, @JsonProperty("name")String name, @JsonProperty("tournamentDetail")TournamentDetail tournamentDetail) {
 		super(participantSize, name, tournamentDetail);
-		this.koMapping = new KnockOutMapping(participantSize / 2);
+		this.setKoMapping(new KnockOutMapping(participantSize));
 		this.currentGames = null;
 		setType("KnockOut");
 	}
@@ -55,7 +55,7 @@ public class KnockOut extends Tournament {
 			for(int i = 0; i < games.size(); i++) {
 				games.get(i).setTime(calculateDate(i));
 			}
-			setCurrentState(TournamentState.KOROUND);
+			isFinalRound();
 			return games;
 		}
 		return null;
@@ -122,6 +122,8 @@ public class KnockOut extends Tournament {
 	private void isFinalRound() {
 		if(this.currentGames.size() == 1) {
 			setCurrentState(TournamentState.FINISH);
+		} else {
+			setCurrentState(TournamentState.KOROUND);
 		}
 	}
 	/**
@@ -165,7 +167,6 @@ public class KnockOut extends Tournament {
 		for(Game tempGame: currentGames) {
 			if(tempGame.getGameId().equals(game.getGameId())) {
 				tempGame.setResult(game.getResult());
-				break;
 			}
 		}
 	}

@@ -25,7 +25,7 @@ class UserTest {
 		User user = new User("username","surname", "forename", "userID");
 		user.joinTournament(tournament);
 		user.quitTournament(tournament);
-		assertTrue(!tournament.isParticipant(user));
+		assertFalse(tournament.isParticipant(user));
 	}
 	
 	@Test
@@ -33,6 +33,7 @@ class UserTest {
 		User user = new User("username","surname", "forename", "userID");
 		Team team = new Team("adminId", "name", "password");
 		assertFalse(user.joinTeam(team, "falsePassword"));
+		assertFalse(user.quitTeam(team));
 	}
 	
 	@Test

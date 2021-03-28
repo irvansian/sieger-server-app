@@ -46,7 +46,7 @@ public class WinLoseResult implements Result {
 	 */
 	@Override
 	public boolean firstWins() {
-		if(this.firstParticipantResult == GameOutcome.WIN && this.secondParticipantResult == GameOutcome.LOSE){
+		if(getFirstParticipantResult() == GameOutcome.WIN && getSecondParticipantResult() == GameOutcome.LOSE){
 			return true;
 		} else {
 		    return false;
@@ -59,7 +59,7 @@ public class WinLoseResult implements Result {
 	 */
 	@Override
 	public boolean secondWins() {
-		if(this.firstParticipantResult == GameOutcome.LOSE && this.secondParticipantResult == GameOutcome.WIN){
+		if(getFirstParticipantResult() == GameOutcome.LOSE && getSecondParticipantResult() == GameOutcome.WIN){
 			return true;
 		} else {
 		    return false;
@@ -72,7 +72,7 @@ public class WinLoseResult implements Result {
 	 */
 	@Override
 	public boolean draws() {
-		if(this.firstParticipantResult == GameOutcome.DRAW && this.secondParticipantResult == GameOutcome.DRAW){
+		if(getFirstParticipantResult() == GameOutcome.DRAW && getSecondParticipantResult() == GameOutcome.DRAW){
 			return true;
 		} else {
 		    return false;

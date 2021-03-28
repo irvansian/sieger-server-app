@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class TournamentTest {
 
 	@Test
-	void testIsParticipant_Single() {
+	void testIsParticipant_Single() {		
 		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", null,null,null,ParticipantForm.SINGLE);
 		League tournament = new League(4, "name", detail);
 		User user = new User("username","surname", "forename", "userID");
@@ -21,7 +21,9 @@ class TournamentTest {
 	void testIsParticipant_Team() {
 		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", null,null,null,ParticipantForm.TEAM);
 		League tournament = new League(4, "name", detail);
+		
 		User user = new User("username","surname", "forename", "userID");
+		user.addTeam("anotherTeam");
 		Team team = new Team("adminId", "name", "password");
 		user.joinTeam(team, "password");
 		team.joinTournament(tournament);
@@ -50,8 +52,21 @@ class TournamentTest {
 		Calendar c1 = Calendar.getInstance();
 		c1.set(2020, 12, 12);
 		Date date = c1.getTime();
-		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", date,null,null,ParticipantForm.TEAM);
+		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", date,null,null,ParticipantForm.SINGLE);
 		League tournament = new League(4, "name", detail);
+		assertFalse(tournament.allowUserToJoin());
+	}
+	@Test
+	void testAllowUserToJoinIn_checkSize() {
+		Calendar c1 = Calendar.getInstance();
+		c1.set(2021, 12, 12);
+		Date date = c1.getTime();
+		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", date,null,null,ParticipantForm.SINGLE);
+		League tournament = new League(4, "name", detail);
+		tournament.addParticipant("a");
+		tournament.addParticipant("b");
+		tournament.addParticipant("c");
+		tournament.addParticipant("d");
 		assertFalse(tournament.allowUserToJoin());
 	}
 	@Test
@@ -82,6 +97,32 @@ class TournamentTest {
 		assertFalse(tournament.allowTeamToJoin());
 	}
 	@Test
+	void testAllowTeamToJoinIn_cantRegisterAndCheckSize() {
+		Calendar c1 = Calendar.getInstance();
+		c1.set(2020, 12, 12);
+		Date date = c1.getTime();
+		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", date,null,null,ParticipantForm.TEAM);
+		League tournament = new League(4, "name", detail);
+		tournament.addParticipant("a");
+		tournament.addParticipant("b");
+		tournament.addParticipant("c");
+		tournament.addParticipant("d");
+		assertFalse(tournament.allowTeamToJoin());
+	}
+	@Test
+	void testAllowTeamToJoinIn_checkSize() {
+		Calendar c1 = Calendar.getInstance();
+		c1.set(2021, 12, 12);
+		Date date = c1.getTime();
+		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", date,null,null,ParticipantForm.TEAM);
+		League tournament = new League(4, "name", detail);
+		tournament.addParticipant("a");
+		tournament.addParticipant("b");
+		tournament.addParticipant("c");
+		tournament.addParticipant("d");
+		assertFalse(tournament.allowUserToJoin());
+	}
+	@Test
 	void testReadyToBeHeld() {
 		Calendar c1 = Calendar.getInstance();
 		c1.set(2020, 12, 12);
@@ -93,6 +134,19 @@ class TournamentTest {
 		User userB = new User("userBname","surname", "forename", "userBID");
 		userB.joinTournament(tournament);
 		assertTrue(tournament.readyToBeHeld());
+	}
+	@Test
+	void testReadyToBeHeld_StillNeedParticipant() {
+		Calendar c1 = Calendar.getInstance();
+		c1.set(2021, 12, 12);
+		Date date = c1.getTime();
+		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", date,null,null,ParticipantForm.TEAM);
+		League tournament = new League(2, "name", detail);;
+		User userA = new User("userAname","surname", "forename", "userAID");
+		userA.joinTournament(tournament);
+		User userB = new User("userBname","surname", "forename", "userBID");
+		userB.joinTournament(tournament);
+		assertFalse(tournament.readyToBeHeld());
 	}
 	
 	@Test
@@ -141,6 +195,7 @@ class TournamentTest {
 		Date enddate = c1.getTime();
 		TournamentDetail detail = new TournamentDetail("organisator", TournamentTypes.OPEN, "typeOfGame", "location", null,startdate,enddate,ParticipantForm.SINGLE);
 		League tournament = new League(4, "name", detail);
-		assertTrue(tournament.calculateDate(1).equals(startdate) && tournament.calculateDate(3).equals(enddate));
+		assertEquals(tournament.calculateDate(1), startdate);
+	    assertEquals(tournament.calculateDate(3), enddate);
 	}
 }

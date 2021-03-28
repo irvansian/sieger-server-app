@@ -85,8 +85,9 @@ public class League extends Tournament{
 	public List<Game> createGames() {
 		if(super.getCurrentState() == TournamentState.START) {
 			return createAllGames();
+		} else {
+			return null;
 		}
-		return null;
 	}
 	/**
 	 * Getter of league table

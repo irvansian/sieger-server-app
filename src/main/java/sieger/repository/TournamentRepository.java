@@ -38,7 +38,6 @@ public interface TournamentRepository {
 	 * @return Return required participant list.
 	 */
 	List<Participant> retrieveTournamentParticipants(String tournamentId, ParticipantForm pf);
-	List<Tournament> retrieveMultipleTournamentsByKeyword(String keyword);
 	/**
 	 * Create a new tournament in firebase.
 	 * 

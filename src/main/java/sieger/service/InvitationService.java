@@ -165,8 +165,8 @@ public class InvitationService {
 		ApiResponse res = new ApiResponse(true, "Successfully declined the invitation");
 		return res;
 	}
-	
-	public String getRecipientUserId(String recipientUsername) {
+
+	public String getRecipientId(String recipientUsername) {
 		Optional<User> userOpt = userRepository.retrieveUserByUsername(recipientUsername);
 		if (userOpt.isEmpty()) {
 			throw new ResourceNotFoundException("User", "username", recipientUsername);

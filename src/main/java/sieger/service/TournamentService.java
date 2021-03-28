@@ -59,15 +59,6 @@ public class TournamentService {
 	@Qualifier("gameDB")
 	private GameRepository gameRepository;
 	/**
-	 * Get tournament by keyword.
-	 * 
-	 * @param keyword The given keyword.
-	 * @return Return the list of tournament.
-	 */
-	public List<Tournament> getTournamentsByKeyword(String keyword) {
-		return null;
-	}
-	/**
 	 * Get tournament from database by id.
 	 * 
 	 * @param currentUserId The id of current user.To check if current user has the permission.

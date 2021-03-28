@@ -1,5 +1,6 @@
 package sieger.model;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Calendar;
@@ -33,17 +34,17 @@ class KnockOutTest {
 
 	@Test
 	void testCreateGames_checkSize() {
-		assertTrue(tournament.createGames().size() == 2);
+		assertEquals(tournament.createGames().size(),2);
 	}
 	@Test
 	void testCreateGames_checkParticipant() {
 		List<Game> games = tournament.createGames();
-		assertTrue(games.get(0).getFirstParticipantId().equals("a"));
+		assertEquals(games.get(0).getFirstParticipantId(), "a");
 	}
 	@Test
 	void testCreateGames_checkState() {
 		tournament.createGames();
-		assertTrue(tournament.getCurrentState().toString().equals("KOROUND"));
+		assertEquals(tournament.getCurrentState().toString(), "KOROUND");
 	}
 	@Test
 	void testNextRound_checkSize() {
@@ -53,7 +54,7 @@ class KnockOutTest {
 		games.get(1).setResult(new ScoreResult(10,11));
 		
 		tournament.createGames();
-		assertTrue(tournament.getCurrentGames().size() == 1);
+		assertEquals(tournament.getCurrentGames().size(), 1);
 	}
 	@Test
 	void testNextRound_checkState() {
@@ -63,8 +64,19 @@ class KnockOutTest {
 		games.get(1).setResult(new ScoreResult(10,11));
 		
 		tournament.createGames();
-		assertTrue(tournament.getCurrentState().toString().equals("FINISH"));
+		assertEquals(tournament.getCurrentState().toString(), "FINISH");
 	}
+	
+	@Test
+	void testCreateGames_NUll() {
+		List<Game> games = tournament.createGames();
+		games.get(0).setResult(new ScoreResult(10,11));
+		games.get(1).setResult(new ScoreResult(10,11));
+		
+		tournament.createGames();
+		assertNull(tournament.createGames());
+	}
+
 	@Test
 	void testNextRound_checkParticipant() {
 
@@ -73,7 +85,8 @@ class KnockOutTest {
 		games.get(1).setResult(new ScoreResult(10,11));
 		
 		tournament.createGames();
-		assertTrue(tournament.getCurrentGames().get(0).getFirstParticipantId().equals("b") && tournament.getCurrentGames().get(0).getSecondParticipantId().equals("d"));
+		assertEquals(tournament.getCurrentGames().get(0).getFirstParticipantId(), "b");
+		assertEquals(tournament.getCurrentGames().get(0).getSecondParticipantId(), "d");
 	}
 	@Test
 	void test_updateGame() {

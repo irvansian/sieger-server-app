@@ -20,7 +20,7 @@ public class KnockOutWithGroup extends Tournament {
 	/**
 	 * The tables of all groups. Each group has a table to record.
 	 */
-	private Map<Integer, LeagueTable> tables;
+	private Map<String, LeagueTable> tables;
 	/**
 	 * The knock out map in ko round.
 	 */
@@ -47,8 +47,8 @@ public class KnockOutWithGroup extends Tournament {
 	@JsonCreator
 	public KnockOutWithGroup(@JsonProperty("participantSize")int participantSize, @JsonProperty("name")String name, @JsonProperty("tournamentDetail")TournamentDetail tournamentDetail) {
 		super(participantSize, name, tournamentDetail);
-		this.tables = new HashMap<>();
-		this.koMapping = null;
+		this.setTables(new HashMap<>());
+		this.setKoMapping(new KnockOutMapping());
 		this.currentGames = null;
 		setType("KnockOutWithGroup");
 	}
@@ -91,7 +91,6 @@ public class KnockOutWithGroup extends Tournament {
 			games.get(i - currentIndex).setTime(calculateDate(i));
 		}
 		setCurrentGames(games);
-		setCurrentState(TournamentState.KOROUND);
 		isFinalRound();
 		return games;
 	}
@@ -191,7 +190,7 @@ public class KnockOutWithGroup extends Tournament {
 	 * @param table The table to be added.
 	 */
 	public void mapLeagueTable(int index, LeagueTable table) {
-		this.tables.put(index, table);
+		this.tables.put(String.valueOf(index), table);
 	}
 	/**
 	 * Setter of current games.
@@ -216,6 +215,8 @@ public class KnockOutWithGroup extends Tournament {
 	private void isFinalRound() {
 		if(this.currentGames.size() == 1) {
 			setCurrentState(TournamentState.FINISH);
+		} else {
+			setCurrentState(TournamentState.KOROUND);
 		}
 	}
 	/**
@@ -230,10 +231,9 @@ public class KnockOutWithGroup extends Tournament {
 			return createGroupGames();
 		} else if (getCurrentState() == TournamentState.GROUP) {
 			return createFirstKO();
-		} else if(getCurrentState() == TournamentState.KOROUND) {
+		} else{
 			return nextRoundGames();
 		}
-		return null;
 	}
 	/**
 	 * Getter of knock out map.
@@ -256,7 +256,7 @@ public class KnockOutWithGroup extends Tournament {
 	 * 
 	 * @return Return the list of table.
 	 */
-	public Map<Integer, LeagueTable> getTables(){
+	public Map<String, LeagueTable> getTables(){
 		return this.tables;
 	}
 	/**
@@ -264,7 +264,7 @@ public class KnockOutWithGroup extends Tournament {
 	 * 
 	 * @param tables New tables to be setted.
 	 */
-	public void setTables(Map<Integer, LeagueTable> tables) {
+	public void setTables(Map<String, LeagueTable> tables) {
 		this.tables = tables;
 	}
 	/**
@@ -290,7 +290,6 @@ public class KnockOutWithGroup extends Tournament {
 						table.participantWin(winner);
 						table.participantLose(loser);
 						table.sort();
-						break;
 					}
 				}
 			} else {
@@ -299,7 +298,6 @@ public class KnockOutWithGroup extends Tournament {
 						table.participantDraw(game.getFirstParticipantId());
 						table.participantDraw(game.getSecondParticipantId());
 						table.sort();
-						break;
 					}
 				}
 			}
@@ -308,7 +306,6 @@ public class KnockOutWithGroup extends Tournament {
 			for(Game tempGame: currentGames) {
 				if(tempGame.getGameId().equals(game.getGameId())) {
 					tempGame = game;
-					break;
 				}
 			}
 		}

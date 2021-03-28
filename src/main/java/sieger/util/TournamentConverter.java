@@ -31,7 +31,7 @@ public class TournamentConverter {
 					((KnockOut) tournament).getCurrentGames());
 			tourneyDTO.getSpecifiedAttributes().put("koMapping", 
 					((KnockOut) tournament).getKoMapping());
-		} else if (tournament instanceof League){
+		} else {
 			tourneyDTO.setType("League");
 			tourneyDTO.getSpecifiedAttributes().put("leagueTable", ((League) tournament).getLeagueTable());
 		}

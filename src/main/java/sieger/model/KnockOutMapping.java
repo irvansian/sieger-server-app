@@ -26,10 +26,8 @@ public class KnockOutMapping {
 	 * @param branchSize
 	 */
 	public KnockOutMapping(int branchSize) {
-		this.koMapping = new HashMap<String, String>();
-		for(int i = 1; i <= branchSize; i++) {
-			koMapping.put(String.valueOf(i), null);
-		}
+		this.setKoMapping(new HashMap<String, String>());
+		
 	}
 	/**
 	 * Getter of the map.

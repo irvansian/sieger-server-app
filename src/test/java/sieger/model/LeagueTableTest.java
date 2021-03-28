@@ -20,8 +20,9 @@ class LeagueTableTest {
 	  table.participantLose("first");
 	  table.participantDraw("second");
 	  table.sort();
-	  assertTrue(table.getTables().get(0).getParticipantId().equals("third") && table.getTables().get(1).getParticipantId().equals("second") 
-			  && table.getTables().get(2).getParticipantId().equals("first"));
+	  assertEquals(table.getTables().get(0).getParticipantId(), "third");
+	  assertEquals(table.getTables().get(1).getParticipantId(), "second");
+	  assertEquals(table.getTables().get(2).getParticipantId(), "first");
 	}
 	@Test
 	void testGetStandingById() {
@@ -31,7 +32,7 @@ class LeagueTableTest {
 	  participants.add("third");
 	  LeagueTable table = new LeagueTable(participants);
 	  ParticipantActualStanding result = table.getParticipantStandingById("first");
-	  assertTrue(result.equals(table.getTables().get(0)));
+	  assertEquals(result, table.getTables().get(0));
 	}
 	@Test
 	void testWin() {
@@ -39,7 +40,9 @@ class LeagueTableTest {
 	  participants.add("first");
 	  LeagueTable table = new LeagueTable(participants);
 	  table.participantWin("first");
-	  assertTrue(table.getTables().get(0).getPlays() == 1 && table.getTables().get(0).getWin() == 1 && table.getTables().get(0).getPoints() == 2 );
+	  assertEquals(table.getTables().get(0).getPlays(), 1);
+	  assertEquals(table.getTables().get(0).getWin(), 1);
+	  assertEquals(table.getTables().get(0).getPoints(), 2);
 	}
 	@Test
 	void testLose() {
@@ -47,7 +50,9 @@ class LeagueTableTest {
 	  participants.add("first");
 	  LeagueTable table = new LeagueTable(participants);
 	  table.participantLose("first");
-	  assertTrue(table.getTables().get(0).getPlays() == 1 && table.getTables().get(0).getLose() == 1 && table.getTables().get(0).getPoints() == 0 );
+	  assertEquals(table.getTables().get(0).getPlays(), 1);
+	  assertEquals(table.getTables().get(0).getLose(), 1);
+	  assertEquals(table.getTables().get(0).getPoints(), 0);
 	}
 	@Test
 	void testDraw() {
@@ -55,6 +60,8 @@ class LeagueTableTest {
 	  participants.add("first");
 	  LeagueTable table = new LeagueTable(participants);
 	  table.participantDraw("first");
-	  assertTrue(table.getTables().get(0).getPlays() == 1 && table.getTables().get(0).getDraw() == 1 && table.getTables().get(0).getPoints() == 1 );
+	  assertEquals(table.getTables().get(0).getPlays(), 1);
+	  assertEquals(table.getTables().get(0).getDraw(), 1);
+	  assertEquals(table.getTables().get(0).getPoints(), 1);
 	}
 }

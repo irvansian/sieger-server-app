@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -58,9 +59,9 @@ class InvitationServiceTest {
 	@Test
 	void test_getInvitation_Empty() {
 		when(invitationRepository.retrieveInvitationById("invitationID")).thenReturn(Optional.ofNullable(null));
-		Assertions.assertThrows(ResourceNotFoundException.class, () ->{
-			invitationService.getInvitation("userID", "invitationID");
-		});
+		Executable exception =() ->invitationService.getInvitation("userID", "invitationID");
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
+		
 	}
 	
 	@Test
@@ -80,9 +81,9 @@ class InvitationServiceTest {
 		user.addInvitation(invitation.getInvitationId());
 		when(userRepository.retrieveUserById("userID")).thenReturn(Optional.ofNullable(user));
 		when(invitationRepository.retrieveInvitationById(invitation.getInvitationId())).thenReturn(Optional.ofNullable(invitation));
-		Assertions.assertThrows(ForbiddenException.class, () ->{
-			invitationService.getInvitation("userID", invitation.getInvitationId());
-		});
+		Executable exception =() ->invitationService.getInvitation("userID", invitation.getInvitationId());
+		Assertions.assertThrows(ForbiddenException.class, exception);
+		
 	}
 	
 	@Test
@@ -111,10 +112,9 @@ class InvitationServiceTest {
 		when(userRepository.retrieveUserById("userID")).thenReturn(Optional.ofNullable(user));
 		when(teamRepository.retrieveTeamById(team.getTeamId())).thenReturn(Optional.ofNullable(team));
 		when(invitationRepository.retrieveInvitationById(invitation.getInvitationId())).thenReturn(Optional.ofNullable(invitation));
+		Executable exception =() ->invitationService.getInvitation("userID", invitation.getInvitationId());
+		Assertions.assertThrows(ForbiddenException.class, exception);
 		
-		Assertions.assertThrows(ForbiddenException.class, () ->{
-			invitationService.getInvitation("userID", invitation.getInvitationId());
-		});
 	}
 	
 	@Test
@@ -122,9 +122,9 @@ class InvitationServiceTest {
 		Invitation invitation = new Invitation("senderId", "userID", "tournamentId", ParticipantForm.SINGLE);
 		when(invitationRepository.retrieveInvitationById(invitation.getInvitationId())).thenReturn(Optional.ofNullable(invitation));
 		when(userRepository.retrieveUserById("userID")).thenReturn(Optional.ofNullable(null));
-		Assertions.assertThrows(ResourceNotFoundException.class, () ->{
-			invitationService.getInvitation("userID", invitation.getInvitationId());
-		});
+		Executable exception =() ->invitationService.getInvitation("userID", invitation.getInvitationId());
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
+		
 	}
 	
 	@Test
@@ -253,5 +253,18 @@ class InvitationServiceTest {
 		when(tournamentRepository.retrieveTournamentById("tournamentId")).thenReturn(Optional.ofNullable(tournament));
 		assertEquals(invitationService.convertToInvitationDTOList(invitations).get(0).getInvitationId(), invitationDTOs.get(0).getInvitationId());
 
+	}
+	
+	@Test
+	void test_getRecipientId_success() {
+		User user = new User("username","surname", "forename", "userID");
+		when(userRepository.retrieveUserByUsername("username")).thenReturn(Optional.ofNullable(user));
+		assertEquals(invitationService.getRecipientId("username"), "userID");
+	}
+	@Test
+	void test_getRecipientId_empty() {
+		when(userRepository.retrieveUserByUsername("username")).thenReturn(Optional.ofNullable(null));
+		Executable exception =() ->invitationService.getRecipientId("username");
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
 	}
 }

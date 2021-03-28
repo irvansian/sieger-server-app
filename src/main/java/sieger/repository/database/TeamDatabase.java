@@ -82,11 +82,7 @@ public class TeamDatabase implements TeamRepository {
 		return Optional.ofNullable(team);
 	}
 
-	@Override
-	public List<Team> retrieveMultipleTeamByIds(String[] ids) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 	/**
 	 * Create a new team in firebase.
 	 * 

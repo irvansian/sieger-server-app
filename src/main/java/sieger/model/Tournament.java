@@ -79,9 +79,9 @@ public abstract class Tournament implements Searchable {
 	@JsonCreator
 	public Tournament(@JsonProperty("participantSize")int participantSize, @JsonProperty("name")String name, @JsonProperty("tournamentDetail")TournamentDetail tournamentDetail) {
 		this.setTournamentDetail(tournamentDetail);
-		this.gameList = new ArrayList<>();
-		this.tournamentid = randomId();
-		this.participantList = new ArrayList<String>();
+		this.setGameList(new ArrayList<>());
+		this.setTournamentId(randomId());
+		this.setParticipantList(new ArrayList<String>());
 		this.setTournamentName(name);
 		this.setMaxParticipantNumber(participantSize);
 		this.setCurrentState(TournamentState.START);
@@ -116,10 +116,9 @@ public abstract class Tournament implements Searchable {
 	public boolean isParticipant(User user) {
 		if(tournamentDetail.getParticipantForm() == ParticipantForm.SINGLE) {
 			return participateAsSingle(user);
-		} else if(tournamentDetail.getParticipantForm() == ParticipantForm.TEAM) {
+		} else {
 			return participateAsTeam(user);
 		}
-		return false;
 	}
 	/**
 	 * Private method to check if the user participate as single.

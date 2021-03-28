@@ -2,6 +2,7 @@ package sieger.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -36,19 +37,27 @@ class LeagueTest {
 	@Test
 	void testCreateGames_checkSize() {
 
-		assertTrue(tournament.createGames().size() == 6);
+		assertEquals(tournament.createGames().size(), 6);
 	}
 	@Test
 	void testCreateGames_checkParticipant() {
-
 		List<Game> games = tournament.createGames();
 		assertTrue(games.get(5).getFirstParticipantId().equals("c"));
 	}
 	@Test
 	void testCreateGames_checkState() {
-
 		tournament.createGames();
 		assertTrue(tournament.getCurrentState().toString().equals("FINISH"));
+	}
+	@Test
+	void testCreateGames_Fail() {
+		tournament.setParticipantList(new ArrayList<String>());
+		assertEquals(tournament.createGames(), null);
+	}
+	@Test
+	void testCreateGames_Finish() {
+		tournament.createGames();
+		assertEquals(tournament.createGames(), null);
 	}
 	@Test
 	void test_updateGame_Group_secondWins() {
