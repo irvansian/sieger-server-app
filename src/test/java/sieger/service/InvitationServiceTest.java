@@ -267,4 +267,16 @@ class InvitationServiceTest {
 		Executable exception =() ->invitationService.getRecipientId("username");
 		Assertions.assertThrows(ResourceNotFoundException.class, exception);
 	}
+	@Test
+	void test_getRecipientTeamId_success() {
+		Team team = new Team("userID", "name", "password");
+		when(teamRepository.retrieveTeamByName("name")).thenReturn(Optional.ofNullable(team));
+		assertEquals(invitationService.getRecipientTeamId("name"), team.getTeamId());
+	}
+	@Test
+	void test_getRecipientTeamId_empty() {
+		when(teamRepository.retrieveTeamByName("name")).thenReturn(Optional.ofNullable(null));
+		Executable exception =() ->invitationService.getRecipientTeamId("name");
+		Assertions.assertThrows(ResourceNotFoundException.class, exception);
+	}
 }
