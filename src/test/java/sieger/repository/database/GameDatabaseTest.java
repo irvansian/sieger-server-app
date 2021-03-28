@@ -3,22 +3,18 @@ package sieger.repository.database;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Date;
-import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import sieger.model.Game;
 import sieger.model.GameOutcome;
 import sieger.model.Result;
 import sieger.model.ScoreResult;
-import sieger.model.Team;
 import sieger.model.WinLoseResult;
 import sieger.repository.GameRepository;
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 class GameDatabaseTest {
 	@Autowired
