@@ -81,9 +81,9 @@ class InvitationControllerTest {
 	}
 	@Test
 	void test_getOtherTeamIdByNameInvitation() {
-		when(invitationService.getRecipientTeamId("recipientTeamName")).thenReturn("userId");
-		ResponseEntity<Map<String, String>> response = invitationController.getOtherUserIdByNameInvitation("recipientTeamName");
-		assertEquals(response.getBody().get("userId"), "userId");
+		when(invitationService.getRecipientTeamId("recipientTeamName")).thenReturn("teamId");
+		ResponseEntity<Map<String, String>> response = invitationController.getOtherTeamIdByNameInvitation("recipientTeamName");
+		assertEquals(response.getBody().get("userId"), "teamId");
 		assertEquals(response.getStatusCodeValue(), 200);
 	}
 }
